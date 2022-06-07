@@ -28,14 +28,14 @@ const UserProvider = ({ children }) => {
           };
 
           setUser(userData);
-          setLoading(false);
+          setTimeout(() => setLoading(false), 2300);
         });
 
         return;
       }
 
       setUser(null);
-      setLoading(false);
+      setTimeout(() => setLoading(false), 2300);
     });
 
     return unsubscribe;

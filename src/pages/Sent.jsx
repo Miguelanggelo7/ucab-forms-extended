@@ -66,7 +66,7 @@ const Sent = () => {
             {sentText}
           </Typography>
           <Box sx={{ width: "40vmin" }}>
-            <Lottie animationData={doneAnimation} />
+            <Lottie animationData={doneAnimation} loop={false} />
           </Box>
           <Typography align="center" mb={2}>
             ¡Gracias por tu colaboración! {successText}

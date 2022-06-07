@@ -121,6 +121,11 @@ const DashboardTable = () => {
       data={forms}
       title="Mis encuestas"
       isLoading={loadingUserForms || loadingCollaborationForms || duplicating}
+      // options={{
+      //   headerStyle: {
+      //     backgroundColor: "#00d49c",
+      //   },
+      // }}
       actions={[
         {
           icon: () => <AddIcon />,

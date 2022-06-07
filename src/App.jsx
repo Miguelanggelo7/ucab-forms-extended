@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import EditForm from "./pages/EditForm";
 import AnswerForm from "./pages/AnswerForm";
 import Sent from "./pages/Sent";
+import Fade from "react-reveal/Fade";
 
 const App = () => {
   return (
@@ -27,8 +28,26 @@ const App = () => {
               </UnAuthPage>
             }
           >
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/login"
+              element={
+                <>
+                  <Fade key={1}>
+                    <Login />
+                  </Fade>
+                </>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <>
+                  <Fade key={2}>
+                    <Signup />
+                  </Fade>
+                </>
+              }
+            />
           </Route>
           <Route
             element={
