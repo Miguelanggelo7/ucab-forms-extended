@@ -3,10 +3,11 @@ import { Card, Typography } from "@mui/material";
 import { useForm } from "../../hooks/useForm";
 import AllQuestionsPreview from "../AllQuestionsPreview";
 import RequiredMark from "../RequiredMark";
+import { useFont } from "../../hooks/useFont";
 
 const EditQuestion = ({ question, setOpenDrawer }) => {
   const { current, setCurrent } = useForm();
-
+  const { font } = useFont();
   return useMemo(() => {
     const handleClick = () => {
       setCurrent(question.id);
@@ -20,7 +21,12 @@ const EditQuestion = ({ question, setOpenDrawer }) => {
         elevation={question.id === current ? 5 : 0}
         variant={question.id === current ? "elevation" : "outlined"}
       >
-        <Typography mb={2}>
+        <Typography
+          mb={2}
+          fontFamily={font.family}
+          fontWeight="bold"
+          fontSize={`${font.size + 2}px`}
+        >
           {question.title}
           <RequiredMark question={question} />
         </Typography>

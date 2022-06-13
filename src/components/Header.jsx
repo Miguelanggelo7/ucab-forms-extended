@@ -35,10 +35,12 @@ import SignalWifiOffIcon from "@mui/icons-material/SignalWifiOff";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useFont } from "../hooks/useFont";
 
 const Header = ({ leftIcons, rightIcons, moreMenu }) => {
   const user = useUser();
   const theme = useTheme();
+  const { font, setFont } = useFont();
   // let [isOnline, connection] = useNetwork();
 
   const popupStateUser = usePopupState({
@@ -46,15 +48,12 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
     popupId: "user-menu",
   });
 
-  const [font, setFont] = useState("Poppins");
-  const [size, setSize] = useState("medium");
-
   const changeFont = (event) => {
-    setFont(event.target.value);
+    setFont({ ...font, family: event.target.value });
   };
 
   const changeSize = (event) => {
-    setSize(event.target.value);
+    setFont({ ...font, size: event.target.value });
   };
 
   return (
@@ -115,7 +114,7 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
                       <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
-                        value={font}
+                        value={font.family}
                         onChange={changeFont}
                       >
                         <MenuItem value={"Poppins"}>
@@ -171,20 +170,20 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
                       <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
-                        value={size}
+                        value={font.size}
                         onChange={changeSize}
                       >
-                        <MenuItem value={"small"}>
+                        <MenuItem value={13}>
                           <Typography style={{ fontSize: "Small" }}>
                             Pequeña
                           </Typography>
                         </MenuItem>
-                        <MenuItem value={"medium"}>
+                        <MenuItem value={16}>
                           <Typography style={{ fontSize: "Medium" }}>
                             Mediana
                           </Typography>
                         </MenuItem>
-                        <MenuItem value={"large"}>
+                        <MenuItem value={18}>
                           <Typography style={{ fontSize: "Large" }}>
                             Grande
                           </Typography>

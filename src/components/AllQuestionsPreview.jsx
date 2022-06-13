@@ -31,8 +31,11 @@ import {
 import Select from "./Select";
 import Slider from "./Slider";
 import UploadButton from "./UploadButton";
+import { useFont } from "../hooks/useFont";
 
 const QuestionPreview = ({ question }) => {
+  const { font } = useFont();
+
   switch (question.type) {
     case TEXT:
       return (
