@@ -18,6 +18,11 @@ const Footer = () => {
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />
+          <MemberCard img={Saad} />
+          <MemberCard img={Saad} />
+          <MemberCard img={Saad} />
+          <MemberCard img={Saad} />
+          <MemberCard img={Saad} />
         </div>
       </div>
     </footer>

@@ -18,8 +18,10 @@
 }
 
 .member {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   position: relative;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .member:last-child {
@@ -70,4 +72,5 @@
 .contImg {
   overflow: hidden;
   height: 230px;
+  margin-bottom: 5px;
 }
