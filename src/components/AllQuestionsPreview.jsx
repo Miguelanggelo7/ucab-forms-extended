@@ -41,6 +41,7 @@ const QuestionPreview = ({ question }) => {
       return (
         <TextField
           disabled
+          InputProps={{ style: { fontSize: font.size } }}
           variant="standard"
           value="Texto de respuesta breve"
         />
@@ -49,6 +50,7 @@ const QuestionPreview = ({ question }) => {
       return (
         <TextField
           disabled
+          InputProps={{ style: { fontSize: font.size } }}
           variant="standard"
           value="Texto de respuesta larga"
           fullWidth
@@ -61,6 +63,7 @@ const QuestionPreview = ({ question }) => {
             <FormControlLabel
               key={i}
               disabled
+              sx={{ fontSize: font.size }}
               value={option}
               control={<Radio />}
               label={option}
@@ -69,6 +72,7 @@ const QuestionPreview = ({ question }) => {
           {question.other && (
             <FormControlLabel
               disabled
+              sx={{ fontSize: font.size }}
               value="otros"
               control={<Radio />}
               label="Otros"

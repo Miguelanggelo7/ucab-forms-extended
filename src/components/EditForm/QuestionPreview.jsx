@@ -3,11 +3,9 @@ import { Card, Typography } from "@mui/material";
 import { useForm } from "../../hooks/useForm";
 import AllQuestionsPreview from "../AllQuestionsPreview";
 import RequiredMark from "../RequiredMark";
-import { useFont } from "../../hooks/useFont";
 
 const EditQuestion = ({ question, setOpenDrawer }) => {
   const { current, setCurrent } = useForm();
-  const { font } = useFont();
   return useMemo(() => {
     const handleClick = () => {
       setCurrent(question.id);
