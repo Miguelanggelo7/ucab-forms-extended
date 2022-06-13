@@ -10,7 +10,7 @@ const ThemeProvider = ({ children }) => {
     () =>
       createTheme({
         typography: {
-          fontFamily: "Poppins",
+          fontFamily: font.family,
         },
         components: {
           MuiTypography: {

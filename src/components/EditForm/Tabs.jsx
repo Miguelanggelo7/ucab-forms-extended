@@ -22,8 +22,8 @@ const Tabs = ({ setOpenDrawer }) => {
           variant="fullWidth"
           aria-label="questions/responses tabs"
         >
-          <Tab label="Preguntas" value={"0"} />
-          <Tab label="Respuestas" value={"1"} />
+          <Tab label="Preguntas" sx={{ fontFamily: "Poppins" }} value={"0"} />
+          <Tab label="Respuestas" sx={{ fontFamily: "Poppins" }} value={"1"} />
         </TabList>
       </AppBar>
       <TabPanel sx={{ p: 0, pt: 1 }} value={"0"}>

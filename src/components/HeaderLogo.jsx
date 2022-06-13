@@ -18,7 +18,12 @@ const HeaderLogo = ({ sx, ...props }) => {
       }}
       {...props}
     >
-      <Typography variant="h6" component="h1" align="center">
+      <Typography
+        variant="h6"
+        component="h1"
+        align="center"
+        fontFamily={"Poppins"}
+      >
         UCAB Forms
       </Typography>
     </Box>

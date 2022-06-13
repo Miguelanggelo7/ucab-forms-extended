@@ -21,12 +21,7 @@ const EditQuestion = ({ question, setOpenDrawer }) => {
         elevation={question.id === current ? 5 : 0}
         variant={question.id === current ? "elevation" : "outlined"}
       >
-        <Typography
-          mb={2}
-          fontFamily={font.family}
-          fontWeight="bold"
-          fontSize={`${font.size + 2}px`}
-        >
+        <Typography mb={2}>
           {question.title}
           <RequiredMark question={question} />
         </Typography>
