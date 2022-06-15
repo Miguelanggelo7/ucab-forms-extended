@@ -19,7 +19,7 @@ import { sendNotification } from "./notifications";
 
 const formsRef = collection(db, "forms");
 
-export const createForm = (user) => {
+export const createForm = (user, fatherId) => {
   const formRef = doc(formsRef);
 
   setDoc(formRef, {
@@ -45,6 +45,15 @@ export const createForm = (user) => {
 
   insertQuestion(formRef.id, { ...defaultQuestion, index: 0 });
 
+  return formRef.id;
+};
+
+export const createSubsection = (fatherForm) => {
+  const newFormsRef = collection(db, `forms/${fatherForm.id}/subsections`);
+  const formRef = doc(newFormsRef);
+  setDoc(formRef, {
+    prueba: "prueba",
+  });
   return formRef.id;
 };
 
