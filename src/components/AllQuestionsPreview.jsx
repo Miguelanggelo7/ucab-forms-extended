@@ -42,7 +42,7 @@ const QuestionPreview = ({ question }) => {
       return (
         <TextField
           disabled
-          InputProps={{ style: { fontSize: font.size } }}
+          InputProps={{ style: { width: "103%" } }}
           variant="standard"
           value="Texto de respuesta breve"
         />
@@ -51,7 +51,6 @@ const QuestionPreview = ({ question }) => {
       return (
         <TextField
           disabled
-          InputProps={{ style: { fontSize: font.size } }}
           variant="standard"
           value="Texto de respuesta larga"
           fullWidth
@@ -64,14 +63,6 @@ const QuestionPreview = ({ question }) => {
             <FormControlLabel
               key={i}
               disabled
-              sx={{
-                ".MuiFormControlLabel-label": {
-                  fontSize: `${font.size}px`,
-                },
-                "& svg": {
-                  fontSize: `${font.size + 7}px`,
-                },
-              }}
               value={option}
               control={<Radio />}
               label={option}
@@ -80,14 +71,6 @@ const QuestionPreview = ({ question }) => {
           {question.other && (
             <FormControlLabel
               disabled
-              sx={{
-                ".MuiFormControlLabel-label": {
-                  fontSize: `${font.size}px`,
-                },
-                "& svg": {
-                  fontSize: `${font.size + 7}px`,
-                },
-              }}
               value="otros"
               control={<Radio />}
               label="Otros"
@@ -105,14 +88,6 @@ const QuestionPreview = ({ question }) => {
               value={option}
               control={<Checkbox />}
               label={option}
-              sx={{
-                ".MuiFormControlLabel-label": {
-                  fontSize: `${font.size}px`,
-                },
-                "& svg": {
-                  fontSize: `${font.size + 7}px`,
-                },
-              }}
             />
           ))}
           {question.other && (
@@ -121,30 +96,13 @@ const QuestionPreview = ({ question }) => {
               value="otros"
               control={<Checkbox />}
               label="Otros"
-              sx={{
-                ".MuiFormControlLabel-label": {
-                  fontSize: `${font.size}px`,
-                },
-                "& svg": {
-                  fontSize: `${font.size + 7}px`,
-                },
-              }}
             />
           )}
         </FormGroup>
       );
     case SELECT:
       return (
-        <Select
-          variant="standard"
-          displayEmpty
-          defaultValue=""
-          sx={{
-            ".MuiInput-input": {
-              fontSize: `${font.size}px`,
-            },
-          }}
-        >
+        <Select variant="standard" displayEmpty defaultValue="">
           {question.options.map((option, i) => (
             <MenuItem disabled key={i} value={option}>
               {option}
@@ -202,15 +160,7 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => (
-            <TextField
-              InputLabelProps={{
-                style: { fontSize: font.size },
-              }}
-              variant="standard"
-              {...params}
-            />
-          )}
+          renderInput={(params) => <TextField variant="standard" {...params} />}
         />
       );
     case DATETIME:
@@ -220,15 +170,7 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => (
-            <TextField
-              InputLabelProps={{
-                style: { fontSize: font.size },
-              }}
-              variant="standard"
-              {...params}
-            />
-          )}
+          renderInput={(params) => <TextField variant="standard" {...params} />}
         />
       );
     case FILE:

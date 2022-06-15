@@ -26,6 +26,7 @@ import {
   TEXTAREA,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
+import { useFont } from "../../hooks/useFont";
 
 const sliderMinValues = [0, 1];
 const sliderMaxValues = [2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -75,6 +76,7 @@ const specialTypes = [
 
 const Options = ({ question, debouncedSave }) => {
   const { setQuestions } = useForm();
+  const { font } = useFont();
 
   return useMemo(() => {
     const handleChangeOption = (i) => (e) => {
@@ -215,13 +217,9 @@ const Options = ({ question, debouncedSave }) => {
                 </Box>
               )}
             </RadioGroup>
-            <Button size="small" onClick={addOption}>
-              Agregar opción
-            </Button>
+            <Button onClick={addOption}>Agregar opción</Button>
             {!question.other && (
-              <Button size="small" onClick={addOther}>
-                Agregar "Otros"
-              </Button>
+              <Button onClick={addOther}>Agregar "Otros"</Button>
             )}
           </FormControl>
         );
@@ -270,13 +268,9 @@ const Options = ({ question, debouncedSave }) => {
                 </Box>
               )}
             </FormGroup>
-            <Button size="small" onClick={addOption}>
-              Agregar opción
-            </Button>
+            <Button onClick={addOption}>Agregar opción</Button>
             {!question.other && (
-              <Button size="small" onClick={addOther}>
-                Agregar "Otros"
-              </Button>
+              <Button onClick={addOther}>Agregar "Otros"</Button>
             )}
           </FormControl>
         );
