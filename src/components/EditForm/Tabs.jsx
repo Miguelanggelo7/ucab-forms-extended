@@ -3,6 +3,7 @@ import { AppBar, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Questions from "./Questions";
 import Responses from "./Responses";
+import Fade from "react-reveal/Fade";
 
 const Tabs = ({ setOpenDrawer }) => {
   const [currentTab, setCurrentTab] = useState("0");
@@ -29,7 +30,9 @@ const Tabs = ({ setOpenDrawer }) => {
         <Questions setOpenDrawer={setOpenDrawer} />
       </TabPanel>
       <TabPanel sx={{ p: 0, pt: 1 }} value={"1"}>
-        <Responses />
+        <Fade>
+          <Responses />
+        </Fade>
       </TabPanel>
     </TabContext>
   );

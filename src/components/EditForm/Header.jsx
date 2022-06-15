@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   Tooltip,
   useMediaQuery,
+  Typography,
 } from "@mui/material";
 import {
   usePopupState,
@@ -135,7 +136,13 @@ const EditFormHeader = ({ setOpenDrawer }) => {
                 </Tooltip>
                 <Button
                   variant="contained"
-                  sx={{ px: 3, ml: 1, mr: 2 }}
+                  color="secondary"
+                  sx={{
+                    px: 3,
+                    ml: 1,
+                    mr: 2,
+                    color: "#fff",
+                  }}
                   onClick={handleClickOpenSend}
                 >
                   Enviar

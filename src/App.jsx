@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./hooks/useUser";
+import { FontProvider } from "./hooks/useFont";
 import { AlertProvider } from "./hooks/useAlert";
 import { FormProvider } from "./hooks/useForm";
 import AuthPage from "./components/AuthPage";
@@ -13,57 +14,78 @@ import Dashboard from "./pages/Dashboard";
 import EditForm from "./pages/EditForm";
 import AnswerForm from "./pages/AnswerForm";
 import Sent from "./pages/Sent";
+import Fade from "react-reveal/Fade";
 
 const App = () => {
   return (
     <UserProvider>
       <AlertProvider>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route
-            element={
-              <UnAuthPage>
-                <AuthLayout />
-              </UnAuthPage>
-            }
-          >
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
-          <Route
-            element={
-              <AuthPage>
-                <Outlet />
-              </AuthPage>
-            }
-          >
+        <FontProvider>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route
-              path="/dashboard"
               element={
-                <>
-                  <Header />
-                  <Dashboard />
-                </>
+                <UnAuthPage>
+                  <AuthLayout />
+                </UnAuthPage>
+              }
+            >
+              <Route
+                path="/login"
+                element={
+                  <>
+                    <Fade key={1}>
+                      <Login />
+                    </Fade>
+                  </>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <>
+                    <Fade key={2}>
+                      <Signup />
+                    </Fade>
+                  </>
+                }
+              />
+            </Route>
+            <Route
+              element={
+                <AuthPage>
+                  <Outlet />
+                </AuthPage>
+              }
+            >
+              <Route
+                path="/dashboard"
+                element={
+                  <>
+                    <Header />
+                    <Dashboard />
+                  </>
+                }
+              />
+              <Route
+                path="/forms/edit/:id"
+                element={
+                  <FormProvider>
+                    <EditForm />
+                  </FormProvider>
+                }
+              />
+            </Route>
+            <Route path="/forms/answer/:id" element={<AnswerForm />} />
+            <Route path="/forms/answer/:id/sent" element={<Sent />} />
+            <Route
+              path="*"
+              element={
+                <AnswerPageText>No se encontró esta página</AnswerPageText>
               }
             />
-            <Route
-              path="/forms/edit/:id"
-              element={
-                <FormProvider>
-                  <EditForm />
-                </FormProvider>
-              }
-            />
-          </Route>
-          <Route path="/forms/answer/:id" element={<AnswerForm />} />
-          <Route path="/forms/answer/:id/sent" element={<Sent />} />
-          <Route
-            path="*"
-            element={
-              <AnswerPageText>No se encontró esta página</AnswerPageText>
-            }
-          />
-        </Routes>
+          </Routes>
+        </FontProvider>
       </AlertProvider>
     </UserProvider>
   );

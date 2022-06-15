@@ -35,7 +35,7 @@ const AuthLayout = () => {
         <Box
           sx={{
             maxWidth: 430,
-            background: "rgba(14, 14, 14, 0.7)",
+            background: "#fff",
             boxShadow: 3,
             borderRadius: 2.5,
             p: 4,

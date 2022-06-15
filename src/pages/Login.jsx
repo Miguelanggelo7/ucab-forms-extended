@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div>
       <Typography variant="h5" component="h2" gutterBottom>
         Iniciar Sesión
       </Typography>
@@ -86,7 +86,7 @@ const Login = () => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };
 

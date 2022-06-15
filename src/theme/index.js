@@ -8,15 +8,23 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: "#0a0a0a",
+          backgroundColor: "#fafafa",
         },
       },
     },
   },
   palette: {
-    mode: "dark",
     primary: {
-      main: "#6bc4eb",
+      main: "#4B7ABC",
+    },
+    secondary: {
+      main: "#006225",
+    },
+    warning: {
+      main: "#FFF120",
+    },
+    error: {
+      main: "#C22027",
     },
   },
 });

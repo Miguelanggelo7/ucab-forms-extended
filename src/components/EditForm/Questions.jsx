@@ -6,6 +6,8 @@ import { useForm } from "../../hooks/useForm";
 import { insertQuestion } from "../../api/questions";
 import QuestionPreview from "./QuestionPreview";
 import { calculateNewIndex } from "../../utils/questions";
+import { motion } from "framer-motion";
+import Fade from "react-reveal/Fade";
 
 const Questions = ({ setOpenDrawer }) => {
   const { form, questions, current, setCurrent } = useForm();
@@ -24,23 +26,33 @@ const Questions = ({ setOpenDrawer }) => {
 
     return (
       <Box>
-        <Stack spacing={2}>
-          {questions.map((question, i) => (
-            <QuestionPreview
-              key={i}
-              question={question}
-              setOpenDrawer={setOpenDrawer}
-            />
-          ))}
-        </Stack>
+        <Fade>
+          <Stack spacing={2}>
+            {questions.map((question, i) => (
+              <QuestionPreview
+                key={i}
+                question={question}
+                setOpenDrawer={setOpenDrawer}
+              />
+            ))}
+          </Stack>
+        </Fade>
         <Tooltip title="Agregar pregunta" arrow>
-          <Fab
-            color="primary"
-            sx={{ position: "fixed", bottom: "8%", right: "5%" }}
-            onClick={addQuestion}
+          <motion.button
+            style={{
+              position: "fixed",
+              bottom: "8%",
+              right: "5%",
+              background: "none",
+              border: "none",
+            }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            <Add />
-          </Fab>
+            <Fab color="primary" onClick={addQuestion}>
+              <Add />
+            </Fab>
+          </motion.button>
         </Tooltip>
       </Box>
     );
