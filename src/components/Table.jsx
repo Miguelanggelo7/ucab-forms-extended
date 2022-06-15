@@ -9,8 +9,7 @@ const Table = ({ localization, options, ...props }) => {
       options={{
         headerStyle: {
           fontFamily: font.family,
-          fontWeight: "bold",
-          fontSize: `${font.size + 3}px`,
+          fontSize: `${font.size}px`,
         },
         searchFieldStyle: {
           fontFamily: font.family,

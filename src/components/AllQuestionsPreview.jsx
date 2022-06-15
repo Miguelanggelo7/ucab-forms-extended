@@ -11,6 +11,7 @@ import {
   Stack,
   TextField,
   Typography,
+  FormControl,
 } from "@mui/material";
 import { DragHandle as DragHandleIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
@@ -63,7 +64,14 @@ const QuestionPreview = ({ question }) => {
             <FormControlLabel
               key={i}
               disabled
-              sx={{ fontSize: font.size }}
+              sx={{
+                ".MuiFormControlLabel-label": {
+                  fontSize: `${font.size}px`,
+                },
+                "& svg": {
+                  fontSize: `${font.size + 7}px`,
+                },
+              }}
               value={option}
               control={<Radio />}
               label={option}
@@ -72,7 +80,14 @@ const QuestionPreview = ({ question }) => {
           {question.other && (
             <FormControlLabel
               disabled
-              sx={{ fontSize: font.size }}
+              sx={{
+                ".MuiFormControlLabel-label": {
+                  fontSize: `${font.size}px`,
+                },
+                "& svg": {
+                  fontSize: `${font.size + 7}px`,
+                },
+              }}
               value="otros"
               control={<Radio />}
               label="Otros"
@@ -90,6 +105,14 @@ const QuestionPreview = ({ question }) => {
               value={option}
               control={<Checkbox />}
               label={option}
+              sx={{
+                ".MuiFormControlLabel-label": {
+                  fontSize: `${font.size}px`,
+                },
+                "& svg": {
+                  fontSize: `${font.size + 7}px`,
+                },
+              }}
             />
           ))}
           {question.other && (
@@ -98,13 +121,30 @@ const QuestionPreview = ({ question }) => {
               value="otros"
               control={<Checkbox />}
               label="Otros"
+              sx={{
+                ".MuiFormControlLabel-label": {
+                  fontSize: `${font.size}px`,
+                },
+                "& svg": {
+                  fontSize: `${font.size + 7}px`,
+                },
+              }}
             />
           )}
         </FormGroup>
       );
     case SELECT:
       return (
-        <Select variant="standard" displayEmpty defaultValue="">
+        <Select
+          variant="standard"
+          displayEmpty
+          defaultValue=""
+          sx={{
+            ".MuiInput-input": {
+              fontSize: `${font.size}px`,
+            },
+          }}
+        >
           {question.options.map((option, i) => (
             <MenuItem disabled key={i} value={option}>
               {option}
@@ -127,7 +167,7 @@ const QuestionPreview = ({ question }) => {
                 gap: 1,
               }}
             >
-              <Typography>{option}</Typography>
+              <Typography fontSize={font.size}>{option}</Typography>
               <DragHandleIcon />
             </Card>
           ))}
@@ -144,7 +184,15 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => <TextField variant="standard" {...params} />}
+          renderInput={(params) => (
+            <TextField
+              InputLabelProps={{
+                style: { fontSize: font.size },
+              }}
+              variant="standard"
+              {...params}
+            />
+          )}
         />
       );
     case TIME:
@@ -154,7 +202,15 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => <TextField variant="standard" {...params} />}
+          renderInput={(params) => (
+            <TextField
+              InputLabelProps={{
+                style: { fontSize: font.size },
+              }}
+              variant="standard"
+              {...params}
+            />
+          )}
         />
       );
     case DATETIME:
@@ -164,7 +220,15 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => <TextField variant="standard" {...params} />}
+          renderInput={(params) => (
+            <TextField
+              InputLabelProps={{
+                style: { fontSize: font.size },
+              }}
+              variant="standard"
+              {...params}
+            />
+          )}
         />
       );
     case FILE:
