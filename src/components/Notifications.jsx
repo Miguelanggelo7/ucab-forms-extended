@@ -16,12 +16,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getNotifications, readNotifications } from "../api/notifications";
 import { useUser } from "../hooks/useUser";
+import { useFont } from "../hooks/useFont";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [reading, setReading] = useState(false);
   const navigate = useNavigate();
   const user = useUser();
+  const { font } = useFont();
 
   const popupStateNotifications = usePopupState({
     variant: "popover",
@@ -76,7 +78,11 @@ const Notifications = () => {
         {notifications.map((notification, i) => [
           <MenuItem
             onClick={() => navigate(notification.goto)}
-            sx={{ whiteSpace: "pre-wrap" }}
+            sx={{
+              whiteSpace: "pre-wrap",
+              fontFamily: font.family,
+              fontSize: `${font.size}px`,
+            }}
           >
             {notification.message}
           </MenuItem>,

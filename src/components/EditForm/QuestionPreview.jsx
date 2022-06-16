@@ -6,7 +6,6 @@ import RequiredMark from "../RequiredMark";
 
 const EditQuestion = ({ question, setOpenDrawer }) => {
   const { current, setCurrent } = useForm();
-
   return useMemo(() => {
     const handleClick = () => {
       setCurrent(question.id);

@@ -11,7 +11,7 @@ const useFont = () => {
 };
 
 const FontProvider = ({ children }) => {
-  const [font, setFont] = useState({ type: "Poppins", size: "Medium" });
+  const [font, setFont] = useState({ family: "Poppins", size: 16 });
 
   const value = { font, setFont };
 

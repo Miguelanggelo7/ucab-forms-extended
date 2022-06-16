@@ -11,6 +11,7 @@ import {
   Stack,
   TextField,
   Typography,
+  FormControl,
 } from "@mui/material";
 import { DragHandle as DragHandleIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
@@ -31,13 +32,17 @@ import {
 import Select from "./Select";
 import Slider from "./Slider";
 import UploadButton from "./UploadButton";
+import { useFont } from "../hooks/useFont";
 
 const QuestionPreview = ({ question }) => {
+  const { font } = useFont();
+
   switch (question.type) {
     case TEXT:
       return (
         <TextField
           disabled
+          InputProps={{ style: { width: "103%" } }}
           variant="standard"
           value="Texto de respuesta breve"
         />
@@ -120,7 +125,7 @@ const QuestionPreview = ({ question }) => {
                 gap: 1,
               }}
             >
-              <Typography>{option}</Typography>
+              <Typography fontSize={font.size}>{option}</Typography>
               <DragHandleIcon />
             </Card>
           ))}
@@ -137,7 +142,15 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => <TextField variant="standard" {...params} />}
+          renderInput={(params) => (
+            <TextField
+              InputLabelProps={{
+                style: { fontSize: font.size },
+              }}
+              variant="standard"
+              {...params}
+            />
+          )}
         />
       );
     case TIME:
