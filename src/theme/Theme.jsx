@@ -13,21 +13,34 @@ const ThemeProvider = ({ children }) => {
           fontFamily: font.family,
         },
         components: {
-          // Labels de los inputs
-          // MuiInputLabel: {
-          //   styleOverrides: {
-          //     standard: {
-          //       fontSize: font.size,
-          //     },
-          //   },
-          // },
-          // MuiFormControlLabel: {
-          //   styleOverrides: {
-          //     root:{
-          //       fontSize: '80px'
-          //     }
-          //   }
-          // },
+          MuiInputLabel: {
+            styleOverrides: {
+              root: {
+                fontSize: font.size,
+              },
+            },
+          },
+          MuiInput: {
+            styleOverrides: {
+              root: {
+                fontSize: font.size,
+              },
+            },
+          },
+          MuiFormControlLabel: {
+            styleOverrides: {
+              label: {
+                fontSize: `${font.size}px`,
+              },
+            },
+          },
+          MuiFormLabel: {
+            styleOverrides: {
+              root: {
+                fontSize: `${font.size}px`,
+              },
+            },
+          },
           MuiCssBaseline: {
             styleOverrides: {
               body: {

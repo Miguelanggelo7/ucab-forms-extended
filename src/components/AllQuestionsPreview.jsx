@@ -11,6 +11,7 @@ import {
   Stack,
   TextField,
   Typography,
+  FormControl,
 } from "@mui/material";
 import { DragHandle as DragHandleIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
@@ -41,7 +42,7 @@ const QuestionPreview = ({ question }) => {
       return (
         <TextField
           disabled
-          InputProps={{ style: { fontSize: font.size } }}
+          InputProps={{ style: { width: "103%" } }}
           variant="standard"
           value="Texto de respuesta breve"
         />
@@ -50,7 +51,6 @@ const QuestionPreview = ({ question }) => {
       return (
         <TextField
           disabled
-          InputProps={{ style: { fontSize: font.size } }}
           variant="standard"
           value="Texto de respuesta larga"
           fullWidth
@@ -63,7 +63,6 @@ const QuestionPreview = ({ question }) => {
             <FormControlLabel
               key={i}
               disabled
-              sx={{ fontSize: font.size }}
               value={option}
               control={<Radio />}
               label={option}
@@ -72,7 +71,6 @@ const QuestionPreview = ({ question }) => {
           {question.other && (
             <FormControlLabel
               disabled
-              sx={{ fontSize: font.size }}
               value="otros"
               control={<Radio />}
               label="Otros"
@@ -127,7 +125,7 @@ const QuestionPreview = ({ question }) => {
                 gap: 1,
               }}
             >
-              <Typography>{option}</Typography>
+              <Typography fontSize={font.size}>{option}</Typography>
               <DragHandleIcon />
             </Card>
           ))}
@@ -144,7 +142,15 @@ const QuestionPreview = ({ question }) => {
           disabled
           value={null}
           onChange={() => null}
-          renderInput={(params) => <TextField variant="standard" {...params} />}
+          renderInput={(params) => (
+            <TextField
+              InputLabelProps={{
+                style: { fontSize: font.size },
+              }}
+              variant="standard"
+              {...params}
+            />
+          )}
         />
       );
     case TIME:

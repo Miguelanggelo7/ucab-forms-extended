@@ -125,6 +125,15 @@ const EditFormHeader = ({ setOpenDrawer }) => {
           rightIcons={
             upMd && (
               <>
+                <Tooltip title="Enviar encuesta" arrow>
+                  <IconButton
+                    size="large"
+                    color="inherit"
+                    onClick={handleClickOpenSend}
+                  >
+                    <SendIcon />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip title="Configuración" arrow>
                   <IconButton
                     size="large"
@@ -134,19 +143,6 @@ const EditFormHeader = ({ setOpenDrawer }) => {
                     <SettingsIcon />
                   </IconButton>
                 </Tooltip>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  sx={{
-                    px: 3,
-                    ml: 1,
-                    mr: 2,
-                    color: "#fff",
-                  }}
-                  onClick={handleClickOpenSend}
-                >
-                  Enviar
-                </Button>
               </>
             )
           }
