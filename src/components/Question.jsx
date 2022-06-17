@@ -29,6 +29,7 @@ import {
   TEXT,
   TEXTAREA,
   TIME,
+  VOICE,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -36,6 +37,7 @@ import SortableList from "./SortableList";
 import UploadButton from "./UploadButton";
 import Rating from "./Rating";
 import RequiredMark from "./RequiredMark";
+import RecordAudio from "./RecordAudio";
 
 const Question = ({ answers, question, setAnswers }) => {
   const [other, setOther] = useState("");
@@ -370,6 +372,12 @@ const Question = ({ answers, question, setAnswers }) => {
               }}
             />
           </Box>
+        );
+      case VOICE:
+        return (
+          <div>
+            <RecordAudio />
+          </div>
         );
       default:
         return <Typography>No se puede mostrar la pregunta</Typography>;

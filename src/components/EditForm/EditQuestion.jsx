@@ -128,6 +128,8 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.multipleFiles = null;
       }
 
+      console.log(type);
+
       debouncedSave(newQuestion);
 
       setQuestions((questions) =>

@@ -28,11 +28,13 @@ import {
   TEXT,
   TEXTAREA,
   TIME,
+  VOICE,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
 import UploadButton from "./UploadButton";
 import { useFont } from "../hooks/useFont";
+import MicIcon from "@mui/icons-material/Mic";
 
 const QuestionPreview = ({ question }) => {
   const { font } = useFont();
@@ -175,6 +177,15 @@ const QuestionPreview = ({ question }) => {
       );
     case FILE:
       return <UploadButton disabled />;
+    case VOICE:
+      return (
+        <div style={{ display: "inline-flex" }}>
+          <MicIcon
+            sx={{ color: "#c4c4c4", marginTop: "12pt", marginRight: "10pt" }}
+          />
+          <audio src={null} controls controlsList="nodownload noplaybackrate" />
+        </div>
+      );
     default:
       return null;
   }

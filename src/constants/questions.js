@@ -10,6 +10,7 @@ export const DATE = "date";
 export const TIME = "time";
 export const DATETIME = "datetime";
 export const FILE = "file";
+export const VOICE = "voice";
 
 export const compatibility = {
   [TEXT]: [TEXT, TEXTAREA, RADIO, SELECT],
@@ -24,6 +25,7 @@ export const compatibility = {
   [TIME]: [DATE, TIME, DATETIME],
   [DATETIME]: [DATE, TIME, DATETIME],
   [FILE]: [FILE],
+  [VOICE]: [VOICE, FILE],
 };
 
 export const ratingLabels = [
@@ -83,6 +85,10 @@ export const questionTypes = [
   {
     value: FILE,
     label: "Carga de archivo",
+  },
+  {
+    value: VOICE,
+    label: "Audio",
   },
 ];
 

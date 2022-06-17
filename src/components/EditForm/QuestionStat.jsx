@@ -25,6 +25,7 @@ import {
   TEXTAREA,
   TIME,
   ratingLabels,
+  VOICE,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import FilesResponse from "./FilesResponse";

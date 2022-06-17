@@ -20,6 +20,7 @@ import {
   RATING,
   SLIDER,
   SORTABLE,
+  VOICE,
 } from "../constants/questions";
 import { useUser } from "../hooks/useUser";
 import Header from "../components/Header";
@@ -43,7 +44,11 @@ const AnswerForm = () => {
     const answers = {};
 
     questions.forEach((question) => {
-      if (question.type === CHECKBOX || question.type === FILE) {
+      if (
+        question.type === CHECKBOX ||
+        question.type === FILE ||
+        question.type === VOICE
+      ) {
         answers[question.id] = [];
       } else if (question.type === RADIO && question.required) {
         answers[question.id] = question.options[0];
@@ -223,6 +228,7 @@ const AnswerForm = () => {
                 * Obligatorio
               </Typography>
             </Card>
+            {console.log(form.questions)}
             {form.questions.map((question, i) => (
               <Card key={i} sx={{ p: 3 }} variant="outlined">
                 <Question
