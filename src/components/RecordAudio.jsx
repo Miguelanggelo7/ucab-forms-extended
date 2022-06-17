@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import StopIcon from "@mui/icons-material/Stop";
 import MicIcon from "@mui/icons-material/Mic";
 import { IconButton } from "@mui/material";
-import "./RecordAudio.css";
 
 const RecordAudio = ({}) => {
   const audioRef = useRef(null);
