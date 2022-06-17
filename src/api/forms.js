@@ -19,7 +19,7 @@ import { sendNotification } from "./notifications";
 
 const formsRef = collection(db, "forms");
 
-export const createForm = (user, fatherId) => {
+export const createForm = (user, sonId) => {
   const formRef = doc(formsRef);
 
   setDoc(formRef, {
@@ -41,6 +41,7 @@ export const createForm = (user, fatherId) => {
       endDate: null,
       randomOrder: false,
     },
+    subsections: [],
   });
 
   insertQuestion(formRef.id, { ...defaultQuestion, index: 0 });
@@ -48,12 +49,32 @@ export const createForm = (user, fatherId) => {
   return formRef.id;
 };
 
-export const createSubsection = (fatherForm) => {
-  const newFormsRef = collection(db, `forms/${fatherForm.id}/subsections`);
-  const formRef = doc(newFormsRef);
+export const createSubsection = (father) => {
+  const formRef = doc(formsRef);
+
   setDoc(formRef, {
-    prueba: "prueba",
+    title: "Subsección sin título",
+    description: "",
+    createdAt: new Date(),
+    responses: 0,
+    collaborators: [],
+    settings: {
+      allowResponses: true,
+      maxResponses: "",
+      onlyOneResponse: false,
+      startDate: null,
+      endDate: null,
+      randomOrder: false,
+    },
+    subsections: [],
   });
+
+  insertQuestion(formRef.id, { ...defaultQuestion, index: 0 });
+
+  father.subsections.push(formRef.id);
+
+  saveForm(father);
+
   return formRef.id;
 };
 

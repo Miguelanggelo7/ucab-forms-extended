@@ -40,13 +40,11 @@ import { useAlert } from "../../hooks/useAlert";
 import EditOptions from "./EditOptions";
 import { calculateNewIndex } from "../../utils/questions";
 import selectAnimation from "../../img/select.json";
-import { useFont } from "../../hooks/useFont";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
     useForm();
   const openAlert = useAlert();
-  const { font } = useFont();
 
   const question = useMemo(() => {
     return questions.find((q) => q.id === current);
