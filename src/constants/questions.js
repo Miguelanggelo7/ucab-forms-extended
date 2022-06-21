@@ -97,4 +97,5 @@ export const defaultQuestion = {
   type: TEXT,
   required: false,
   specialType: "",
+  restricted: false,
 };

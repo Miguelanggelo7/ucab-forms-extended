@@ -377,6 +377,7 @@ const Question = ({ answers, question, setAnswers }) => {
         return (
           <div>
             <RecordAudio />
+            {/* mi amigo miguel debe guardar los audios en firebase */}
           </div>
         );
       default:
