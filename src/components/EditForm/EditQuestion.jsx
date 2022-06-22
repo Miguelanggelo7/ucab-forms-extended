@@ -49,12 +49,15 @@ import selectAnimation from "../../img/select.json";
 import { useFont } from "../../hooks/useFont";
 import { Clear as ClearIcon } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
+import RestrictionDialog from "../RestrictionDialog";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
     useForm();
   const openAlert = useAlert();
   const { font } = useFont();
+
+  const [openResDialog, setOpenResDialog] = useState(false);
 
   const question = useMemo(() => {
     return questions.find((q) => q.id === current);
@@ -545,6 +548,9 @@ const EditQuestion = ({ setOpenDrawer }) => {
               <Button fullWidth onClick={addRestriction}>
                 Agregar Restricción
               </Button>
+              <Button fullWidth onClick={() => setOpenResDialog(true)}>
+                Crear Restricción
+              </Button>
             </Box>
           )}
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -560,6 +566,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
             </Tooltip>
           </Box>
         </Box>
+        <RestrictionDialog open={openResDialog} setOpen={setOpenResDialog} />
       </Stack>
     );
   }, [
@@ -572,6 +579,8 @@ const EditQuestion = ({ setOpenDrawer }) => {
     setCurrent,
     setOpenDrawer,
     setQuestions,
+    openResDialog,
+    setOpenResDialog,
   ]);
 };
 
