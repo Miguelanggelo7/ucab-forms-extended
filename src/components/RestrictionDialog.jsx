@@ -64,7 +64,9 @@ const DialogBody = ({ closeDialog }) => {
       options.splice(i, 1);
 
       const newRestriction = { ...restriction, options };
-
+      if (newRestriction.optionSelected !== 0) {
+        newRestriction.optionSelected -= 1;
+      }
       setRestriction(newRestriction);
     }
   };
@@ -127,11 +129,21 @@ const DialogBody = ({ closeDialog }) => {
                           />
                         }
                       />
-                      <Tooltip title="Elegir esta opción">
-                        <IconButton>
-                          <Check />
-                        </IconButton>
-                      </Tooltip>
+                      {restriction.optionSelected === i ? (
+                        <Tooltip title="Esta es la opción correcta">
+                          <IconButton>
+                            <Check color="secondary" />
+                          </IconButton>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title="Elegir esta opción">
+                          <IconButton
+                            onClick={() => changeValue("optionSelected", i)}
+                          >
+                            <Check />
+                          </IconButton>
+                        </Tooltip>
+                      )}
                       <Tooltip title="Eliminar">
                         <IconButton onClick={deleteRestriction(i)}>
                           <Clear />
