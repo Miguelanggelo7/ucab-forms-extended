@@ -121,6 +121,21 @@ const emojis = [
   {
     url: "https://twemoji.maxcdn.com/2/72x72/1f62e.png",
   },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f494.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f4a9.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f637.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f64f.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f628.png",
+  },
 ];
 
 const Options = ({ question, debouncedSave }) => {
