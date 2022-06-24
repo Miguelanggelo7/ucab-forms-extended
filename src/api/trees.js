@@ -29,7 +29,10 @@ export const enableSections = (form) => {
 };
 
 export const getTree = (form, callback) => {
-  const ref = form ? doc(treeRef, form.treeId) : doc(treeRef);
+  const ref =
+    !form || typeof form.treeId === "undefined"
+      ? doc(treeRef)
+      : doc(treeRef, form.treeId);
 
   return onSnapshot(ref, (doc) => {
     if (!doc.exists()) {
