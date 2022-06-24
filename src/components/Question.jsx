@@ -266,6 +266,7 @@ const Question = ({ answers, question, setAnswers }) => {
       case RATING:
         return (
           <Rating
+            question={question}
             value={answers[question.id]}
             onChange={(e, value) =>
               setAnswers({ ...answers, [question.id]: value || 0 })

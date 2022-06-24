@@ -36,6 +36,7 @@ import {
   TEXT,
   TEXTAREA,
   SLIDERMOJI,
+  RATING,
 } from "../../constants/questions";
 import {
   deleteQuestion,
@@ -315,6 +316,12 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.multipleFiles = false;
       } else {
         newQuestion.multipleFiles = null;
+      }
+
+      if (type === RATING) {
+        newQuestion.typeRating = "star";
+      } else {
+        newQuestion.typeRating = null;
       }
 
       console.log(type);

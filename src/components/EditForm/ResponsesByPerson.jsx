@@ -90,7 +90,7 @@ const Response = () => {
       }
 
       if (question.type === RATING) {
-        return <Rating readOnly value={value} />;
+        return <Rating question={question} readOnly value={value} />;
       }
 
       if (question.type === FILE) {

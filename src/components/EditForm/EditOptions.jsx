@@ -15,7 +15,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Clear as ClearIcon } from "@mui/icons-material";
+import {
+  Clear as ClearIcon,
+  FavoriteBorder,
+  SentimentSatisfied,
+  StarBorder,
+} from "@mui/icons-material";
 import {
   CHECKBOX,
   RADIO,
@@ -25,6 +30,7 @@ import {
   TEXT,
   TEXTAREA,
   SLIDERMOJI,
+  RATING,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import { useFont } from "../../hooks/useFont";
@@ -455,6 +461,23 @@ const Options = ({ question, debouncedSave }) => {
               {emojis.map((emoji, i) => (
                 <EmojiButton emoji={emoji.url} key={i} />
               ))}
+            </Box>
+          </>
+        );
+      case RATING:
+        return (
+          <>
+            <Box>
+              <FormLabel component="legend">Elige un icono</FormLabel>
+              <IconButton onClick={() => handleEmoji("typeRating", "star")}>
+                <StarBorder />
+              </IconButton>
+              <IconButton onClick={() => handleEmoji("typeRating", "heart")}>
+                <FavoriteBorder />
+              </IconButton>
+              <IconButton onClick={() => handleEmoji("typeRating", "emoji")}>
+                <SentimentSatisfied />
+              </IconButton>
             </Box>
           </>
         );

@@ -6,13 +6,13 @@ import {
   FormGroup,
   MenuItem,
   Radio,
-  Rating,
   RadioGroup,
   Stack,
   TextField,
   Typography,
   FormControl,
 } from "@mui/material";
+import Rating from "./Rating";
 import { DragHandle as DragHandleIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
 import {
@@ -138,7 +138,7 @@ const QuestionPreview = ({ question }) => {
     case SLIDER:
       return <Slider disabled defaultValue={1} question={question} />;
     case RATING:
-      return <Rating disabled />;
+      return <Rating readOnly question={question} />;
     case DATE:
       return (
         <DatePicker
