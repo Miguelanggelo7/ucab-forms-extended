@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getForm } from "../api/forms";
+import { getTree } from "../api/trees";
 import { getQuestionsChanges } from "../api/questions";
 import { getResponses } from "../api/responses";
 
@@ -13,6 +14,7 @@ const useForm = () => {
 const FormProvider = ({ children }) => {
   const { id: formId } = useParams();
   const [form, setForm] = useState(null);
+  const [tree, setTree] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
   const [current, setCurrent] = useState(null);
@@ -54,9 +56,21 @@ const FormProvider = ({ children }) => {
     };
   }, [formId]);
 
+  useEffect(() => {
+    const unsuscribeTree = getTree(form, (tree) => {
+      setTree(tree);
+    });
+
+    return () => {
+      unsuscribeTree();
+    };
+  }, [form]);
+
   const value = {
     form,
     setForm,
+    tree,
+    setTree,
     questions,
     setQuestions,
     responses,
