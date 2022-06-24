@@ -37,7 +37,31 @@ export const getTree = (form, callback) => {
     }
 
     const tree = doc.data();
-    tree.id = doc.id;
-    callback(tree);
+
+    const q = query(collection(db, "forms"), where("treeId", "==", doc.id));
+
+    return onSnapshot(q, (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        const i = tree.children.indexOf(doc.id);
+        i !== -1
+          ? (tree.children[i] = doc.data())
+          : iterateOverTree(tree.subTrees, doc);
+      });
+
+      callback(tree);
+    });
+  });
+};
+
+const iterateOverTree = (sections, doc) => {
+  sections.forEach((tree) => {
+    const i = tree.children.indexOf(doc.id);
+
+    if (i !== -1) {
+      tree.children[i] = doc.data();
+      return;
+    }
+
+    iterateOverTree(tree.subTrees, doc);
   });
 };
