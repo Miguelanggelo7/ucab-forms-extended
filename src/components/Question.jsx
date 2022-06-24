@@ -30,6 +30,7 @@ import {
   TEXTAREA,
   TIME,
   VOICE,
+  SLIDERMOJI,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -38,6 +39,7 @@ import UploadButton from "./UploadButton";
 import Rating from "./Rating";
 import RequiredMark from "./RequiredMark";
 import RecordAudio from "./RecordAudio";
+import Slidermoji from "./Slidermoji";
 
 const Question = ({ answers, question, setAnswers }) => {
   const [other, setOther] = useState("");
@@ -378,6 +380,13 @@ const Question = ({ answers, question, setAnswers }) => {
           <div>
             <RecordAudio />
             {/* mi amigo miguel debe guardar los audios en firebase */}
+          </div>
+        );
+      case SLIDERMOJI:
+        return (
+          <div>
+            <Slidermoji question={question} />
+            {/* mi amigo miguel debe guardar los datos de esto tambien en firebase */}
           </div>
         );
       default:

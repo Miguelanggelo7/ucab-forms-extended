@@ -8,8 +8,6 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemText,
-  Switch,
   TextField,
   Tooltip,
   useMediaQuery,
@@ -21,7 +19,6 @@ import {
   FormLabel,
 } from "@mui/material";
 import { Check, Clear, Close as CloseIcon } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles";
 
 const DialogBody = ({ closeDialog }) => {
   const dataRestriction = {
@@ -195,8 +192,7 @@ const DialogBody = ({ closeDialog }) => {
 };
 
 const RestrictionDialog = ({ open, setOpen }) => {
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const fullScreen = useMediaQuery("(max-width:320pt)");
 
   const closeDialog = () => {
     setOpen(false);

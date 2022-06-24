@@ -35,6 +35,7 @@ import {
   SLIDER,
   TEXT,
   TEXTAREA,
+  SLIDERMOJI,
 } from "../../constants/questions";
 import {
   deleteQuestion,
@@ -298,6 +299,12 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.max = null;
         newQuestion.minLabel = null;
         newQuestion.maxLabel = null;
+      }
+
+      if (type === SLIDERMOJI) {
+        newQuestion.urlEmoji = "https://twemoji.maxcdn.com/2/72x72/1f600.png";
+      } else {
+        newQuestion.urlEmoji = null;
       }
 
       if (type === SORTABLE) {

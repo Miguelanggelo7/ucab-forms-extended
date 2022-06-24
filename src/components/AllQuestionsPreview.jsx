@@ -29,12 +29,14 @@ import {
   TEXTAREA,
   TIME,
   VOICE,
+  SLIDERMOJI,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
 import UploadButton from "./UploadButton";
 import { useFont } from "../hooks/useFont";
 import MicIcon from "@mui/icons-material/Mic";
+import Slidermoji from "./Slidermoji";
 
 const QuestionPreview = ({ question }) => {
   const { font } = useFont();
@@ -184,6 +186,12 @@ const QuestionPreview = ({ question }) => {
             sx={{ color: "#c4c4c4", marginTop: "12pt", marginRight: "10pt" }}
           />
           <audio src={null} controls controlsList="nodownload noplaybackrate" />
+        </div>
+      );
+    case SLIDERMOJI:
+      return (
+        <div>
+          <Slidermoji disabled defaultValue={1} question={question} />
         </div>
       );
     default:

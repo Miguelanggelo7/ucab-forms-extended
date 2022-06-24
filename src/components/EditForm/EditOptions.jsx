@@ -24,6 +24,7 @@ import {
   SLIDER,
   TEXT,
   TEXTAREA,
+  SLIDERMOJI,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import { useFont } from "../../hooks/useFont";
@@ -74,6 +75,54 @@ const specialTypes = [
   },
 ];
 
+const emojis = [
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f600.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f60d.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f621.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f631.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f62d.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f44d.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f44e.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f641.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f610.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f634.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f912.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/2764.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f642.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f614.png",
+  },
+  {
+    url: "https://twemoji.maxcdn.com/2/72x72/1f62e.png",
+  },
+];
+
 const Options = ({ question, debouncedSave }) => {
   const { setQuestions } = useForm();
   const { font } = useFont();
@@ -96,6 +145,18 @@ const Options = ({ question, debouncedSave }) => {
 
     const handleChange = (field) => (e) => {
       const value = e.target.value;
+
+      const newQuestion = { ...question, [field]: value };
+
+      debouncedSave(newQuestion);
+
+      setQuestions((questions) =>
+        questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const handleEmoji = (field, emoji) => {
+      const value = emoji;
 
       const newQuestion = { ...question, [field]: value };
 
@@ -150,6 +211,14 @@ const Options = ({ question, debouncedSave }) => {
 
       setQuestions((questions) =>
         questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const EmojiButton = (props) => {
+      return (
+        <IconButton onClick={() => handleEmoji("urlEmoji", props.emoji)}>
+          <img style={{ width: "40px" }} src={props.emoji} />
+        </IconButton>
       );
     };
 
@@ -361,6 +430,17 @@ const Options = ({ question, debouncedSave }) => {
               value={question.maxLabel ?? ""}
               onChange={handleChange("maxLabel")}
             />
+          </>
+        );
+      case SLIDERMOJI:
+        return (
+          <>
+            <Box>
+              <FormLabel component="legend">Elige un emoji</FormLabel>
+              {emojis.map((emoji, i) => (
+                <EmojiButton emoji={emoji.url} key={i} />
+              ))}
+            </Box>
           </>
         );
       default:
