@@ -3,11 +3,17 @@ import { useForm } from "../../hooks/useForm";
 import { Box, Button, Typography } from "@mui/material";
 import { enableSections } from "../../api/trees";
 import { useSnackbar } from "notistack";
+import { TreeView, TreeItem } from "@mui/lab";
+import FolderIcon from "@mui/icons-material/Folder";
+import ArticleIcon from "@mui/icons-material/Article";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { useNavigate } from "react-router-dom";
 
 const Sections = () => {
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { tree, form } = useForm();
-  console.log(tree);
 
   const handleEnableSections = () => {
     try {
@@ -23,10 +29,41 @@ const Sections = () => {
     }
   };
 
+  const buildTree = (tree) => (
+    <TreeItem
+      nodeId={`${Math.floor(Math.random() * 1000) + 1 + ""} `}
+      icon={<FolderIcon />}
+      label={tree.title}
+    >
+      {tree.children.map((doc) => (
+        // Se construyen las encuestas hijas si es que tiene
+        <TreeItem
+          key={doc.id}
+          nodeId={doc.id}
+          icon={<ArticleIcon />}
+          label={doc.title}
+          onClick={() => {
+            navigate("/forms/edit/" + doc.id);
+          }}
+        />
+      ))}
+      {tree.subTrees.map((subTree) => {
+        // Ahora se construyen los subarboles si es que tiene
+        return buildTree(subTree);
+      })}
+    </TreeItem>
+  );
+
   return (
     <Box>
       {form && form.treeId ? (
-        <p>Sections</p>
+        <TreeView
+          defaultEndIcon={<div style={{ width: 24 }} />}
+          defaultCollapseIcon={<ArrowDropDownIcon />}
+          defaultExpandIcon={<ArrowRightIcon />}
+        >
+          {buildTree(tree)}
+        </TreeView>
       ) : (
         <Box>
           <Typography>

@@ -45,10 +45,11 @@ export const getTree = (form, callback) => {
 
     return onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((doc) => {
-        const i = tree.children.indexOf(doc.id);
+        const data = { ...doc.data(), id: doc.id };
+        const i = tree.children.indexOf(data.id);
         i !== -1
-          ? (tree.children[i] = doc.data())
-          : iterateOverTree(tree.subTrees, doc);
+          ? (tree.children[i] = data)
+          : iterateOverTree(tree.subTrees, data);
       });
 
       callback(tree);
@@ -61,7 +62,7 @@ const iterateOverTree = (sections, doc) => {
     const i = tree.children.indexOf(doc.id);
 
     if (i !== -1) {
-      tree.children[i] = doc.data();
+      tree.children[i] = doc;
       return;
     }
 
