@@ -29,9 +29,17 @@ const Sections = () => {
     }
   };
 
+  /*
+    TODO:
+      que al colocar los iconos de carpeta y articulo, no se quiten el icono de colapsar y expandir
+      agregar boton de expandir todos y colapsar todos
+      agregar boton para añadir encuesta
+  */
+
   const buildTree = (tree) => (
     <TreeItem
-      nodeId={`${Math.floor(Math.random() * 1000) + 1 + ""} `}
+      nodeId={tree.id + ""}
+      key={tree.id}
       icon={<FolderIcon />}
       label={tree.title}
     >

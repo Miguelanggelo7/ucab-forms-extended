@@ -21,6 +21,7 @@ export const enableSections = (form) => {
     title: "Nueva Sección",
     children: [form.id],
     subTrees: [],
+    id: Math.floor(Math.random() * 1000) + 1,
   });
 
   saveForm({ ...form, treeId: ref.id });
@@ -39,7 +40,7 @@ export const getTree = (form, callback) => {
       return callback(null);
     }
 
-    const tree = doc.data();
+    const tree = { treeId: doc.id, ...doc.data() };
 
     const q = query(collection(db, "forms"), where("treeId", "==", doc.id));
 
@@ -69,3 +70,9 @@ const iterateOverTree = (sections, doc) => {
     iterateOverTree(tree.subTrees, doc);
   });
 };
+
+// export const saveTree = (tree) => {
+//   const { treeId: id, ...treeData } = tree;
+//   const treeRef = collection(db, "trees", id);
+//   updateDoc(treeRef, treeData);
+// };
