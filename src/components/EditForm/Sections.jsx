@@ -34,6 +34,8 @@ const Sections = () => {
       que al colocar los iconos de carpeta y articulo, no se quiten el icono de colapsar y expandir
       agregar boton de expandir todos y colapsar todos
       agregar boton para añadir encuesta
+      para hacer todo esto hay que customizar el componente TreeItem y a parte de añadir todo lo anterior
+      tambien hay que pasarle por props el parentId correspondiente
   */
 
   const buildTree = (tree) => (
@@ -50,7 +52,7 @@ const Sections = () => {
           nodeId={doc.id}
           icon={<ArticleIcon />}
           label={doc.title}
-          onClick={() => {
+          onClick={(e) => {
             navigate("/forms/edit/" + doc.id);
           }}
         />

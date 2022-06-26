@@ -10,7 +10,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
-import { saveForm } from "./forms";
+import { saveForm, createForm } from "./forms";
 
 const treeRef = collection(db, "trees");
 
@@ -27,6 +27,18 @@ export const enableSections = (form) => {
   saveForm({ ...form, treeId: ref.id });
 
   return ref;
+};
+
+export const addChild = (user, tree, treeId) => {
+  const childId = createForm(user);
+
+  tree.id === treeId
+    ? tree.children.push(childId)
+    : findTreeId(tree.subTrees, treeId, childId);
+
+  saveTree(tree);
+
+  return tree;
 };
 
 export const getTree = (form, callback) => {
@@ -48,9 +60,7 @@ export const getTree = (form, callback) => {
       snapshot.docs.forEach((doc) => {
         const data = { ...doc.data(), id: doc.id };
         const i = tree.children.indexOf(data.id);
-        i !== -1
-          ? (tree.children[i] = data)
-          : iterateOverTree(tree.subTrees, data);
+        i !== -1 ? (tree.children[i] = data) : findChildId(tree.subTrees, data);
       });
 
       callback(tree);
@@ -58,7 +68,18 @@ export const getTree = (form, callback) => {
   });
 };
 
-const iterateOverTree = (sections, doc) => {
+const findTreeId = (sections, treeId, formId) => {
+  sections.forEach((tree) => {
+    if (treeId === tree.id) {
+      tree.children.push(formId);
+      return;
+    }
+
+    findTreeId(tree.subTrees, treeId, formId);
+  });
+};
+
+const findChildId = (sections, doc) => {
   sections.forEach((tree) => {
     const i = tree.children.indexOf(doc.id);
 
@@ -67,12 +88,12 @@ const iterateOverTree = (sections, doc) => {
       return;
     }
 
-    iterateOverTree(tree.subTrees, doc);
+    findChildId(tree.subTrees, doc);
   });
 };
 
-// export const saveTree = (tree) => {
-//   const { treeId: id, ...treeData } = tree;
-//   const treeRef = collection(db, "trees", id);
-//   updateDoc(treeRef, treeData);
-// };
+export const saveTree = (tree) => {
+  const { treeId: id, ...treeData } = tree;
+  const treeRef = collection(db, "trees", id);
+  updateDoc(treeRef, treeData);
+};
