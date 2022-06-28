@@ -391,11 +391,11 @@ const Question = ({ answers, question, setAnswers }) => {
           <div>
             <Slidermoji
               question={question}
-              onChange={(e, value) =>
-                setAnswers({ ...answers, [question.id]: value })
-              }
+              // value={answers[question.id] || 0}
+              // onChange={(_, value) =>
+              //   setAnswers({ ...answers, [question.id]: value })
+              // }
             />
-            {/* mi amigo miguel debe guardar los datos de esto tambien en firebase */}
           </div>
         );
       default:
