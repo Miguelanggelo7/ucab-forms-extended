@@ -389,7 +389,12 @@ const Question = ({ answers, question, setAnswers }) => {
       case SLIDERMOJI:
         return (
           <div>
-            <Slidermoji question={question} />
+            <Slidermoji
+              question={question}
+              onChange={(e, value) =>
+                setAnswers({ ...answers, [question.id]: value })
+              }
+            />
             {/* mi amigo miguel debe guardar los datos de esto tambien en firebase */}
           </div>
         );

@@ -33,7 +33,7 @@ import {
   RATING,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
-import { useFont } from "../../hooks/useFont";
+import { emojis } from "../../constants/emojis";
 
 const sliderMinValues = [0, 1];
 const sliderMaxValues = [2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -81,72 +81,8 @@ const specialTypes = [
   },
 ];
 
-const emojis = [
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f600.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f60d.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f621.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f631.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f62d.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f44d.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f44e.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f641.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f610.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f634.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f912.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/2764.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f642.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f614.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f62e.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f494.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f4a9.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f637.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f64f.png",
-  },
-  {
-    url: "https://twemoji.maxcdn.com/2/72x72/1f628.png",
-  },
-];
-
 const Options = ({ question, debouncedSave }) => {
   const { setQuestions } = useForm();
-  const { font } = useFont();
 
   return useMemo(() => {
     const handleChangeOption = (i) => (e) => {
@@ -174,6 +110,10 @@ const Options = ({ question, debouncedSave }) => {
       setQuestions((questions) =>
         questions.map((q) => (q.id === question.id ? newQuestion : q))
       );
+    };
+
+    const handleRating = (e) => {
+      handleEmoji("typeRating", e.currentTarget.id);
     };
 
     const handleEmoji = (field, emoji) => {
@@ -469,13 +409,13 @@ const Options = ({ question, debouncedSave }) => {
           <>
             <Box>
               <FormLabel component="legend">Elige un icono</FormLabel>
-              <IconButton onClick={() => handleEmoji("typeRating", "star")}>
+              <IconButton id="star" onClick={handleRating}>
                 <StarBorder />
               </IconButton>
-              <IconButton onClick={() => handleEmoji("typeRating", "heart")}>
+              <IconButton id="heart" onClick={handleRating}>
                 <FavoriteBorder />
               </IconButton>
-              <IconButton onClick={() => handleEmoji("typeRating", "emoji")}>
+              <IconButton id="face" onClick={handleRating}>
                 <SentimentSatisfied />
               </IconButton>
             </Box>
