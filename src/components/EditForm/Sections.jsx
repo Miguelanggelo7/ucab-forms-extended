@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { Edit, NoteAdd, CreateNewFolder } from "@mui/icons-material";
+import EditTreeDialog from "../EditTreeDialog";
+import AddTreeDialog from "../AddTreeDialog";
+import AddFormDialog from "../AddFormDialog";
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   [`& .${treeItemClasses.content}`]: {
@@ -106,22 +109,44 @@ const Sections = () => {
   const { tree, form } = useForm();
   const [expanded, setExpanded] = useState([]);
   const [files, setFiles] = useState(["1"]);
+  const [editDialog, setEditDialog] = useState(false);
+  const [item, setItem] = useState(null);
+  const [addTree, setAddTree] = useState(false);
+  const [addForm, setAddForm] = useState(false);
 
-  const optionFile = () => {
+  const optionFile = (tree) => {
     return (
       <Box sx={{ position: "absolute", right: "0", display: "inline-flex" }}>
         <Tooltip title="Editar">
-          <IconButton onClick={(e) => e.stopPropagation()}>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setItem(tree);
+              setEditDialog(true);
+            }}
+          >
             <Edit />
           </IconButton>
         </Tooltip>
         <Tooltip title="Añadir sección">
-          <IconButton onClick={(e) => e.stopPropagation()}>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setItem(tree);
+              setAddTree(true);
+            }}
+          >
             <CreateNewFolder />
           </IconButton>
         </Tooltip>
         <Tooltip title="Añadir encuesta">
-          <IconButton onClick={(e) => e.stopPropagation()}>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setItem(tree);
+              setAddForm(true);
+            }}
+          >
             <NoteAdd />
           </IconButton>
         </Tooltip>
@@ -177,7 +202,7 @@ const Sections = () => {
       labelIcon={FolderIcon}
       labelText={tree.title}
       iconColor={"#ffd200"}
-      options={optionFile()}
+      options={optionFile(tree)}
       labelInfo={"85pt"}
     >
       {tree.children.map((doc) => (
@@ -203,6 +228,9 @@ const Sections = () => {
 
   return (
     <Box>
+      <EditTreeDialog open={editDialog} setOpen={setEditDialog} tree={item} />
+      <AddTreeDialog open={addTree} setOpen={setAddTree} tree={item} />
+      <AddFormDialog open={addForm} setOpen={setAddForm} tree={item} />
       {console.log(tree)}
       {form && form.treeId ? (
         <Box sx={{ maxWidth: "400pt", margin: "auto" }}>
