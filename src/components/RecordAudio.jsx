@@ -17,7 +17,7 @@ const blink = keyframes`
   }
 `;
 
-const RecordAudio = ({}) => {
+const RecordAudio = ({ onChange }) => {
   const audioRef = useRef(null);
   const stopRef = useRef(null);
   const startRef = useRef(null);
@@ -25,6 +25,16 @@ const RecordAudio = ({}) => {
   const recRef = useRef(null);
   const chunks = [];
   let rec;
+
+  const getFileBlob = (url, cb) => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.addEventListener("load", function () {
+      cb(xhr.response);
+    });
+    xhr.send();
+  };
 
   const onStart = () => {
     stopRef.current.style.display = "block";
@@ -44,7 +54,11 @@ const RecordAudio = ({}) => {
       rec.onstop = () => {
         const blob = new Blob(chunks, { type: "audio/mp3" });
         const blobURL = URL.createObjectURL(blob);
-        //localStorage.setItem(name, blobURL);
+
+        getFileBlob(blobURL, (blob) => {
+          onChange(blob);
+        });
+
         audioRef.current.src = blobURL;
         audioRef.current.controls = true;
         stopRef.current.style.display = "none";

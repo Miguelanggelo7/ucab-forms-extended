@@ -379,8 +379,11 @@ const Question = ({ answers, question, setAnswers }) => {
       case VOICE:
         return (
           <div>
-            <RecordAudio />
-            {/* mi amigo miguel debe guardar los audios en firebase */}
+            <RecordAudio
+              onChange={(audio) => {
+                setAnswers({ ...answers, [question.id]: audio });
+              }}
+            />
           </div>
         );
       case SLIDERMOJI:
