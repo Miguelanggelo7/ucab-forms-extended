@@ -391,10 +391,10 @@ const Question = ({ answers, question, setAnswers }) => {
           <div>
             <Slidermoji
               question={question}
-              // value={answers[question.id] || 0}
-              // onChange={(_, value) =>
-              //   setAnswers({ ...answers, [question.id]: value })
-              // }
+              value={answers[question.id] || 0}
+              onChange={(_, value) =>
+                setAnswers({ ...answers, [question.id]: value })
+              }
             />
           </div>
         );
