@@ -13,9 +13,9 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { Edit, NoteAdd, CreateNewFolder } from "@mui/icons-material";
-import EditTreeDialog from "../EditTreeDialog";
-import AddTreeDialog from "../AddTreeDialog";
-import AddFormDialog from "../AddFormDialog";
+import EditTreeDialog from "./EditTreeDialog";
+import AddTreeDialog from "./AddTreeDialog";
+import AddFormDialog from "./AddFormDialog";
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   [`& .${treeItemClasses.content}`]: {
@@ -110,7 +110,7 @@ const Sections = () => {
   const [expanded, setExpanded] = useState([]);
   const [files, setFiles] = useState(["1"]);
   const [editDialog, setEditDialog] = useState(false);
-  const [item, setItem] = useState(null);
+  const [current, setCurrent] = useState(null);
   const [addTree, setAddTree] = useState(false);
   const [addForm, setAddForm] = useState(false);
 
@@ -121,9 +121,8 @@ const Sections = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              setItem(tree.treeId);
+              setCurrent({ title: tree.title, id: +tree.id });
               setEditDialog(true);
-              console.log(item);
             }}
           >
             <Edit />
@@ -133,7 +132,7 @@ const Sections = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              setItem(tree.treeId);
+              setCurrent({ title: tree.title, id: +tree.id });
               setAddTree(true);
             }}
           >
@@ -144,7 +143,7 @@ const Sections = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              setItem(tree.treeId);
+              setCurrent({ title: tree.title, id: +tree.id });
               setAddForm(true);
             }}
           >
@@ -157,8 +156,7 @@ const Sections = () => {
 
   const handleEnableSections = () => {
     try {
-      const ref = enableSections(form);
-      console.log(ref);
+      enableSections(form);
       enqueueSnackbar("Secciones habilitadas correctamente", {
         variant: "success",
       });
@@ -169,24 +167,12 @@ const Sections = () => {
     }
   };
 
-  /*
-    TODO:
-      que al colocar los iconos de carpeta y articulo, no se quiten el icono de colapsar y expandir
-      agregar boton de expandir todos y colapsar todos
-      agregar boton para añadir encuesta
-      para hacer todo esto hay que customizar el componente TreeItem y a parte de añadir todo lo anterior
-      tambien hay que pasarle por props el parentId correspondiente
-  */
-
-  //ZSS
-
   useEffect(() => {
-    if (tree) {
-      tree.subTrees.map((subTree, i) => {
+    tree &&
+      tree.subTrees.forEach((subTree, i) => {
         setFiles((files) => [...files, i + 2 + ""]);
       });
-    }
-  }, []);
+  }, [tree]);
 
   const handleExpandClick = () => {
     setExpanded((oldExpanded) => (oldExpanded.length === 0 ? files : []));
@@ -229,10 +215,13 @@ const Sections = () => {
 
   return (
     <Box>
-      <EditTreeDialog open={editDialog} setOpen={setEditDialog} tree={item} />
-      <AddTreeDialog open={addTree} setOpen={setAddTree} tree={item} />
-      <AddFormDialog open={addForm} setOpen={setAddForm} tree={item} />
-      {console.log(tree)}
+      <EditTreeDialog
+        open={editDialog}
+        setOpen={setEditDialog}
+        data={current}
+      />
+      <AddTreeDialog open={addTree} setOpen={setAddTree} data={current} />
+      <AddFormDialog open={addForm} setOpen={setAddForm} data={current} />
       {form && form.treeId ? (
         <Box sx={{ maxWidth: "400pt", margin: "auto" }}>
           {tree.subTrees && tree.subTrees.length > 0 ? (

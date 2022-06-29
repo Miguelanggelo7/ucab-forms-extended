@@ -12,10 +12,10 @@ import {
 import { db } from "./firebaseConfig";
 import { saveForm, createForm } from "./forms";
 
-const treeRef = collection(db, "trees");
+const treesRef = collection(db, "trees");
 
 export const enableSections = (form) => {
-  const ref = doc(treeRef);
+  const ref = doc(treesRef);
 
   setDoc(ref, {
     title: "Nueva Sección",
@@ -25,8 +25,6 @@ export const enableSections = (form) => {
   });
 
   saveForm({ ...form, treeId: ref.id });
-
-  return ref;
 };
 
 export const addChild = (user, tree, treeId) => {
@@ -44,8 +42,8 @@ export const addChild = (user, tree, treeId) => {
 export const getTree = (form, callback) => {
   const ref =
     !form || typeof form.treeId === "undefined"
-      ? doc(treeRef)
-      : doc(treeRef, form.treeId);
+      ? doc(treesRef)
+      : doc(treesRef, form.treeId);
 
   return onSnapshot(ref, (doc) => {
     if (!doc.exists()) {
@@ -92,8 +90,42 @@ const findChildId = (sections, doc) => {
   });
 };
 
+export const updateTitle = async (id, newData) => {
+  try {
+    const treeRef = doc(db, "trees", id);
+
+    const tree = await getDoc(treeRef);
+
+    if (!tree.exists()) return null;
+
+    const data = { ...tree.data(), treeId: tree.id };
+
+    data.id === newData.id
+      ? (data.title = newData.title)
+      : editTreeById(data.subTrees, newData);
+
+    saveTree(data);
+    return data;
+  } catch (err) {
+    return {
+      error: { message: "Error al actualizar el nombre de la sección" },
+    };
+  }
+};
+
+const editTreeById = (trees, data) => {
+  trees.forEach((tree) => {
+    if (tree.id === data.id) {
+      tree.title = data.title;
+      return;
+    }
+
+    editTreeById(tree.subTrees, data);
+  });
+};
+
 export const saveTree = (tree) => {
   const { treeId: id, ...treeData } = tree;
-  const treeRef = collection(db, "trees", id);
+  const treeRef = doc(db, "trees", id);
   updateDoc(treeRef, treeData);
 };
