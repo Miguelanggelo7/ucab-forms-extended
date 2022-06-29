@@ -121,8 +121,9 @@ const Sections = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              setItem(tree);
+              setItem(tree.treeId);
               setEditDialog(true);
+              console.log(item);
             }}
           >
             <Edit />
@@ -132,7 +133,7 @@ const Sections = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              setItem(tree);
+              setItem(tree.treeId);
               setAddTree(true);
             }}
           >
@@ -143,7 +144,7 @@ const Sections = () => {
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              setItem(tree);
+              setItem(tree.treeId);
               setAddForm(true);
             }}
           >
