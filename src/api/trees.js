@@ -1,17 +1,19 @@
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
   onSnapshot,
   query,
+  runTransaction,
   setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
-import { saveForm, createForm } from "./forms";
+import { saveForm, createForm, getFormOnce } from "./forms";
 
 const treesRef = collection(db, "trees");
 
@@ -33,7 +35,7 @@ export const addChild = (user, tree, treeId) => {
 
   tree.id === treeId
     ? tree.children.push(childId)
-    : findTreeId(tree.subTrees, treeId, childId);
+    : findParentId(tree.subTrees, treeId, childId);
 
   saveTree(tree);
 
@@ -51,25 +53,25 @@ export const getAndSetTree = (id, forms, callback) => {
 
     forms.forEach((form) => {
       const i = tree.children.indexOf(form.id);
-      i !== -1 ? (tree.children[i] = form) : findChildId(tree.subTrees, form);
+      i !== -1 ? (tree.children[i] = form) : findChildData(tree.subTrees, form);
     });
 
     callback(tree);
   });
 };
 
-const findTreeId = (sections, treeId, formId) => {
+const findParentId = (sections, treeId, formId) => {
   sections.forEach((tree) => {
     if (treeId === tree.id) {
       tree.children.push(formId);
       return;
     }
 
-    findTreeId(tree.subTrees, treeId, formId);
+    findParentId(tree.subTrees, treeId, formId);
   });
 };
 
-const findChildId = (sections, doc) => {
+const findChildData = (sections, doc) => {
   sections.forEach((tree) => {
     const i = tree.children.indexOf(doc.id);
 
@@ -78,7 +80,7 @@ const findChildId = (sections, doc) => {
       return;
     }
 
-    findChildId(tree.subTrees, doc);
+    findChildData(tree.subTrees, doc);
   });
 };
 
@@ -114,19 +116,70 @@ export const deleteTree = async (id, deleteId) => {
   try {
     const treeRef = doc(db, "trees", id);
     const tree = await getTreeOnce(treeRef);
-    console.log(treeRef.id);
-    // const data = tree.id === deleteId ?
+    tree.id === deleteId
+      ? await deleteAllTree(treeRef)
+      : await deleteSubTree(tree, deleteId);
+
+    return {
+      succes: { message: "Sección eliminada correctamente" },
+    };
   } catch (err) {
+    console.log(err);
     return {
       error: { message: "Error al eliminar la sección" },
     };
   }
 };
 
-// const deleteSubTree =
+const deleteSubTree = async (root, deleteId) => {
+  const { subTrees, ...rest } = root;
+  const newSubTrees = findAndDeleteSubTrees(subTrees, deleteId);
+
+  const tree = {
+    ...rest,
+    subTrees: newSubTrees,
+  };
+
+  saveTree(tree);
+  return tree;
+};
+
+const findAndDeleteSubTrees = (trees, deleteId, founded) => {
+  return trees.filter((tree) => {
+    if ((typeof founded === "undefined" || !founded) && tree.id !== deleteId) {
+      findAndDeleteSubTrees(tree.subTrees, deleteId, false);
+      return true;
+    }
+
+    tree.children = tree.children.map(async (docId) => {
+      const doc = await getFormOnce(docId);
+      const { treeId, questions, ...docData } = doc;
+      saveForm(docData);
+      return docData;
+    });
+
+    return tree.subTrees.length === 0
+      ? false
+      : findAndDeleteSubTrees(tree.subTrees, deleteId, true);
+  });
+};
 
 const deleteAllTree = async (treeRef) => {
-  await deleteDoc(treeRef);
+  const formsRef = collection(db, "forms");
+  const q = query(formsRef, where("treeId", "==", treeRef.id));
+  const docs = (await getDocs(q)).docs;
+
+  await runTransaction(db, async (transaction) => {
+    transaction.delete(treeRef);
+
+    docs.forEach((form) => {
+      const formRef = doc(db, "forms", form.id);
+      transaction.update(formRef, {
+        treeId: deleteField(),
+      });
+    });
+  });
+
   return null;
 };
 

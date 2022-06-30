@@ -66,7 +66,7 @@ const FormProvider = ({ children }) => {
 
   useEffect(() => {
     const unsuscribeTreeForms = getAllTreeForms(treeId, (forms) => {
-      console.log("amen?");
+      console.log(forms);
       setTreeForms(forms);
     });
 
@@ -77,7 +77,7 @@ const FormProvider = ({ children }) => {
 
   useEffect(() => {
     const unsuscribeTree = getAndSetTree(treeId, treeForms, (tree) => {
-      console.log("tree");
+      console.log(tree);
       setTree(tree);
     });
 

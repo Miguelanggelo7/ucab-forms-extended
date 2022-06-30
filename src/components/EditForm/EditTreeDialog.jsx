@@ -27,10 +27,17 @@ const DialogBody = ({ closeDialog, data }) => {
       title: "Eliminar sección",
       message: "¿Estás seguro de eliminar esta sección?",
       action: async () => {
-        await deleteTree(tree.treeId, data.id);
-        enqueueSnackbar("Sección eliminada", {
-          variant: "success",
-        });
+        const { error, succes } = await deleteTree(tree.treeId, data.id);
+
+        error
+          ? enqueueSnackbar(error.message, {
+              variant: "error",
+            })
+          : enqueueSnackbar(succes.message, {
+              variant: "success",
+            });
+
+        closeDialog();
       },
     });
   };
