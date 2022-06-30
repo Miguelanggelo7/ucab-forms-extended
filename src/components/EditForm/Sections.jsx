@@ -196,7 +196,7 @@ const Sections = () => {
         // Se construyen las encuestas hijas si es que tiene
         <StyledTreeItem
           key={doc.id}
-          nodeId={doc.id}
+          nodeId={doc.id + ""}
           labelIcon={ArticleIcon}
           labelText={doc.title}
           iconColor={"#4B7ABC"}
@@ -222,7 +222,7 @@ const Sections = () => {
       />
       <AddTreeDialog open={addTree} setOpen={setAddTree} data={current} />
       <AddFormDialog open={addForm} setOpen={setAddForm} data={current} />
-      {form && form.treeId ? (
+      {form && tree && form.treeId ? (
         <Box sx={{ maxWidth: "400pt", margin: "auto" }}>
           {tree.subTrees && tree.subTrees.length > 0 ? (
             <Button fullWidth onClick={handleExpandClick}>

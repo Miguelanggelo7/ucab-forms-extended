@@ -14,7 +14,7 @@ import { Close as CloseIcon } from "@mui/icons-material";
 import { useAlert } from "../../hooks/useAlert";
 import { useSnackbar } from "notistack";
 import { useForm } from "../../hooks/useForm";
-import { updateTitle } from "../../api/trees";
+import { updateTitle, deleteTree } from "../../api/trees";
 
 const DialogBody = ({ closeDialog, data }) => {
   const [title, setTitle] = useState(data.title);
@@ -26,7 +26,8 @@ const DialogBody = ({ closeDialog, data }) => {
     openAlert({
       title: "Eliminar sección",
       message: "¿Estás seguro de eliminar esta sección?",
-      action: () => {
+      action: async () => {
+        await deleteTree(tree.treeId, data.id);
         enqueueSnackbar("Sección eliminada", {
           variant: "success",
         });

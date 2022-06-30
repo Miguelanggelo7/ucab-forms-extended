@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -39,12 +40,8 @@ export const addChild = (user, tree, treeId) => {
   return tree;
 };
 
-export const getTree = (form, callback) => {
-  const ref =
-    !form || typeof form.treeId === "undefined"
-      ? doc(treesRef)
-      : doc(treesRef, form.treeId);
-
+export const getAndSetTree = (id, forms, callback) => {
+  const ref = id ? doc(treesRef, id) : doc(treesRef);
   return onSnapshot(ref, (doc) => {
     if (!doc.exists()) {
       return callback(null);
@@ -52,17 +49,12 @@ export const getTree = (form, callback) => {
 
     const tree = { treeId: doc.id, ...doc.data() };
 
-    const q = query(collection(db, "forms"), where("treeId", "==", doc.id));
-
-    return onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        const data = { ...doc.data(), id: doc.id };
-        const i = tree.children.indexOf(data.id);
-        i !== -1 ? (tree.children[i] = data) : findChildId(tree.subTrees, data);
-      });
-
-      callback(tree);
+    forms.forEach((form) => {
+      const i = tree.children.indexOf(form.id);
+      i !== -1 ? (tree.children[i] = form) : findChildId(tree.subTrees, form);
     });
+
+    callback(tree);
   });
 };
 
@@ -90,22 +82,27 @@ const findChildId = (sections, doc) => {
   });
 };
 
+const getTreeOnce = async (treeRef) => {
+  const tree = await getDoc(treeRef);
+
+  if (!tree.exists()) return null;
+
+  const data = { ...tree.data(), treeId: tree.id };
+
+  return data;
+};
+
 export const updateTitle = async (id, newData) => {
   try {
     const treeRef = doc(db, "trees", id);
+    const tree = await getTreeOnce(treeRef);
 
-    const tree = await getDoc(treeRef);
+    tree.id === newData.id
+      ? (tree.title = newData.title)
+      : editTreeById(tree.subTrees, newData, "edit");
 
-    if (!tree.exists()) return null;
-
-    const data = { ...tree.data(), treeId: tree.id };
-
-    data.id === newData.id
-      ? (data.title = newData.title)
-      : editTreeById(data.subTrees, newData);
-
-    saveTree(data);
-    return data;
+    saveTree(tree);
+    return tree;
   } catch (err) {
     return {
       error: { message: "Error al actualizar el nombre de la sección" },
@@ -113,10 +110,41 @@ export const updateTitle = async (id, newData) => {
   }
 };
 
-const editTreeById = (trees, data) => {
+export const deleteTree = async (id, deleteId) => {
+  try {
+    const treeRef = doc(db, "trees", id);
+    const tree = await getTreeOnce(treeRef);
+    console.log(treeRef.id);
+    // const data = tree.id === deleteId ?
+  } catch (err) {
+    return {
+      error: { message: "Error al eliminar la sección" },
+    };
+  }
+};
+
+// const deleteSubTree =
+
+const deleteAllTree = async (treeRef) => {
+  await deleteDoc(treeRef);
+  return null;
+};
+
+const editTreeById = (trees, data, action) => {
   trees.forEach((tree) => {
     if (tree.id === data.id) {
-      tree.title = data.title;
+      switch (action) {
+        case "edit":
+          tree.title = data.title;
+          break;
+
+        case "addForm":
+          tree.children.push(data);
+          break;
+
+        default:
+          break;
+      }
       return;
     }
 

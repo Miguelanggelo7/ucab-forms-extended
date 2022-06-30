@@ -177,6 +177,20 @@ export const getForm = (id, callback) => {
   });
 };
 
+export const getAllTreeForms = (id, callback) => {
+  const q = query(formsRef, where("treeId", "==", id));
+
+  return onSnapshot(q, (snapshot) => {
+    const forms = snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+      // const i = tree.children.indexOf(data.id);
+      // i !== -1 ? (tree.children[i] = data) : findChildId(tree.subTrees, data);
+    });
+
+    callback(forms);
+  });
+};
+
 export const saveForm = (form) => {
   const { id: formId, ...formData } = form;
   const formRef = doc(db, "forms", formId);
