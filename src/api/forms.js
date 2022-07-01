@@ -16,13 +16,14 @@ import { db } from "./firebaseConfig";
 import { defaultQuestion } from "../constants/questions";
 import { getQuestionsOnce, insertQuestion } from "./questions";
 import { sendNotification } from "./notifications";
+import { deleteIdFromTree } from "./trees";
 
 const formsRef = collection(db, "forms");
 
-export const createForm = (user) => {
+export const createForm = (user, treeId) => {
   const formRef = doc(formsRef);
-
-  setDoc(formRef, {
+  console.log(user);
+  const data = {
     author: {
       id: user.id,
       email: user.email,
@@ -41,8 +42,11 @@ export const createForm = (user) => {
       endDate: null,
       randomOrder: false,
     },
-    subsections: [],
-  });
+  };
+
+  if (typeof treeId !== "undefined") data.treeId = treeId;
+
+  setDoc(formRef, data);
 
   insertQuestion(formRef.id, { ...defaultQuestion, index: 0 });
 
@@ -197,8 +201,11 @@ export const saveForm = (form) => {
   updateDoc(formRef, formData);
 };
 
-export const deleteForm = (formId) => {
+export const deleteForm = async (formId) => {
   const formRef = doc(db, "forms", formId);
+  const form = await getFormOnce(formId);
+  if (typeof form.treeId !== "undefined") deleteIdFromTree(formId, form.treeId);
+
   deleteDoc(formRef);
 };
 

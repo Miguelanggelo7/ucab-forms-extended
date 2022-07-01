@@ -12,6 +12,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { indexOf } from "lodash";
 import { db } from "./firebaseConfig";
 import { saveForm, createForm, getFormOnce } from "./forms";
 
@@ -30,16 +31,52 @@ export const enableSections = (form) => {
   saveForm({ ...form, treeId: ref.id });
 };
 
-export const addChild = (user, tree, treeId) => {
-  const childId = createForm(user);
+export const addChild = async (user, treeId, parentId) => {
+  const childId = createForm(user, treeId);
+  const treeRef = doc(db, "trees", treeId);
+  try {
+    const tree = await getTreeOnce(treeRef);
 
-  tree.id === treeId
-    ? tree.children.push(childId)
-    : findParentId(tree.subTrees, treeId, childId);
+    tree.id === parentId
+      ? tree.children.push(childId)
+      : editTreeById(tree.subTrees, { id: parentId, childId }, "add-form");
 
+    saveTree(tree);
+
+    return childId;
+  } catch (err) {
+    return {
+      error: {
+        message: "Ocurrió un error al intentar crear la nueva encuesta",
+      },
+    };
+  }
+};
+
+export const deleteIdFromTree = async (formId, treeId) => {
+  const treeRef = doc(db, "trees", treeId);
+  const tree = await getTreeOnce(treeRef);
+
+  const i = tree.children.indexOf(formId);
+
+  i === -1
+    ? deleteFormInTree(tree.subTrees, formId)
+    : tree.children.splice(i, i + 1);
+  console.log(tree);
   saveTree(tree);
+};
 
-  return tree;
+const deleteFormInTree = (trees, formId) => {
+  trees.forEach((tree) => {
+    const i = tree.children.indexOf(formId);
+
+    if (i !== -1) {
+      tree.children.splice(i, i + 1);
+      return;
+    }
+
+    deleteFormInTree(tree.subTrees, formId);
+  });
 };
 
 export const getAndSetTree = (id, forms, callback) => {
@@ -184,15 +221,16 @@ const deleteAllTree = async (treeRef) => {
 };
 
 const editTreeById = (trees, data, action) => {
+  const { id, title, childId } = data;
   trees.forEach((tree) => {
-    if (tree.id === data.id) {
+    if (tree.id === id) {
       switch (action) {
         case "edit":
-          tree.title = data.title;
+          tree.title = title;
           break;
 
-        case "addForm":
-          tree.children.push(data);
+        case "add-form":
+          tree.children.push(childId);
           break;
 
         default:
@@ -201,7 +239,7 @@ const editTreeById = (trees, data, action) => {
       return;
     }
 
-    editTreeById(tree.subTrees, data);
+    editTreeById(tree.subTrees, data, action);
   });
 };
 
