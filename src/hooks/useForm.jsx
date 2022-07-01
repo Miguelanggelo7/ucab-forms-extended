@@ -21,6 +21,7 @@ const FormProvider = ({ children }) => {
   const [treeId, setTreeId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [treeForms, setTreeForms] = useState([]);
+  const [loadingTree, setLoadingTree] = useState(tree);
 
   useEffect(() => {
     const unsubscribeForm = getForm(formId, (form) => {
@@ -77,8 +78,8 @@ const FormProvider = ({ children }) => {
 
   useEffect(() => {
     const unsuscribeTree = getAndSetTree(treeId, treeForms, (tree) => {
-      console.log(tree);
       setTree(tree);
+      setLoadingTree(false);
     });
 
     return () => {
@@ -94,6 +95,8 @@ const FormProvider = ({ children }) => {
   const value = {
     form,
     setForm,
+    loadingTree,
+    setLoadingTree,
     tree,
     treeId,
     questions,
