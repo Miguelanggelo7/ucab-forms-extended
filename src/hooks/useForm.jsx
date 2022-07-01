@@ -86,6 +86,11 @@ const FormProvider = ({ children }) => {
     };
   }, [treeForms]);
 
+  const resetQuestions = () => {
+    setLoading(true);
+    setQuestions([]);
+  };
+
   const value = {
     form,
     setForm,
@@ -97,6 +102,7 @@ const FormProvider = ({ children }) => {
     loading,
     current,
     setCurrent,
+    resetQuestions,
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;

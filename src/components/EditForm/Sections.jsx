@@ -9,7 +9,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import ArticleIcon from "@mui/icons-material/Article";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { Edit, NoteAdd, CreateNewFolder } from "@mui/icons-material";
@@ -51,6 +51,7 @@ function StyledTreeItem(props) {
     labelText,
     iconColor,
     options,
+    labelColor,
     ...other
   } = props;
 
@@ -79,6 +80,7 @@ function StyledTreeItem(props) {
             <Typography
               variant="body1"
               sx={{ fontWeight: "inherit", flexGrow: 1 }}
+              color={labelColor}
             >
               {labelText}
             </Typography>
@@ -104,9 +106,10 @@ StyledTreeItem.propTypes = {
 };
 
 const Sections = () => {
+  const { id: formId } = useParams();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { tree, form } = useForm();
+  const { tree, form, resetQuestions } = useForm();
   const [expanded, setExpanded] = useState([]);
   const [files, setFiles] = useState(["1"]);
   const [editDialog, setEditDialog] = useState(false);
@@ -191,6 +194,7 @@ const Sections = () => {
       iconColor={"#ffd200"}
       options={optionFile(tree)}
       labelInfo={"85pt"}
+      labelColor={"#000"}
     >
       {tree.children.map((doc) => (
         // Se construyen las encuestas hijas si es que tiene
@@ -201,8 +205,12 @@ const Sections = () => {
           labelText={doc.title}
           iconColor={"#4B7ABC"}
           labelInfo={"0pt"}
-          onClick={(e) => {
-            navigate("/forms/edit/" + doc.id);
+          labelColor={doc.id === formId ? "#444a44" : "#000"}
+          onClick={(_) => {
+            if (formId !== doc.id) {
+              resetQuestions();
+              navigate("/forms/edit/" + doc.id);
+            }
           }}
         />
       ))}
