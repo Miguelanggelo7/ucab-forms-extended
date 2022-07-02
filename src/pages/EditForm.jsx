@@ -1,14 +1,7 @@
 import { useMemo, useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  LinearProgress,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Box, Card, LinearProgress, Stack, TextField } from "@mui/material";
 import debounce from "lodash.debounce";
-import { saveForm, createSubsection } from "../api/forms";
+import { saveForm } from "../api/forms";
 import { useUser } from "../hooks/useUser";
 import { useForm } from "../hooks/useForm";
 import Header from "../components/Header";
@@ -81,12 +74,6 @@ const EditForm = () => {
                 value={form.description}
                 onChange={handleChange("description")}
               />
-              <Button
-                onClick={() => console.log(createSubsection(form))}
-                variant="outlined"
-              >
-                Crear Subseccion
-              </Button>
             </Stack>
           </Card>
           <Tabs setOpenDrawer={setOpenDrawer} />

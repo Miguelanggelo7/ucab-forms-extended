@@ -16,13 +16,14 @@ import { db } from "./firebaseConfig";
 import { defaultQuestion } from "../constants/questions";
 import { getQuestionsOnce, insertQuestion } from "./questions";
 import { sendNotification } from "./notifications";
+import { deleteIdFromTree } from "./trees";
 
 const formsRef = collection(db, "forms");
 
-export const createForm = (user, fatherId) => {
+export const createForm = (user, treeId) => {
   const formRef = doc(formsRef);
-
-  setDoc(formRef, {
+  console.log(user);
+  const data = {
     author: {
       id: user.id,
       email: user.email,
@@ -41,19 +42,14 @@ export const createForm = (user, fatherId) => {
       endDate: null,
       randomOrder: false,
     },
-  });
+  };
+
+  if (typeof treeId !== "undefined") data.treeId = treeId;
+
+  setDoc(formRef, data);
 
   insertQuestion(formRef.id, { ...defaultQuestion, index: 0 });
 
-  return formRef.id;
-};
-
-export const createSubsection = (fatherForm) => {
-  const newFormsRef = collection(db, `forms/${fatherForm.id}/subsections`);
-  const formRef = doc(newFormsRef);
-  setDoc(formRef, {
-    prueba: "prueba",
-  });
   return formRef.id;
 };
 
@@ -185,14 +181,31 @@ export const getForm = (id, callback) => {
   });
 };
 
+export const getAllTreeForms = (id, callback) => {
+  const q = query(formsRef, where("treeId", "==", id));
+
+  return onSnapshot(q, (snapshot) => {
+    const forms = snapshot.docs.map((doc) => {
+      return { ...doc.data(), id: doc.id };
+      // const i = tree.children.indexOf(data.id);
+      // i !== -1 ? (tree.children[i] = data) : findChildId(tree.subTrees, data);
+    });
+
+    callback(forms);
+  });
+};
+
 export const saveForm = (form) => {
   const { id: formId, ...formData } = form;
   const formRef = doc(db, "forms", formId);
   updateDoc(formRef, formData);
 };
 
-export const deleteForm = (formId) => {
+export const deleteForm = async (formId) => {
   const formRef = doc(db, "forms", formId);
+  const form = await getFormOnce(formId);
+  if (typeof form.treeId !== "undefined") deleteIdFromTree(formId, form.treeId);
+
   deleteDoc(formRef);
 };
 

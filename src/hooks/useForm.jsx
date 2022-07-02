@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getForm } from "../api/forms";
+import { getAllTreeForms, getForm } from "../api/forms";
+import { getAndSetTree } from "../api/trees";
 import { getQuestionsChanges } from "../api/questions";
 import { getResponses } from "../api/responses";
 
@@ -13,21 +14,31 @@ const useForm = () => {
 const FormProvider = ({ children }) => {
   const { id: formId } = useParams();
   const [form, setForm] = useState(null);
+  const [tree, setTree] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [responses, setResponses] = useState([]);
   const [current, setCurrent] = useState(null);
+  const [treeId, setTreeId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [treeForms, setTreeForms] = useState([]);
+  const [loadingTree, setLoadingTree] = useState(tree);
 
   useEffect(() => {
     const unsubscribeForm = getForm(formId, (form) => {
       setForm(form);
+
+      if (treeId === null && form && typeof form.treeId !== "undefined")
+        setTreeId(form.treeId);
+      else if (treeId !== null && (!form || typeof form.treeId === "undefined"))
+        setTreeId(null);
+
       setLoading(false);
     });
 
     const unsubscribeQuestions = getQuestionsChanges(formId, (changes) => {
       setQuestions((oldQuestions) => {
         const questions = [...oldQuestions];
-
+        console.log("questions");
         changes.forEach((change) => {
           if (change.type === "added") {
             questions.splice(change.newIndex, 0, change.question);
@@ -54,15 +65,47 @@ const FormProvider = ({ children }) => {
     };
   }, [formId]);
 
+  useEffect(() => {
+    const unsuscribeTreeForms = getAllTreeForms(treeId, (forms) => {
+      console.log(forms);
+      setTreeForms(forms);
+    });
+
+    return () => {
+      unsuscribeTreeForms();
+    };
+  }, [treeId]);
+
+  useEffect(() => {
+    const unsuscribeTree = getAndSetTree(treeId, treeForms, (tree) => {
+      setTree(tree);
+      setLoadingTree(false);
+    });
+
+    return () => {
+      unsuscribeTree();
+    };
+  }, [treeForms]);
+
+  const resetQuestions = () => {
+    setLoading(true);
+    setQuestions([]);
+  };
+
   const value = {
     form,
     setForm,
+    loadingTree,
+    setLoadingTree,
+    tree,
+    treeId,
     questions,
     setQuestions,
     responses,
     loading,
     current,
     setCurrent,
+    resetQuestions,
   };
 
   return <FormContext.Provider value={value}>{children}</FormContext.Provider>;
