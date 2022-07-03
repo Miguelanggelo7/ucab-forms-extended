@@ -39,6 +39,8 @@ const AnswerForm = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const user = useUser();
+  const [rest, setRest] = useState(true);
+  const [arrayRest, setArrayRest] = useState([]);
 
   const initializeAnswers = useCallback((questions) => {
     const answers = {};
@@ -66,13 +68,32 @@ const AnswerForm = () => {
     setAnswers(answers);
   }, []);
 
+  const verificationRest = (question) => {
+    var restricted = false;
+    question.restrictions.map((rest) => {
+      if (rest !== "") {
+        restricted = true;
+      }
+    });
+    return restricted;
+  };
+
   useEffect(() => {
     const randomizeOptionsOrder = (questions) => {
       questions.forEach((question) => {
         if (question.randomOrder) {
           question.options.sort(() => Math.random() - 0.5);
         }
+        if (question.restricted) {
+          if (verificationRest(question)) {
+            setRest(false);
+            question.restrictions.map((rest) => {
+              setArrayRest((arrayRest) => [...arrayRest, rest]);
+            });
+          }
+        }
       });
+      setArrayRest((arrayRest) => [...new Set(arrayRest)]);
     };
 
     const getForm = async () => {
@@ -216,80 +237,83 @@ const AnswerForm = () => {
   return (
     <Box>
       <Header />
-      <Container sx={{ p: 3 }} maxWidth="md">
-        <form onSubmit={submit}>
-          <Stack spacing={2}>
-            <Card sx={{ p: 3 }} variant="outlined">
-              <Typography variant="h5" mb={2}>
-                {form.title}
-              </Typography>
-              <Typography mb={2}>{form.description}</Typography>
-              <Typography color="error" variant="caption">
-                * Obligatorio
-              </Typography>
-            </Card>
-            {console.log(form.questions)}
-            {form.questions.map((question, i) => (
-              <Card key={i} sx={{ p: 3 }} variant="outlined">
-                <Question
-                  question={question}
-                  answers={answers}
-                  setAnswers={setAnswers}
-                />
-                {errors[question.id] && (
-                  <Alert
-                    variant="outlined"
-                    severity="error"
-                    sx={{ mt: 3, border: "none", p: 0 }}
-                  >
-                    Esta pregunta es requerida
-                  </Alert>
-                )}
+      <button onClick={() => console.log(arrayRest)}>prueba</button>
+      {rest ? (
+        <Container sx={{ p: 3 }} maxWidth="md">
+          <form onSubmit={submit}>
+            <Stack spacing={2}>
+              <Card sx={{ p: 3 }} variant="outlined">
+                <Typography variant="h5" mb={2}>
+                  {form.title}
+                </Typography>
+                <Typography mb={2}>{form.description}</Typography>
+                <Typography color="error" variant="caption">
+                  * Obligatorio
+                </Typography>
               </Card>
-            ))}
-          </Stack>
-          <Box
-            sx={{
-              mt: 3,
-              display: "flex",
-              flexDirection: { xs: "column-reverse", sm: "row" },
-              justifyContent: { sm: "space-between" },
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ ml: { sm: 1 }, mr: { sm: 2 } }}
-            >
-              Nunca envíes contraseñas a través de UCAB Forms
-            </Typography>
+              {console.log(form.questions)}
+              {form.questions.map((question, i) => (
+                <Card key={i} sx={{ p: 3 }} variant="outlined">
+                  <Question
+                    question={question}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                  />
+                  {errors[question.id] && (
+                    <Alert
+                      variant="outlined"
+                      severity="error"
+                      sx={{ mt: 3, border: "none", p: 0 }}
+                    >
+                      Esta pregunta es requerida
+                    </Alert>
+                  )}
+                </Card>
+              ))}
+            </Stack>
             <Box
               sx={{
+                mt: 3,
                 display: "flex",
-                flexShrink: 0,
+                flexDirection: { xs: "column-reverse", sm: "row" },
+                justifyContent: { sm: "space-between" },
                 alignItems: "center",
-                mb: { xs: 2, sm: 0 },
               }}
             >
-              <Button
-                sx={{ px: 1, mr: 2 }}
-                onClick={() => initializeAnswers(form.questions)}
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ ml: { sm: 1 }, mr: { sm: 2 } }}
               >
-                Borrar respuestas
-              </Button>
-              <Button
-                type="submit"
-                disabled={submitting}
-                variant="contained"
-                sx={{ px: 5 }}
+                Nunca envíes contraseñas a través de UCAB Forms
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexShrink: 0,
+                  alignItems: "center",
+                  mb: { xs: 2, sm: 0 },
+                }}
               >
-                Enviar
-              </Button>
+                <Button
+                  sx={{ px: 1, mr: 2 }}
+                  onClick={() => initializeAnswers(form.questions)}
+                >
+                  Borrar respuestas
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  variant="contained"
+                  sx={{ px: 5 }}
+                >
+                  Enviar
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </form>
-      </Container>
+          </form>
+        </Container>
+      ) : null}
     </Box>
   );
 };
