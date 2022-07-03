@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -9,20 +9,25 @@ import {
   Tooltip,
   useMediaQuery,
   Select,
+  MenuItem,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { useForm } from "../../hooks/useForm";
 import { useUser } from "../../hooks/useUser";
-import { createForm } from "../../api/forms";
+import { getCollaborationForms, getUserForms } from "../../api/forms";
 import { addChild } from "../../api/trees";
 import { useSnackbar } from "notistack";
 
-const DialogBody = ({ closeDialog, data }) => {
-  // const getAllMyForms = useMemo(() => {
-
-  // }, []);
+const DialogBody = ({
+  closeDialog,
+  data,
+  userForms,
+  collaborationForms,
+  user,
+  defaultValue,
+}) => {
+  const { current, setCurrent } = useState(defaultValue);
   const { enqueueSnackbar } = useSnackbar();
-  const user = useUser();
   const { treeId } = useForm();
 
   const createNewForm = async () => {
@@ -48,7 +53,27 @@ const DialogBody = ({ closeDialog, data }) => {
         </Tooltip>
       </DialogTitle>
       <DialogContent sx={{ background: "inherit" }}>
-        <Select variant="standard" v fullWidth />
+        <Select variant="standard" fullWidth>
+          {userForms.length === 0
+            ? null
+            : userForms.map((form) => (
+                <MenuItem id={form.id} value={form.id}>
+                  {form.title}
+                </MenuItem>
+              ))}
+          {collaborationForms.length === 0
+            ? null
+            : collaborationForms.map((form) => (
+                <MenuItem id={form.id} value={form.id}>
+                  {form.title}
+                </MenuItem>
+              ))}
+          {(userForms.length === collaborationForms.length) === 0 ? (
+            <MenuItem value={0} disabled>
+              No posee encuestas ni colaboraciones
+            </MenuItem>
+          ) : null}
+        </Select>
         <Button
           fullWidth
           sx={{ marginBottom: "-10pt", marginTop: "10pt" }}
@@ -66,10 +91,44 @@ const DialogBody = ({ closeDialog, data }) => {
 
 const AddFormDialog = ({ open, setOpen, data }) => {
   const fullScreen = useMediaQuery("(max-width:320pt)");
+  const [userForms, setUserForms] = useState([]);
+  const [collaborationForms, setCollaborationForms] = useState([]);
+  const [loadingUserForms, setLoadingUserForms] = useState(true);
+  const [loadingCollaborationForms, setLoadingCollaborationForms] =
+    useState(true);
+  const user = useUser();
+
+  const defaultCurrentValue = () => {
+    return userForms.length === 0
+      ? collaborationForms.length === 0
+        ? 0
+        : collaborationForms[0].id
+      : userForms[0].id;
+  };
 
   const closeDialog = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const unsubscribeUserForms = getUserForms(user.id, (forms) => {
+      setUserForms(forms);
+      setLoadingUserForms(false);
+    });
+
+    const unsubscribeCollaborationForms = getCollaborationForms(
+      user,
+      (forms) => {
+        setCollaborationForms(forms);
+        setLoadingCollaborationForms(false);
+      }
+    );
+
+    return () => {
+      unsubscribeUserForms();
+      unsubscribeCollaborationForms();
+    };
+  }, [user]);
 
   return (
     <>
@@ -81,7 +140,14 @@ const AddFormDialog = ({ open, setOpen, data }) => {
         sx={{ maxWidth: "320pt", margin: "auto" }}
         keepMounted={false}
       >
-        <DialogBody closeDialog={closeDialog} data={data} />
+        <DialogBody
+          closeDialog={closeDialog}
+          data={data}
+          userForms={userForms}
+          collaborationForms={collaborationForms}
+          user={user}
+          defaultValue={defaultCurrentValue()}
+        />
       </Dialog>
     </>
   );

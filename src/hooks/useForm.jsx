@@ -4,6 +4,7 @@ import { getAllTreeForms, getForm } from "../api/forms";
 import { getAndSetTree } from "../api/trees";
 import { getQuestionsChanges } from "../api/questions";
 import { getResponses } from "../api/responses";
+import { useUser } from "./useUser";
 
 const FormContext = createContext();
 
@@ -12,6 +13,7 @@ const useForm = () => {
 };
 
 const FormProvider = ({ children }) => {
+  const user = useUser();
   const { id: formId } = useParams();
   const [form, setForm] = useState(null);
   const [tree, setTree] = useState(null);

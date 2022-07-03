@@ -25,7 +25,7 @@ export const enableSections = (form) => {
     title: "Nueva Sección",
     children: [form.id],
     subTrees: [],
-    id: Math.floor(Math.random() * 1000) + 1,
+    id: Math.floor(Math.random() * 10000) + 1,
   });
 
   saveForm({ ...form, treeId: ref.id });
@@ -33,8 +33,8 @@ export const enableSections = (form) => {
 
 export const addChild = async (user, treeId, parentId) => {
   const childId = createForm(user, treeId);
-  const treeRef = doc(db, "trees", treeId);
   try {
+    const treeRef = doc(db, "trees", treeId);
     const tree = await getTreeOnce(treeRef);
 
     tree.id === parentId
@@ -47,7 +47,39 @@ export const addChild = async (user, treeId, parentId) => {
   } catch (err) {
     return {
       error: {
-        message: "Ocurrió un error al intentar crear la nueva encuesta",
+        message: "Error creando encuesta",
+      },
+    };
+  }
+};
+
+export const addTree = async (treeId, parentId, title) => {
+  try {
+    const treeRef = doc(db, "trees", treeId);
+    const tree = await getTreeOnce(treeRef);
+
+    const data = {
+      title: title === "" ? "Nueva sección" : title,
+      children: [],
+      subTrees: [],
+      id: Math.floor(Math.random() * 10000) + 1,
+    };
+
+    tree.id === parentId
+      ? tree.subTrees.push(data)
+      : editTreeById(
+          tree.subTrees,
+          { id: parentId, newTree: data },
+          "add-tree"
+        );
+
+    saveTree(tree);
+
+    return tree;
+  } catch (err) {
+    return {
+      error: {
+        message: "Error creando sección",
       },
     };
   }
@@ -94,17 +126,6 @@ export const getAndSetTree = (id, forms, callback) => {
     });
 
     callback(tree);
-  });
-};
-
-const findParentId = (sections, treeId, formId) => {
-  sections.forEach((tree) => {
-    if (treeId === tree.id) {
-      tree.children.push(formId);
-      return;
-    }
-
-    findParentId(tree.subTrees, treeId, formId);
   });
 };
 
@@ -184,7 +205,7 @@ const deleteSubTree = async (root, deleteId) => {
 const findAndDeleteSubTrees = (trees, deleteId, founded) => {
   return trees.filter((tree) => {
     if ((typeof founded === "undefined" || !founded) && tree.id !== deleteId) {
-      findAndDeleteSubTrees(tree.subTrees, deleteId, false);
+      tree.subTrees = findAndDeleteSubTrees(tree.subTrees, deleteId, false);
       return true;
     }
 
@@ -195,9 +216,8 @@ const findAndDeleteSubTrees = (trees, deleteId, founded) => {
       return docData;
     });
 
-    return tree.subTrees.length === 0
-      ? false
-      : findAndDeleteSubTrees(tree.subTrees, deleteId, true);
+    tree.subTrees = findAndDeleteSubTrees(tree.subTrees, deleteId, true);
+    return false;
   });
 };
 
@@ -221,7 +241,7 @@ const deleteAllTree = async (treeRef) => {
 };
 
 const editTreeById = (trees, data, action) => {
-  const { id, title, childId } = data;
+  const { id, title, childId, newTree } = data;
   trees.forEach((tree) => {
     if (tree.id === id) {
       switch (action) {
@@ -231,6 +251,10 @@ const editTreeById = (trees, data, action) => {
 
         case "add-form":
           tree.children.push(childId);
+          break;
+
+        case "add-tree":
+          tree.subTrees.push(newTree);
           break;
 
         default:
