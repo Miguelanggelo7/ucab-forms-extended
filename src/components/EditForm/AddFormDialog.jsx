@@ -10,6 +10,8 @@ import {
   useMediaQuery,
   Select,
   MenuItem,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { useForm } from "../../hooks/useForm";
@@ -53,7 +55,7 @@ const DialogBody = ({
         </Tooltip>
       </DialogTitle>
       <DialogContent sx={{ background: "inherit" }}>
-        <Select variant="standard" fullWidth>
+        <Select variant="standard" fullWidth defaultValue={userForms[0].id}>
           {userForms.length === 0
             ? null
             : userForms.map((form) => (
@@ -140,14 +142,24 @@ const AddFormDialog = ({ open, setOpen, data }) => {
         sx={{ maxWidth: "320pt", margin: "auto" }}
         keepMounted={false}
       >
-        <DialogBody
-          closeDialog={closeDialog}
-          data={data}
-          userForms={userForms}
-          collaborationForms={collaborationForms}
-          user={user}
-          defaultValue={defaultCurrentValue()}
-        />
+        {loadingUserForms || loadingCollaborationForms ? (
+          <Box
+            sx={{
+              margin: "auto",
+            }}
+          >
+            <CircularProgress sx={{ margin: "20pt" }} />
+          </Box>
+        ) : (
+          <DialogBody
+            closeDialog={closeDialog}
+            data={data}
+            userForms={userForms}
+            collaborationForms={collaborationForms}
+            user={user}
+            defaultValue={defaultCurrentValue()}
+          />
+        )}
       </Dialog>
     </>
   );
