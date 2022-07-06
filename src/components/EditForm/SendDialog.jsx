@@ -10,6 +10,7 @@ import {
 import { useSnackbar } from "notistack";
 import { useForm } from "../../hooks/useForm";
 import { APP_URL } from "../../constants/urls";
+import QRCode from "react-qr-code";
 
 const SendDialog = ({ open, setOpen }) => {
   const { form } = useForm();
@@ -35,6 +36,17 @@ const SendDialog = ({ open, setOpen }) => {
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>Enviar Encuesta</DialogTitle>
         <DialogContent>
+          <div
+            style={{
+              margin: "auto",
+              maxWidth: "192.5pt",
+              width: "100%",
+            }}
+          >
+            <QRCode value={formUrl} />
+          </div>
+        </DialogContent>
+        <DialogContent sx={{ marginTop: "-25pt" }}>
           <TextField
             variant="standard"
             fullWidth
@@ -47,7 +59,7 @@ const SendDialog = ({ open, setOpen }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cerrar</Button>
-          <Button onClick={handleCopy}>Copiar</Button>
+          <Button onClick={handleCopy}>Copiar URL</Button>
         </DialogActions>
       </Dialog>
     );

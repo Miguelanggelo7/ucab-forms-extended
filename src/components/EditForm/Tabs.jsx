@@ -15,7 +15,7 @@ const Tabs = ({ setOpenDrawer }) => {
 
   return (
     <TabContext value={currentTab}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ zIndex: "1" }}>
         <TabList
           onChange={handleChangeTab}
           textColor="inherit"
