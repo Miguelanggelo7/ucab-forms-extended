@@ -17,7 +17,7 @@ const blink = keyframes`
   }
 `;
 
-const RecordAudio = ({ onChange, onChangeText }) => {
+const RecordAudio = ({ onChange, onChangeText, band }) => {
   const audioRef = useRef(null);
   const stopRef = useRef(null);
   const startRef = useRef(null);
@@ -32,6 +32,10 @@ const RecordAudio = ({ onChange, onChangeText }) => {
   useEffect(() => {
     onChangeText(transcript.current);
   }, [transcript.current]);
+
+  useEffect(() => {
+    if (band.length === 0) audioRef.current.controls = false;
+  }, [band]);
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -140,11 +144,7 @@ const RecordAudio = ({ onChange, onChangeText }) => {
         </IconButton>
         <audio ref={audioRef} style={{ width: "100%", maxWidth: "200pt" }} />
       </div>
-      <Typography
-        ref={startRef}
-        variant="caption"
-        onClick={() => console.log(transcript)}
-      >
+      <Typography ref={startRef} variant="caption">
         Presione el micrófono para grabar un audio
       </Typography>
     </>

@@ -380,6 +380,7 @@ const Question = ({ answers, question, setAnswers }) => {
         return (
           <div>
             <RecordAudio
+              band={answers[question.id]}
               onChange={(audio) => {
                 setAnswers({ ...answers, [question.id]: audio });
               }}
