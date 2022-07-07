@@ -37,6 +37,7 @@ import UploadButton from "./UploadButton";
 import { useFont } from "../hooks/useFont";
 import MicIcon from "@mui/icons-material/Mic";
 import Slidermoji from "./Slidermoji";
+import RecordAudio from "./RecordAudio";
 
 const QuestionPreview = ({ question }) => {
   const { font } = useFont();

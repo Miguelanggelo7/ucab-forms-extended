@@ -25,6 +25,17 @@ const RecordAudio = ({ onChange }) => {
   const recRef = useRef(null);
   const chunks = [];
   let rec;
+  let transcript;
+
+  //el texto de reconocimiento se guarda en la variable transcript
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mic = new SpeechRecognition();
+
+  mic.continuous = true;
+  mic.interimResults = true;
+  mic.lang = "es-VE";
 
   const getFileBlob = (url, cb) => {
     var xhr = new XMLHttpRequest();
@@ -41,6 +52,7 @@ const RecordAudio = ({ onChange }) => {
     recRef.current.style.display = "block";
     startRef.current.style.opacity = 0;
     micRef.current.style.display = "none";
+
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       rec = new MediaRecorder(stream);
       rec.start();
@@ -51,9 +63,26 @@ const RecordAudio = ({ onChange }) => {
         chunks.push(e.data);
       };
 
+      mic.start();
+      mic.onstart = () => {
+        console.log("Mics on");
+      };
+
+      mic.onresult = (event) => {
+        transcript = Array.from(event.results)
+          .map((result) => result[0])
+          .map((result) => result.transcript)
+          .join("");
+        console.log(transcript);
+        mic.onerror = (event) => {
+          console.log(event.error);
+        };
+      };
+
       rec.onstop = () => {
         const blob = new Blob(chunks, { type: "audio/mp3" });
         const blobURL = URL.createObjectURL(blob);
+        mic.stop();
 
         getFileBlob(blobURL, (blob) => {
           onChange(blob);
