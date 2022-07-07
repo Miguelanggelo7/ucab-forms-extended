@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import StopIcon from "@mui/icons-material/Stop";
 import MicIcon from "@mui/icons-material/Mic";
 import { IconButton, Typography } from "@mui/material";
@@ -17,17 +17,21 @@ const blink = keyframes`
   }
 `;
 
-const RecordAudio = ({ onChange }) => {
+const RecordAudio = ({ onChange, onChangeText }) => {
   const audioRef = useRef(null);
   const stopRef = useRef(null);
   const startRef = useRef(null);
   const micRef = useRef(null);
   const recRef = useRef(null);
-  const chunks = [];
   let rec;
-  let transcript;
+  let transcript = useRef(null);
+  const chunks = [];
 
   //el texto de reconocimiento se guarda en la variable transcript
+
+  useEffect(() => {
+    onChangeText(transcript.current);
+  }, [transcript.current]);
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -64,16 +68,12 @@ const RecordAudio = ({ onChange }) => {
       };
 
       mic.start();
-      mic.onstart = () => {
-        console.log("Mics on");
-      };
 
       mic.onresult = (event) => {
-        transcript = Array.from(event.results)
+        transcript.current = Array.from(event.results)
           .map((result) => result[0])
           .map((result) => result.transcript)
           .join("");
-        console.log(transcript);
         mic.onerror = (event) => {
           console.log(event.error);
         };
@@ -87,7 +87,6 @@ const RecordAudio = ({ onChange }) => {
         getFileBlob(blobURL, (blob) => {
           onChange(blob);
         });
-
         audioRef.current.src = blobURL;
         audioRef.current.controls = true;
         stopRef.current.style.display = "none";
@@ -141,7 +140,11 @@ const RecordAudio = ({ onChange }) => {
         </IconButton>
         <audio ref={audioRef} style={{ width: "100%", maxWidth: "200pt" }} />
       </div>
-      <Typography ref={startRef} variant="caption">
+      <Typography
+        ref={startRef}
+        variant="caption"
+        onClick={() => console.log(transcript)}
+      >
         Presione el micrófono para grabar un audio
       </Typography>
     </>

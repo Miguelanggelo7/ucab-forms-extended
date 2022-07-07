@@ -383,6 +383,9 @@ const Question = ({ answers, question, setAnswers }) => {
               onChange={(audio) => {
                 setAnswers({ ...answers, [question.id]: audio });
               }}
+              onChangeText={(text) => {
+                setAnswers({ ...answers, [question.id + "-text"]: text });
+              }}
             />
           </div>
         );

@@ -46,11 +46,7 @@ const AnswerForm = () => {
     const answers = {};
 
     questions.forEach((question) => {
-      if (
-        question.type === CHECKBOX ||
-        question.type === FILE ||
-        question.type === VOICE
-      ) {
+      if (question.type === CHECKBOX || question.type === FILE) {
         answers[question.id] = [];
       } else if (question.type === RADIO && question.required) {
         answers[question.id] = question.options[0];
@@ -60,6 +56,9 @@ const AnswerForm = () => {
         answers[question.id] = [...question.options];
       } else if (question.type === RATING) {
         answers[question.id] = 0;
+      } else if (question.type === VOICE) {
+        answers[question.id] = [];
+        answers[question.id + "-text"] = "";
       } else {
         answers[question.id] = "";
       }
@@ -238,6 +237,7 @@ const AnswerForm = () => {
     <Box>
       <Header />
       <button onClick={() => console.log(arrayRest)}>prueba</button>
+      {console.log(answers)}
       {rest ? (
         <Container sx={{ p: 3 }} maxWidth="md">
           <form onSubmit={submit}>
@@ -251,7 +251,6 @@ const AnswerForm = () => {
                   * Obligatorio
                 </Typography>
               </Card>
-              {console.log(form.questions)}
               {form.questions.map((question, i) => (
                 <Card key={i} sx={{ p: 3 }} variant="outlined">
                   <Question
