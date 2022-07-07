@@ -1,6 +1,7 @@
 import Saad from "../img/josesaad.jpg";
 import Luis from "../img/luissumoza.jpg";
 import Nahum from "../img/nahumgiral.jpg";
+import Miguelanggelo from "../img/miguelanggelo.jpg";
 import "./Footer.css";
 import MemberCard from "./MemberCard";
 
@@ -17,6 +18,17 @@ const Footer = () => {
             instagram={"https://www.instagram.com/josemsaad/"}
             linkedin={"https://www.linkedin.com/in/jose-saad-556223206/"}
             name={"José Saad"}
+            role={"Programador"}
+          />
+          <MemberCard
+            img={Miguelanggelo}
+            number={"+584249125727"}
+            git={"https://github.com/Miguelanggelo7"}
+            instagram={"https://www.instagram.com/miguel_jhs/"}
+            linkedin={
+              "https://www.linkedin.com/in/miguelanggelo-sumoza-hurtado-2935861b8/"
+            }
+            name={"Miguelanggelo Sumoza"}
             role={"Programador"}
           />
           <MemberCard
@@ -39,7 +51,6 @@ const Footer = () => {
             name={"Nahum Giral"}
             role={"Tester"}
           />
-          <MemberCard img={Saad} />
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />
