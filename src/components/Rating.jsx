@@ -101,7 +101,7 @@ const Rating = ({
           emptyIcon={<FavoriteBorder fontSize="inherit" />}
           {...ratingProps}
         />
-      ) : question.typeRating === "emoji" ? (
+      ) : question.typeRating === "face" ? (
         <EmojiRating
           value={value}
           onChange={(event, newValue) => {

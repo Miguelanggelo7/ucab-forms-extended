@@ -6,9 +6,12 @@ import { useFont } from "../hooks/useFont";
 
 const Dashboard = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <DashboardTable />
-    </Container>
+    <>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <DashboardTable />
+      </Container>
+      <Footer />
+    </>
   );
 };
 

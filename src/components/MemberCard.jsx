@@ -21,8 +21,8 @@ const MemberCard = (props) => {
       <div className="contImg">
         <img src={props.img} className="imageMember" />
       </div>
-      <p className="name">José Saad</p>
-      <p className="role">Programador</p>
+      <p className="name">{props.name}</p>
+      <p className="role">{props.role}</p>
       <div class="contact">
         <div style={{ height: "150px" }} />
         <IconButton
