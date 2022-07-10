@@ -21,12 +21,15 @@ import {
   SORTABLE,
   RATING,
   TIME,
+  VOICE,
+  SLIDERMOJI,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import Comments from "./Comments";
 import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
+import Slidermoji from "../Slidermoji";
 
 const Response = () => {
   const { responses, questions } = useForm();
@@ -89,12 +92,25 @@ const Response = () => {
         return <Slider disabled question={question} value={value} />;
       }
 
+      if (question.type === SLIDERMOJI) {
+        return <Slidermoji disabled question={question} value={value} />;
+      }
+
       if (question.type === RATING) {
         return <Rating question={question} readOnly value={value} />;
       }
 
       if (question.type === FILE) {
         return <FilesResponse files={value} />;
+      }
+
+      if (question.type === VOICE) {
+        return (
+          <>
+            <audio controls src={value.url} />
+            <Typography>{value.text}</Typography>
+          </>
+        );
       }
 
       let text = value;

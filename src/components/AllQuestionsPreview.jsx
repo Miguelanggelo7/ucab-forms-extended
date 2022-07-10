@@ -181,10 +181,7 @@ const QuestionPreview = ({ question }) => {
     case VOICE:
       return (
         <div style={{ display: "inline-flex" }}>
-          <MicIcon
-            sx={{ color: "#c4c4c4", marginTop: "12pt", marginRight: "10pt" }}
-          />
-          <audio src={null} controls controlsList="nodownload noplaybackrate" />
+          <MicIcon sx={{ color: "#c4c4c4" }} />
         </div>
       );
     case SLIDERMOJI:

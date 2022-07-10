@@ -28,7 +28,8 @@ export const submitResponse = async (form, response) => {
           );
         } else if (question.type === VOICE) {
           response.answers[question.id] = await uploadRecordedAudio(
-            response.answers[question.id]
+            response.answers[question.id],
+            response.answers[question.id + "-text"]
           );
         }
       })

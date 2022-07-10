@@ -21,7 +21,7 @@ export const uploadFiles = async (files) => {
   }));
 };
 
-export const uploadRecordedAudio = async (audio) => {
+export const uploadRecordedAudio = async (audio, text) => {
   const name = uuidv4();
   const fileRef = ref(storage, `${Date.now() + name}`);
   const file = await uploadBytes(fileRef, audio);
@@ -32,5 +32,6 @@ export const uploadRecordedAudio = async (audio) => {
     url,
     type: file.metadata.contentType,
     name,
+    text,
   };
 };

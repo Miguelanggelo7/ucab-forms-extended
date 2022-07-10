@@ -22,11 +22,13 @@ import {
   SORTABLE,
   RATING,
   TIME,
+  VOICE,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
+import RecordAudio from "../RecordAudio";
 
 const ResponsesByQuestion = () => {
   const { responses, questions } = useForm();
@@ -141,6 +143,10 @@ const ResponsesByQuestion = () => {
 
       if (question.type === FILE) {
         return <FilesResponse files={value} />;
+      }
+
+      if (question.type === VOICE) {
+        return <audio controls src={value.url} />;
       }
 
       return <Typography>{value}</Typography>;
