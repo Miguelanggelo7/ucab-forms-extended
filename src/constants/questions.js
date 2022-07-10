@@ -26,7 +26,7 @@ export const compatibility = {
   [TIME]: [DATE, TIME, DATETIME],
   [DATETIME]: [DATE, TIME, DATETIME],
   [FILE]: [FILE],
-  [VOICE]: [VOICE, FILE],
+  [VOICE]: [VOICE],
   [SLIDERMOJI]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING, SLIDERMOJI],
 };
 
