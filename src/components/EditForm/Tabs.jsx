@@ -37,7 +37,9 @@ const Tabs = ({ setOpenDrawer }) => {
         </Fade>
       </TabPanel>
       <TabPanel sx={{ p: 0, pt: 1 }} value={"2"}>
-        <Sections />
+        <Fade>
+          <Sections />
+        </Fade>
       </TabPanel>
     </TabContext>
   );
