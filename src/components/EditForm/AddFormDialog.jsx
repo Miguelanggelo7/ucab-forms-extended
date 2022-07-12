@@ -31,7 +31,7 @@ const DialogBody = ({
   user,
   defaultValue,
 }) => {
-  const { current, setCurrent } = useState("");
+  const [current, setCurrent] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const { treeId } = useForm();
 
@@ -43,6 +43,10 @@ const DialogBody = ({
 
   const addForm = () => {
     console.log(current);
+  };
+
+  const handleChangeSelect = (event, child) => {
+    setCurrent(event.target.value);
   };
 
   return (
@@ -66,7 +70,7 @@ const DialogBody = ({
           variant="standard"
           fullWidth
           defaultValue={defaultValue}
-          onChange={(e) => console.log(e.target.id)}
+          onChange={handleChangeSelect}
         >
           {userForms.length === 0
             ? null
