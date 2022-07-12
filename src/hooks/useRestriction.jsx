@@ -13,22 +13,21 @@ const RestrictionsProvider = ({ children }) => {
   const [formRestrictions, setFormRestrictions] = useState([]);
   const [restrictionsList, setRestrictionsList] = useState([]);
 
-  // useEffect(() => {
-  //   const unsuscribeFormRestrictions = getFormRestrictions(
-  //     questions,
-  //     (restrictions) => {
-  //       setFormRestrictions(restrictions);
-  //     }
-  //   );
+  useEffect(() => {
+    const unsuscribeFormRestrictions = getFormRestrictions(
+      questions,
+      (restrictions) => {
+        setFormRestrictions(restrictions);
+      }
+    );
 
-  //   return () => {
-  //     unsuscribeFormRestrictions();
-  //   };
-  // }, [questions]);
+    return () => {
+      if (unsuscribeFormRestrictions) unsuscribeFormRestrictions();
+    };
+  }, [questions]);
 
   useEffect(() => {
     const unsuscribeRestriction = getRestrictions((restrictions) => {
-      console.log(restrictions);
       setRestrictionsList(restrictions);
     });
 

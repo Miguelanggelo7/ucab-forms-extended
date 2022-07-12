@@ -29,7 +29,6 @@ const FormProvider = ({ children }) => {
     const unsubscribeQuestions = getQuestionsChanges(formId, (changes) => {
       setQuestions((oldQuestions) => {
         const questions = [...oldQuestions];
-        console.log(questions);
         changes.forEach((change) => {
           if (change.type === "added") {
             questions.splice(change.newIndex, 0, change.question);
