@@ -7,6 +7,7 @@
   font-size: 32px;
   color: #4b7abc;
   text-transform: uppercase;
+  cursor: default;
 }
 
 .membersContainer {
@@ -22,6 +23,7 @@
   position: relative;
   margin-left: 5%;
   margin-right: 5%;
+  width: 300px;
 }
 
 .member:last-child {
@@ -36,12 +38,14 @@
   color: #2a2a2a;
   font-size: 24px;
   font-weight: 400;
+  cursor: default;
 }
 
 .role {
   color: #4b7abc;
   font-size: 18px;
   font-weight: 300;
+  cursor: default;
 }
 
 .imageMember {

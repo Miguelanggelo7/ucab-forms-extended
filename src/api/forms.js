@@ -41,6 +41,7 @@ export const createForm = (user, treeId) => {
       startDate: null,
       endDate: null,
       randomOrder: false,
+      color: "#4B7ABC",
     },
   };
 

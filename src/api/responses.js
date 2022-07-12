@@ -11,12 +11,13 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
-import { uploadFiles } from "./storage";
-import { FILE } from "../constants/questions";
+import { uploadFiles, uploadRecordedAudio } from "./storage";
+import { FILE, VOICE } from "../constants/questions";
 import { sendNotification } from "./notifications";
 
 export const submitResponse = async (form, response) => {
   try {
+    console.log(response);
     response.submittedAt = new Date();
 
     await Promise.all(
@@ -24,6 +25,11 @@ export const submitResponse = async (form, response) => {
         if (question.type === FILE) {
           response.answers[question.id] = await uploadFiles(
             response.answers[question.id]
+          );
+        } else if (question.type === VOICE) {
+          response.answers[question.id] = await uploadRecordedAudio(
+            response.answers[question.id],
+            response.answers[question.id + "-text"]
           );
         }
       })

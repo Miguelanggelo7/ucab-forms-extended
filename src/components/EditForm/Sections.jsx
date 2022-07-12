@@ -16,6 +16,8 @@ import { Edit, NoteAdd, CreateNewFolder } from "@mui/icons-material";
 import EditTreeDialog from "./EditTreeDialog";
 import AddTreeDialog from "./AddTreeDialog";
 import AddFormDialog from "./AddFormDialog";
+import Lottie from "lottie-react";
+import fileAnimation from "../../img/files.json";
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   [`& .${treeItemClasses.content}`]: {
@@ -249,17 +251,43 @@ const Sections = () => {
         </Box>
       ) : (
         <Box>
-          <Typography>
-            Al parecer haz habilitado las secciones para esta encuesta.
+          <Box
+            sx={{
+              mx: "auto",
+              width: "100%",
+              zIndex: "-1",
+            }}
+          >
+            <Lottie
+              animationData={fileAnimation}
+              loop
+              style={{
+                width: "150pt",
+                hegiht: "150pt",
+                margin: "auto",
+                marginTop: "-50pt",
+              }}
+            />
+          </Box>
+          <Typography textAlign={"center"}>
+            <strong>
+              ¡Al parecer aún no haz habilitado las secciones para esta
+              encuesta!
+            </strong>
+            <br />
+            Habilitarlas te permitirá dividir tu encuesta en carpetas y
+            subcarpetas, asi como permitirte crear mas encuestas dentro para
+            poder mantener un mejor control.
           </Typography>
-          <Typography>
-            Esto te permitira dividir tu encuesta en carpetas y subcarpetas, asi
-            como permitirte crear mas encuestas dentro para poder mantener un
-            mejor control.
-          </Typography>
-          <Button variant="contained" onClick={handleEnableSections}>
-            Click aqui para habilitarla
-          </Button>
+          <Box sx={{ width: "180pt", margin: "auto", marginTop: "10pt" }}>
+            <Button
+              variant="contained"
+              onClick={handleEnableSections}
+              fullWidth
+            >
+              Click aqui para habilitarla
+            </Button>
+          </Box>
         </Box>
       )}
     </Box>

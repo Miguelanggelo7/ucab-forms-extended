@@ -15,7 +15,7 @@ const Tabs = ({ setOpenDrawer }) => {
 
   return (
     <TabContext value={currentTab}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ zIndex: "1" }}>
         <TabList
           onChange={handleChangeTab}
           textColor="inherit"
@@ -37,7 +37,9 @@ const Tabs = ({ setOpenDrawer }) => {
         </Fade>
       </TabPanel>
       <TabPanel sx={{ p: 0, pt: 1 }} value={"2"}>
-        <Sections />
+        <Fade>
+          <Sections />
+        </Fade>
       </TabPanel>
     </TabContext>
   );

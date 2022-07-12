@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import Table from "../Table";
 import { useForm } from "../../hooks/useForm";
 import { stringifyAnswers } from "../../utils/stats";
-import { FILE } from "../../constants/questions";
+import { FILE, VOICE } from "../../constants/questions";
 
 const ResponsesTable = () => {
   const { responses, questions } = useForm();
@@ -15,7 +15,7 @@ const ResponsesTable = () => {
       { title: "Fecha de respuesta", field: "submittedAt" },
       ...questions.map((question) => ({
         title: question.title,
-        field: question.id,
+        field: question.type === VOICE ? `${question.id}.text` : question.id,
         emptyValue: "-",
         ...(question.type === FILE && {
           render: (rowData) => (
@@ -40,6 +40,7 @@ const ResponsesTable = () => {
   }, [questions]);
 
   const data = useMemo(() => {
+    console.log(responses);
     return responses.map((response) => ({
       id: response.id,
       submittedAt: format(response.submittedAt, "dd/MM/yyyy HH:mm"),
