@@ -41,7 +41,7 @@ import RequiredMark from "./RequiredMark";
 import RecordAudio from "./RecordAudio";
 import Slidermoji from "./Slidermoji";
 
-const Question = ({ answers, question, setAnswers }) => {
+const Question = ({ answers, question, setAnswers, paletteColor }) => {
   const [other, setOther] = useState("");
 
   const handleChange = (e) => {
@@ -395,6 +395,7 @@ const Question = ({ answers, question, setAnswers }) => {
           <div>
             <Slidermoji
               question={question}
+              paletteColor={paletteColor}
               value={answers[question.id] || 0}
               onChange={(_, value) =>
                 setAnswers({ ...answers, [question.id]: value })

@@ -53,6 +53,11 @@ const Slidermoji = ({ question, ...props }) => {
         height: 3,
       },
     },
+    palette: {
+      primary: {
+        main: props.paletteColor,
+      },
+    },
   });
 
   AirbnbThumbComponent.propTypes = {

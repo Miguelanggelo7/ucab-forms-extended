@@ -187,7 +187,12 @@ const QuestionPreview = ({ question }) => {
     case SLIDERMOJI:
       return (
         <div>
-          <Slidermoji disabled defaultValue={1} question={question} />
+          <Slidermoji
+            paletteColor={"#4B7ABC"}
+            disabled
+            defaultValue={1}
+            question={question}
+          />
         </div>
       );
     default:

@@ -2,6 +2,7 @@ import Saad from "../img/josesaad.jpg";
 import Luis from "../img/luissumoza.jpg";
 import Nahum from "../img/nahumgiral.jpg";
 import Miguelanggelo from "../img/miguelanggelo.jpg";
+import Oliver from "../img/olivertorres.jpeg";
 import "./Footer.css";
 import MemberCard from "./MemberCard";
 
@@ -51,7 +52,15 @@ const Footer = () => {
             name={"Nahum Giral"}
             role={"Tester"}
           />
-          <MemberCard img={Saad} />
+          <MemberCard
+            img={Oliver}
+            number={"+584148848537"}
+            git={"https://github.com/otorres828"}
+            instagram={"https://www.instagram.com/otorres828/"}
+            linkedin={"https://www.linkedin.com/in/oliver-torres-2760a5175"}
+            name={"Oliver Torres"}
+            role={"Asegurador de calidad"}
+          />
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />

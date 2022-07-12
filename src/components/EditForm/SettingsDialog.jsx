@@ -20,6 +20,7 @@ import { useTheme } from "@mui/material/styles";
 import { saveForm } from "../../api/forms";
 import { useForm } from "../../hooks/useForm";
 import { useAlert } from "../../hooks/useAlert";
+import ColorPicker from "material-ui-color-picker";
 
 const SettingsDialogBody = ({ closeDialog, discardDialog, setChanges }) => {
   const { form } = useForm();
@@ -29,6 +30,9 @@ const SettingsDialogBody = ({ closeDialog, discardDialog, setChanges }) => {
   );
   const [startDate, setStartDate] = useState(!!form.settings.startDate);
   const [endDate, setEndDate] = useState(!!form.settings.endDate);
+  const [colorCheck, setColorCheck] = useState(
+    form.settings.color === "#4B7ABC" ? false : true
+  );
 
   return useMemo(() => {
     const handleChangeValue = (field) => (e) => {
@@ -54,6 +58,13 @@ const SettingsDialogBody = ({ closeDialog, discardDialog, setChanges }) => {
       setSettings(newSettings);
     };
 
+    const handleChangeColor = (color) => {
+      setChanges(true);
+      const newSettings = { ...settings, ["color"]: color };
+
+      setSettings(newSettings);
+    };
+
     const handleSaveForm = () => {
       const formData = { ...form, settings };
 
@@ -67,6 +78,10 @@ const SettingsDialogBody = ({ closeDialog, discardDialog, setChanges }) => {
 
       if (!endDate) {
         formData.settings.endDate = null;
+      }
+
+      if (!colorCheck) {
+        formData.settings.color = "#4B7ABC";
       }
 
       saveForm(formData);
@@ -92,6 +107,32 @@ const SettingsDialogBody = ({ closeDialog, discardDialog, setChanges }) => {
         </DialogTitle>
         <DialogContent sx={{ background: "inherit" }}>
           <List sx={{ background: "inherit" }}>
+            <ListItem>
+              <ListItemText primary="Personalizar el color de la encuesta" />
+              <Switch
+                edge="end"
+                checked={colorCheck}
+                onChange={(e) => {
+                  setChanges(true);
+                  setColorCheck(e.target.checked);
+                }}
+              />
+            </ListItem>
+            {colorCheck && (
+              <ListItem>
+                <ColorPicker
+                  style={{ marginTop: "-20pt" }}
+                  name="color"
+                  value={settings.color}
+                  label={settings.color}
+                  disabled
+                  onChange={(color) => {
+                    handleChangeColor(color);
+                    console.log(settings.color);
+                  }}
+                />
+              </ListItem>
+            )}
             <ListItem>
               <ListItemText primary="Admitir respuestas" />
               <Switch
@@ -211,6 +252,7 @@ const SettingsDialogBody = ({ closeDialog, discardDialog, setChanges }) => {
     setChanges,
     settings,
     startDate,
+    colorCheck,
   ]);
 };
 
