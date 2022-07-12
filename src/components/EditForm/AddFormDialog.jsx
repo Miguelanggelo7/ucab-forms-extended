@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Dialog,
@@ -16,7 +16,10 @@ import {
 import { Close as CloseIcon } from "@mui/icons-material";
 import { useForm } from "../../hooks/useForm";
 import { useUser } from "../../hooks/useUser";
-import { getCollaborationForms, getUserForms } from "../../api/forms";
+import {
+  getCollaborationUntreeForms,
+  getUserUntreeForms,
+} from "../../api/forms";
 import { addChild } from "../../api/trees";
 import { useSnackbar } from "notistack";
 
@@ -28,7 +31,7 @@ const DialogBody = ({
   user,
   defaultValue,
 }) => {
-  const { current, setCurrent } = useState(defaultValue);
+  const { current, setCurrent } = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const { treeId } = useForm();
 
@@ -36,6 +39,10 @@ const DialogBody = ({
     const { error } = await addChild(user, treeId, data.id);
     error && enqueueSnackbar(error.message, { variant: "error" });
     closeDialog();
+  };
+
+  const addForm = () => {
+    console.log(current);
   };
 
   return (
@@ -55,7 +62,12 @@ const DialogBody = ({
         </Tooltip>
       </DialogTitle>
       <DialogContent sx={{ background: "inherit" }}>
-        <Select variant="standard" fullWidth defaultValue={userForms[0].id}>
+        <Select
+          variant="standard"
+          fullWidth
+          defaultValue={defaultValue}
+          onChange={(e) => console.log(e.target.id)}
+        >
           {userForms.length === 0
             ? null
             : userForms.map((form) => (
@@ -70,8 +82,8 @@ const DialogBody = ({
                   {form.title}
                 </MenuItem>
               ))}
-          {(userForms.length === collaborationForms.length) === 0 ? (
-            <MenuItem value={0} disabled>
+          {defaultValue === "0" ? (
+            <MenuItem id="0" value="0" disabled>
               No posee encuestas ni colaboraciones
             </MenuItem>
           ) : null}
@@ -85,7 +97,7 @@ const DialogBody = ({
         </Button>
       </DialogContent>
       <DialogActions>
-        <Button>Añadir</Button>
+        <Button onClick={addForm}>Añadir</Button>
       </DialogActions>
     </>
   );
@@ -100,25 +112,25 @@ const AddFormDialog = ({ open, setOpen, data }) => {
     useState(true);
   const user = useUser();
 
-  const defaultCurrentValue = () => {
+  const defaultCurrentValue = useMemo(() => {
     return userForms.length === 0
       ? collaborationForms.length === 0
-        ? 0
+        ? "0"
         : collaborationForms[0].id
       : userForms[0].id;
-  };
+  }, [collaborationForms, userForms]);
 
   const closeDialog = () => {
     setOpen(false);
   };
 
   useEffect(() => {
-    const unsubscribeUserForms = getUserForms(user.id, (forms) => {
+    const unsubscribeUserForms = getUserUntreeForms(user.id, (forms) => {
       setUserForms(forms);
       setLoadingUserForms(false);
     });
 
-    const unsubscribeCollaborationForms = getCollaborationForms(
+    const unsubscribeCollaborationForms = getCollaborationUntreeForms(
       user,
       (forms) => {
         setCollaborationForms(forms);
@@ -157,7 +169,7 @@ const AddFormDialog = ({ open, setOpen, data }) => {
             userForms={userForms}
             collaborationForms={collaborationForms}
             user={user}
-            defaultValue={defaultCurrentValue()}
+            defaultValue={defaultCurrentValue}
           />
         )}
       </Dialog>

@@ -44,8 +44,7 @@ export const createForm = (user, treeId) => {
       color: "#4B7ABC",
     },
   };
-
-  if (typeof treeId !== "undefined") data.treeId = treeId;
+  data.treeId = typeof treeId === "undefined" ? null : treeId;
 
   setDoc(formRef, data);
 
@@ -68,6 +67,7 @@ export const duplicateForm = async (form, user) => {
     newForm.createdAt = new Date();
     newForm.responses = 0;
     newForm.collaborators = [];
+    newForm.treeId = null;
 
     const newFormRef = doc(formsRef);
     setDoc(newFormRef, newForm);
@@ -106,6 +106,36 @@ export const getUserForms = (userId, callback) => {
   });
 };
 
+export const getUserUntreeForms = (userId, callback) => {
+  const q = query(
+    formsRef,
+    where("author.id", "==", userId),
+    where("treeId", "==", null)
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    if (snapshot.size === 0) {
+      callback([]);
+      return null;
+    }
+
+    const forms = snapshot.docs.map((doc) => {
+      const form = doc.data();
+      form.id = doc.id;
+      form.createdAt = form.createdAt.toDate();
+      if (form.settings.startDate) {
+        form.settings.startDate = form.settings.startDate.toDate();
+      }
+      if (form.settings.endDate) {
+        form.settings.endDate = form.settings.endDate.toDate();
+      }
+      return form;
+    });
+
+    callback(forms);
+  });
+};
+
 export const getCollaborationForms = (user, callback) => {
   const collaborator = { id: user.id, email: user.email, name: user.name };
   const q = query(
@@ -114,6 +144,36 @@ export const getCollaborationForms = (user, callback) => {
   );
 
   return onSnapshot(q, (snapshot) => {
+    const forms = snapshot.docs.map((doc) => {
+      const form = doc.data();
+      form.id = doc.id;
+      form.createdAt = form.createdAt.toDate();
+      if (form.settings.startDate) {
+        form.settings.startDate = form.settings.startDate.toDate();
+      }
+      if (form.settings.endDate) {
+        form.settings.endDate = form.settings.endDate.toDate();
+      }
+      return form;
+    });
+
+    callback(forms);
+  });
+};
+
+export const getCollaborationUntreeForms = (user, callback) => {
+  const collaborator = { id: user.id, email: user.email, name: user.name };
+  const q = query(
+    formsRef,
+    where("collaborators", "array-contains", collaborator),
+    where("treeId", "==", null)
+  );
+
+  return onSnapshot(q, (snapshot) => {
+    if (snapshot.size === 0) {
+      callback([]);
+      return null;
+    }
     const forms = snapshot.docs.map((doc) => {
       const form = doc.data();
       form.id = doc.id;
@@ -205,7 +265,7 @@ export const saveForm = (form) => {
 export const deleteForm = async (formId) => {
   const formRef = doc(db, "forms", formId);
   const form = await getFormOnce(formId);
-  if (typeof form.treeId !== "undefined") deleteIdFromTree(formId, form.treeId);
+  if (!form.treeId) deleteIdFromTree(formId, form.treeId);
 
   deleteDoc(formRef);
 };
