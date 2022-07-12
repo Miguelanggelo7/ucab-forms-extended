@@ -27,6 +27,7 @@ import Header from "../components/Header";
 import Question from "../components/Question";
 import AnswerPageText from "../components/AnswerPageText";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { getFormRestrictions } from "../api/restrictions";
 
 const AnswerForm = () => {
   const { id: formId } = useParams();
@@ -42,6 +43,7 @@ const AnswerForm = () => {
   const user = useUser();
   const [rest, setRest] = useState(true);
   const [arrayRest, setArrayRest] = useState([]);
+  const [restrictions, setRestrictions] = useState([]);
 
   const initializeAnswers = useCallback((questions) => {
     const answers = {};
@@ -99,6 +101,9 @@ const AnswerForm = () => {
     const getForm = async () => {
       const form = await getFormOnce(formId);
       if (form) {
+        const restrictions = await getFormRestrictions(form.questions);
+        setRestrictions(restrictions);
+
         if (form.settings.onlyOneResponse && !user) {
           setForm(form);
           return setLoading(false);
