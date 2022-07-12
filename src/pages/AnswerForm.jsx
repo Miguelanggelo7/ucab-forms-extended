@@ -27,6 +27,7 @@ import Header from "../components/Header";
 import Question from "../components/Question";
 import AnswerPageText from "../components/AnswerPageText";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useRestrictions } from "../hooks/useRestriction";
 
 const AnswerForm = () => {
   const { id: formId } = useParams();
@@ -246,7 +247,6 @@ const AnswerForm = () => {
     <ThemeProvider theme={theme}>
       <Box>
         <Header />
-        <button onClick={() => console.log(arrayRest)}>prueba</button>
         {rest ? (
           <Container sx={{ p: 3 }} maxWidth="md">
             <form onSubmit={submit}>
