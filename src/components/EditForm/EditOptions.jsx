@@ -356,7 +356,7 @@ const Options = ({ question, debouncedSave }) => {
                 label="Desde"
                 value={question.min}
                 onChange={handleChange("min")}
-                sx={{ width: 100, mr: 2 }}
+                sx={{ width: "45%", marginRight: "10%" }}
               >
                 {sliderMinValues.map((n) => (
                   <MenuItem key={n} value={n}>
@@ -370,7 +370,7 @@ const Options = ({ question, debouncedSave }) => {
                 label="Hasta"
                 value={question.max}
                 onChange={handleChange("max")}
-                sx={{ width: 100 }}
+                sx={{ width: "45%" }}
               >
                 {sliderMaxValues.map((n) => (
                   <MenuItem key={n} value={n}>
