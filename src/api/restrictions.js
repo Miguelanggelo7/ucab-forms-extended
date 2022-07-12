@@ -8,6 +8,8 @@ import {
   where,
   getDoc,
   getDocs,
+  arrayUnion,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
@@ -27,18 +29,36 @@ export const getRestrictions = (callback) => {
   });
 };
 
+const isDuplicated = (array, value, index) => {
+  array.forEach((item, i) => {
+    if (item && item.value === value) return i === index ? false : true;
+  });
+};
+
 export const getFormRestrictions = (questions, callback) => {
   const data = questions
     .map((question) => {
-      return question.restricted ? question.restrictions : null;
+      return question.restricted
+        ? question.restrictions.map((value) => {
+            return {
+              questionId: question.id,
+              value,
+            };
+          })
+        : null;
     })
     .flat();
 
   // nullless, without emptiness and unduplicated array
-  const keys = data.filter(
+  const cleanData = data.filter(
     (item, index) =>
-      item !== "" && item !== null && data.indexOf(item) === index
+      item &&
+      item.value !== "" &&
+      item.value !== null &&
+      !isDuplicated(data, item.value, index)
   );
+
+  const keys = cleanData.map((item) => item.value);
 
   if (keys.length === 0) {
     callback([]);
@@ -46,7 +66,6 @@ export const getFormRestrictions = (questions, callback) => {
   }
 
   const q = query(resRef, where("title", "in", keys));
-
   return onSnapshot(q, (snapshot) => {
     const restrictions = snapshot.docs.map((doc) => {
       const { question, options, optionSelected } = doc.data();
@@ -86,4 +105,20 @@ export const createRestriction = async (restriction, user) => {
   });
 };
 
-export const answerRestriction = (restriction, response) => {};
+export const answerRestriction = async (userId, formId, response) => {
+  /*
+
+  response = {
+    userId,
+    title: 'Solo hombres',
+    value: null
+  }
+
+  */
+  const responsesRef = collection(db, "forms", formId, "conditions");
+  const responseRef = doc(responsesRef);
+
+  (await getDoc(responseRef)).exists
+    ? updateDoc(responseRef, arrayUnion(response))
+    : setDoc(responseRef, response);
+};

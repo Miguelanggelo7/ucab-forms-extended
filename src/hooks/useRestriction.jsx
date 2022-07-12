@@ -17,6 +17,7 @@ const RestrictionsProvider = ({ children }) => {
     const unsuscribeFormRestrictions = getFormRestrictions(
       questions,
       (restrictions) => {
+        console.log(restrictions);
         setFormRestrictions(restrictions);
       }
     );
