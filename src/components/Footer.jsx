@@ -59,7 +59,7 @@ const Footer = () => {
             instagram={"https://www.instagram.com/otorres828/"}
             linkedin={"https://www.linkedin.com/in/oliver-torres-2760a5175"}
             name={"Oliver Torres"}
-            role={"Asegurador de calidad"}
+            role={"Documentador"}
           />
           <MemberCard img={Saad} />
           <MemberCard img={Saad} />

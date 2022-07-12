@@ -18,8 +18,10 @@ const MemberCard = (props) => {
 
   return (
     <div className="member">
-      <div className="contImg">
-        <img src={props.img} className="imageMember" />
+      <div style={{ width: "230px", margin: "auto" }}>
+        <div className="contImg">
+          <img src={props.img} className="imageMember" />
+        </div>
       </div>
       <p className="name">{props.name}</p>
       <p className="role">{props.role}</p>
