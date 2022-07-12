@@ -35,7 +35,7 @@ const isDuplicated = (array, value, index) => {
   });
 };
 
-export const getFormRestrictions = (questions, callback) => {
+export const getFormRestrictions = async (questions) => {
   const data = questions
     .map((question) => {
       return question.restricted
@@ -60,26 +60,38 @@ export const getFormRestrictions = (questions, callback) => {
 
   const keys = cleanData.map((item) => item.value);
 
-  if (keys.length === 0) {
-    callback([]);
-    return null;
-  }
+  if (keys.length === 0) return [];
 
   const q = query(resRef, where("title", "in", keys));
-  return onSnapshot(q, (snapshot) => {
-    const restrictions = snapshot.docs.map((doc) => {
-      const { question, options, optionSelected } = doc.data();
 
-      return {
-        question,
-        options,
-        optionSelected,
-        id: doc.id,
-      };
-    });
+  const snapshots = await getDocs(q);
 
-    callback(restrictions);
+  const restrictions = snapshots.docs.map((item) => {
+    const { question, options, title, optionSelected } = item.data();
+    return {
+      question,
+      title,
+      options,
+      optionSelected,
+      id: item.id,
+    };
   });
+
+  return restrictions;
+  // return onSnapshot(q, (snapshot) => {
+  //   const restrictions = snapshot.docs.map((doc) => {
+  //     const { question, options, optionSelected } = doc.data();
+
+  //     return {
+  //       question,
+  //       options,
+  //       optionSelected,
+  //       id: doc.id,
+  //     };
+  //   });
+
+  //   callback(restrictions);
+  // });
 };
 
 export const createRestriction = async (restriction, user) => {

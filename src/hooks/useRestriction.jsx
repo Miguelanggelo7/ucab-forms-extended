@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getRestrictions, getFormRestrictions } from "../api/restrictions";
-import { useForm } from "../hooks/useForm";
+import { getRestrictions } from "../api/restrictions";
 
 const RestrictionsContext = createContext();
 
@@ -9,22 +8,7 @@ const useRestrictions = () => {
 };
 
 const RestrictionsProvider = ({ children }) => {
-  const { questions } = useForm();
-  const [formRestrictions, setFormRestrictions] = useState([]);
   const [restrictionsList, setRestrictionsList] = useState([]);
-
-  useEffect(() => {
-    const unsuscribeFormRestrictions = getFormRestrictions(
-      questions,
-      (restrictions) => {
-        setFormRestrictions(restrictions);
-      }
-    );
-
-    return () => {
-      if (unsuscribeFormRestrictions) unsuscribeFormRestrictions();
-    };
-  }, [questions]);
 
   useEffect(() => {
     const unsuscribeRestriction = getRestrictions((restrictions) => {
@@ -37,7 +21,6 @@ const RestrictionsProvider = ({ children }) => {
   }, []);
 
   const value = {
-    formRestrictions,
     restrictionsList,
   };
 
