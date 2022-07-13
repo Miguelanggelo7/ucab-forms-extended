@@ -31,8 +31,8 @@ export const enableSections = (form) => {
   saveForm({ ...form, treeId: ref.id });
 };
 
-export const addChild = async (user, treeId, parentId) => {
-  const childId = createForm(user, treeId);
+export const addChild = async ({ child, user, treeId, parentId }) => {
+  const childId = child ? child : createForm(user, treeId);
   try {
     const treeRef = doc(db, "trees", treeId);
     const tree = await getTreeOnce(treeRef);
@@ -40,6 +40,13 @@ export const addChild = async (user, treeId, parentId) => {
     tree.id === parentId
       ? tree.children.push(childId)
       : editTreeById(tree.subTrees, { id: parentId, childId }, "add-form");
+
+    if (child) {
+      const formRef = doc(db, "forms", childId);
+      updateDoc(formRef, {
+        treeId,
+      });
+    }
 
     saveTree(tree);
 
@@ -179,7 +186,7 @@ export const deleteTree = async (id, deleteId) => {
       : await deleteSubTree(tree, deleteId);
 
     return {
-      succes: { message: "Sección eliminada correctamente" },
+      success: { message: "Sección eliminada correctamente" },
     };
   } catch (err) {
     console.log(err);

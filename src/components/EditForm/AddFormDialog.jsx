@@ -36,13 +36,29 @@ const DialogBody = ({
   const { treeId } = useForm();
 
   const createNewForm = async () => {
-    const { error } = await addChild(user, treeId, data.id);
+    const { error } = await addChild({
+      user,
+      treeId,
+      parentId: data.id,
+    });
     error && enqueueSnackbar(error.message, { variant: "error" });
     closeDialog();
   };
 
-  const addForm = () => {
-    console.log(current);
+  const addForm = async () => {
+    const { error } = await addChild({
+      treeId,
+      parentId: data.id,
+      child: current,
+    });
+
+    error
+      ? enqueueSnackbar(error.message, { variant: "error" })
+      : enqueueSnackbar("Se ha añadido correctamente la encuesta", {
+          variant: "success",
+        });
+
+    closeDialog();
   };
 
   const handleChangeSelect = (event) => {
@@ -88,7 +104,7 @@ const DialogBody = ({
               ))}
           {defaultValue === "0" ? (
             <MenuItem id="0" value="0" disabled>
-              No posee encuestas ni colaboraciones
+              No hay encuestas disponibles
             </MenuItem>
           ) : null}
         </Select>
@@ -101,7 +117,9 @@ const DialogBody = ({
         </Button>
       </DialogContent>
       <DialogActions>
-        <Button onClick={addForm}>Añadir</Button>
+        <Button onClick={addForm} disabled={defaultValue === "0"}>
+          Añadir
+        </Button>
       </DialogActions>
     </>
   );
