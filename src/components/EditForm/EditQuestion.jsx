@@ -97,9 +97,9 @@ const EditQuestion = ({ setOpenDrawer }) => {
       restrictions[i] = restriction;
 
       const newQuestion = { ...question, restrictions };
-
+      console.log(question);
+      console.log(restrictionsList);
       debouncedSave(newQuestion);
-
       setQuestions((questions) =>
         questions.map((q) => (q.id === question.id ? newQuestion : q))
       );
@@ -297,6 +297,14 @@ const EditQuestion = ({ setOpenDrawer }) => {
       return !compatibility[question.type].includes(type);
     };
 
+    const verificationRestrictionList = (value) => {
+      if (question.restrictions.indexOf(value) > -1) {
+        return false;
+      } else {
+        return true;
+      }
+    };
+
     return (
       <Stack spacing={3}>
         <Box
@@ -409,7 +417,9 @@ const EditQuestion = ({ setOpenDrawer }) => {
                       disablePortal
                       onChange={handleChangeRestriction(i)}
                       id="combo-box-demo"
-                      options={restrictionsList}
+                      options={restrictionsList.filter((rest) =>
+                        verificationRestrictionList(rest.label)
+                      )}
                       isOptionEqualToValue={(option, value) =>
                         option.label === value
                       }

@@ -139,6 +139,12 @@ const Response = () => {
             shape="rounded"
             renderItem={renderItem}
           />
+          <Typography>Respondido por:</Typography>
+          <Typography>
+            {responses[page - 1].user
+              ? responses[page - 1].user.name
+              : "Anónimo"}
+          </Typography>
           <Typography align="right" variant="caption" color="text.secondary">
             Respondido el {format(response.submittedAt, "dd/MM/yyyy, hh:mm a")}
           </Typography>
@@ -172,7 +178,7 @@ const Response = () => {
               </Box>
             </Card>
           )}
-          {questions.map((question) => (
+          {questions.map((question, index) => (
             <Box>
               <Card key={question.id} sx={{ p: 3, mb: 1 }} variant="outlined">
                 <Typography gutterBottom>{question.title}</Typography>

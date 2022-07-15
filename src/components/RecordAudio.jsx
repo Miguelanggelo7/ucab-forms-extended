@@ -88,6 +88,13 @@ const RecordAudio = ({ onChange, onChangeText, band }) => {
         const blobURL = URL.createObjectURL(blob);
         mic.stop();
 
+        // to dissapear the red dot in tab
+        if (rec) {
+          stream.getAudioTracks().forEach((track) => {
+            track.stop();
+          });
+        }
+
         getFileBlob(blobURL, (blob) => {
           onChange(blob);
         });

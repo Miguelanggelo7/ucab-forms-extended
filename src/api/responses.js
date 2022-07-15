@@ -15,7 +15,7 @@ import { uploadFiles, uploadRecordedAudio } from "./storage";
 import { FILE, VOICE } from "../constants/questions";
 import { sendNotification } from "./notifications";
 
-export const submitResponse = async (form, response) => {
+export const submitResponse = async (form, response, user) => {
   try {
     console.log(response);
     response.submittedAt = new Date();
@@ -38,7 +38,12 @@ export const submitResponse = async (form, response) => {
     const responsesRef = collection(db, "forms", form.id, "responses");
     const responseRef = doc(responsesRef);
 
-    setDoc(responseRef, response);
+    const newRes = {
+      ...response,
+    };
+
+    if (user) newRes.user = user;
+    setDoc(responseRef, newRes);
 
     const formRef = doc(db, "forms", form.id);
     updateDoc(formRef, {

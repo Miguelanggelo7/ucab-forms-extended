@@ -13,6 +13,7 @@ const ResponsesTable = () => {
   const columns = useMemo(() => {
     return [
       { title: "Fecha de respuesta", field: "submittedAt" },
+      { title: "Usuario", field: "username" },
       ...questions.map((question) => ({
         title: question.title,
         field: question.type === VOICE ? `${question.id}.text` : question.id,
@@ -44,6 +45,7 @@ const ResponsesTable = () => {
     return responses.map((response) => ({
       id: response.id,
       submittedAt: format(response.submittedAt, "dd/MM/yyyy HH:mm"),
+      username: response.user ? response.user.name : "Anónimo",
       ...stringifyAnswers(response.answers, questions),
     }));
   }, [questions, responses]);
