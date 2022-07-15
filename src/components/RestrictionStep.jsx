@@ -34,6 +34,7 @@ export default function RestrictionStep({
   };
 
   const handleNext = () => {
+    console.log(array);
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
         ? // It's the last step, but not all steps have been completed,
@@ -124,7 +125,7 @@ export default function RestrictionStep({
               }}
             >
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={() => setShow(true)}>Dale aca pa irnos</Button>
+              <Button onClick={() => setShow(true)}>Ir a encuesta</Button>
             </Box>
           </>
         ) : (

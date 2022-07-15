@@ -56,6 +56,7 @@ const FormProvider = ({ children }) => {
     });
 
     const unsubscribeResponses = getResponses(formId, (responses) => {
+      console.log(responses);
       setResponses(responses);
     });
 

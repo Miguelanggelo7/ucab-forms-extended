@@ -3,7 +3,7 @@ import { SliderThumb } from "@mui/material/Slider";
 import PropTypes from "prop-types";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-const Slidermoji = ({ question, ...props }) => {
+const Slidermoji = ({ question, paletteColor, ...props }) => {
   const sliderMarks = () => {
     const marks = [];
 
@@ -55,7 +55,7 @@ const Slidermoji = ({ question, ...props }) => {
     },
     palette: {
       primary: {
-        main: props.paletteColor,
+        main: paletteColor ? paletteColor : "#4B7ABC",
       },
     },
   });

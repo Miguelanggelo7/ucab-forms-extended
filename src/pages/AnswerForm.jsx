@@ -28,7 +28,6 @@ import Question from "../components/Question";
 import AnswerPageText from "../components/AnswerPageText";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getFormRestrictions } from "../api/restrictions";
-import { useRestrictions } from "../hooks/useRestriction";
 import RestrictionStep from "../components/RestrictionStep";
 
 const AnswerForm = () => {
@@ -163,7 +162,7 @@ const AnswerForm = () => {
       responseData.user = { ...user };
     }
 
-    const { error } = await submitResponse(form, responseData);
+    const { error } = await submitResponse(form, responseData, user);
 
     if (error) {
       enqueueSnackbar(error.message, { variant: "error" });
