@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  CircularProgress,
   Container,
   LinearProgress,
   Stack,
@@ -233,9 +234,14 @@ const AnswerForm = () => {
 
   if (loading) {
     return (
-      <Box>
-        <Header />
-        <LinearProgress />
+      <Box
+        sx={{
+          margin: "auto",
+          width: "30pt",
+          marginTop: "50pt",
+        }}
+      >
+        <CircularProgress sx={{ margin: "auto" }} />
       </Box>
     );
   }
