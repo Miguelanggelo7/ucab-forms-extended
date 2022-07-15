@@ -15,7 +15,12 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { Clear as ClearIcon } from "@mui/icons-material";
+import {
+  Clear as ClearIcon,
+  FavoriteBorder,
+  SentimentSatisfied,
+  StarBorder,
+} from "@mui/icons-material";
 import {
   CHECKBOX,
   RADIO,
@@ -24,9 +29,11 @@ import {
   SLIDER,
   TEXT,
   TEXTAREA,
+  SLIDERMOJI,
+  RATING,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
-import { useFont } from "../../hooks/useFont";
+import { emojis } from "../../constants/emojis";
 
 const sliderMinValues = [0, 1];
 const sliderMaxValues = [2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -76,7 +83,6 @@ const specialTypes = [
 
 const Options = ({ question, debouncedSave }) => {
   const { setQuestions } = useForm();
-  const { font } = useFont();
 
   return useMemo(() => {
     const handleChangeOption = (i) => (e) => {
@@ -96,6 +102,22 @@ const Options = ({ question, debouncedSave }) => {
 
     const handleChange = (field) => (e) => {
       const value = e.target.value;
+
+      const newQuestion = { ...question, [field]: value };
+
+      debouncedSave(newQuestion);
+
+      setQuestions((questions) =>
+        questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const handleRating = (e) => {
+      handleEmoji("typeRating", e.currentTarget.id);
+    };
+
+    const handleEmoji = (field, emoji) => {
+      const value = emoji;
 
       const newQuestion = { ...question, [field]: value };
 
@@ -150,6 +172,14 @@ const Options = ({ question, debouncedSave }) => {
 
       setQuestions((questions) =>
         questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const EmojiButton = (props) => {
+      return (
+        <IconButton onClick={() => handleEmoji("urlEmoji", props.emoji)}>
+          <img style={{ width: "40px" }} src={props.emoji} />
+        </IconButton>
       );
     };
 
@@ -326,7 +356,7 @@ const Options = ({ question, debouncedSave }) => {
                 label="Desde"
                 value={question.min}
                 onChange={handleChange("min")}
-                sx={{ width: 100, mr: 2 }}
+                sx={{ width: "45%", marginRight: "10%" }}
               >
                 {sliderMinValues.map((n) => (
                   <MenuItem key={n} value={n}>
@@ -340,7 +370,7 @@ const Options = ({ question, debouncedSave }) => {
                 label="Hasta"
                 value={question.max}
                 onChange={handleChange("max")}
-                sx={{ width: 100 }}
+                sx={{ width: "45%" }}
               >
                 {sliderMaxValues.map((n) => (
                   <MenuItem key={n} value={n}>
@@ -361,6 +391,34 @@ const Options = ({ question, debouncedSave }) => {
               value={question.maxLabel ?? ""}
               onChange={handleChange("maxLabel")}
             />
+          </>
+        );
+      case SLIDERMOJI:
+        return (
+          <>
+            <Box>
+              <FormLabel component="legend">Elige un emoji</FormLabel>
+              {emojis.map((emoji, i) => (
+                <EmojiButton emoji={emoji.url} key={i} />
+              ))}
+            </Box>
+          </>
+        );
+      case RATING:
+        return (
+          <>
+            <Box>
+              <FormLabel component="legend">Elige un icono</FormLabel>
+              <IconButton id="star" onClick={handleRating}>
+                <StarBorder />
+              </IconButton>
+              <IconButton id="heart" onClick={handleRating}>
+                <FavoriteBorder />
+              </IconButton>
+              <IconButton id="face" onClick={handleRating}>
+                <SentimentSatisfied />
+              </IconButton>
+            </Box>
           </>
         );
       default:

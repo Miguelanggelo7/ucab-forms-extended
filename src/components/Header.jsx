@@ -115,6 +115,7 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         value={font.family}
+                        style={{ paddingLeft: "4pt" }}
                         onChange={changeFont}
                       >
                         <MenuItem value={"Poppins"}>
@@ -171,6 +172,7 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
                         value={font.size}
+                        style={{ paddingLeft: "4pt" }}
                         onChange={changeSize}
                       >
                         <MenuItem value={13}>

@@ -4,6 +4,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Questions from "./Questions";
 import Responses from "./Responses";
 import Fade from "react-reveal/Fade";
+import Sections from "./Sections";
 
 const Tabs = ({ setOpenDrawer }) => {
   const [currentTab, setCurrentTab] = useState("0");
@@ -14,7 +15,7 @@ const Tabs = ({ setOpenDrawer }) => {
 
   return (
     <TabContext value={currentTab}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ zIndex: "1" }}>
         <TabList
           onChange={handleChangeTab}
           textColor="inherit"
@@ -24,6 +25,7 @@ const Tabs = ({ setOpenDrawer }) => {
         >
           <Tab label="Preguntas" sx={{ fontFamily: "Poppins" }} value={"0"} />
           <Tab label="Respuestas" sx={{ fontFamily: "Poppins" }} value={"1"} />
+          <Tab label="Secciones" sx={{ fontFamily: "Poppins" }} value={"2"} />
         </TabList>
       </AppBar>
       <TabPanel sx={{ p: 0, pt: 1 }} value={"0"}>
@@ -32,6 +34,11 @@ const Tabs = ({ setOpenDrawer }) => {
       <TabPanel sx={{ p: 0, pt: 1 }} value={"1"}>
         <Fade>
           <Responses />
+        </Fade>
+      </TabPanel>
+      <TabPanel sx={{ p: 0, pt: 1 }} value={"2"}>
+        <Fade>
+          <Sections />
         </Fade>
       </TabPanel>
     </TabContext>

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import {
   Alert,
   Box,
   Button,
   Card,
+  CircularProgress,
   Container,
   LinearProgress,
   Stack,
@@ -20,11 +21,16 @@ import {
   RATING,
   SLIDER,
   SORTABLE,
+  VOICE,
 } from "../constants/questions";
 import { useUser } from "../hooks/useUser";
 import Header from "../components/Header";
 import Question from "../components/Question";
 import AnswerPageText from "../components/AnswerPageText";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { getFormRestrictions } from "../api/restrictions";
+import RestrictionStep from "../components/RestrictionStep";
+import { useFont } from "../hooks/useFont";
 
 const AnswerForm = () => {
   const { id: formId } = useParams();
@@ -38,6 +44,13 @@ const AnswerForm = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const user = useUser();
+  const [restrictions, setRestrictions] = useState([]);
+  const [arrayRestValidated, setArrayRestValidated] = useState([]);
+  const [stepper, setStepper] = useState(false);
+  const [cardShowed, setCardShowed] = useState(false);
+  const [colorForm, setColorForm] = useState("#4B7ABC");
+
+  const { font } = useFont();
 
   const initializeAnswers = useCallback((questions) => {
     const answers = {};
@@ -53,6 +66,9 @@ const AnswerForm = () => {
         answers[question.id] = [...question.options];
       } else if (question.type === RATING) {
         answers[question.id] = 0;
+      } else if (question.type === VOICE) {
+        answers[question.id] = [];
+        answers[question.id + "-text"] = "";
       } else {
         answers[question.id] = "";
       }
@@ -73,6 +89,11 @@ const AnswerForm = () => {
     const getForm = async () => {
       const form = await getFormOnce(formId);
       if (form) {
+        const restrictions = await getFormRestrictions(form.questions);
+        setRestrictions(restrictions);
+
+        setColorForm(form.settings.color);
+
         if (form.settings.onlyOneResponse && !user) {
           setForm(form);
           return setLoading(false);
@@ -106,6 +127,58 @@ const AnswerForm = () => {
 
     getForm();
   }, [formId, initializeAnswers, user]);
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        typography: {
+          fontFamily: font.family,
+        },
+        components: {
+          MuiInputLabel: {
+            styleOverrides: {
+              root: {
+                fontSize: font.size,
+              },
+            },
+          },
+          MuiInput: {
+            styleOverrides: {
+              root: {
+                fontSize: font.size,
+              },
+            },
+          },
+          MuiFormControlLabel: {
+            styleOverrides: {
+              label: {
+                fontSize: `${font.size}px`,
+              },
+            },
+          },
+          MuiFormLabel: {
+            styleOverrides: {
+              root: {
+                fontSize: `${font.size}px`,
+              },
+            },
+          },
+          MuiCssBaseline: {
+            styleOverrides: {
+              body: {
+                backgroundColor: "#fafafa",
+              },
+            },
+          },
+        },
+        palette: {
+          primary: {
+            main: colorForm,
+          },
+        },
+      }),
+    [font, colorForm]
+  );
 
   const submit = async (e) => {
     e.preventDefault();
@@ -148,7 +221,7 @@ const AnswerForm = () => {
       responseData.user = { ...user };
     }
 
-    const { error } = await submitResponse(form, responseData);
+    const { error } = await submitResponse(form, responseData, user);
 
     if (error) {
       enqueueSnackbar(error.message, { variant: "error" });
@@ -160,9 +233,14 @@ const AnswerForm = () => {
 
   if (loading) {
     return (
-      <Box>
-        <Header />
-        <LinearProgress />
+      <Box
+        sx={{
+          margin: "auto",
+          width: "30pt",
+          marginTop: "50pt",
+        }}
+      >
+        <CircularProgress sx={{ margin: "auto" }} />
       </Box>
     );
   }
@@ -208,83 +286,114 @@ const AnswerForm = () => {
     }
   }
 
+  const showQuestion = (question) => {
+    if (question.restricted) {
+      let checker = (arr, target) => target.every((v) => arr.includes(v));
+      return checker(arrayRestValidated, question.restrictions);
+    }
+    return true;
+  };
+
   return (
-    <Box>
-      <Header />
-      <Container sx={{ p: 3 }} maxWidth="md">
-        <form onSubmit={submit}>
-          <Stack spacing={2}>
-            <Card sx={{ p: 3 }} variant="outlined">
-              <Typography variant="h5" mb={2}>
-                {form.title}
-              </Typography>
-              <Typography mb={2}>{form.description}</Typography>
-              <Typography color="error" variant="caption">
-                * Obligatorio
-              </Typography>
-            </Card>
-            {form.questions.map((question, i) => (
-              <Card key={i} sx={{ p: 3 }} variant="outlined">
-                <Question
-                  question={question}
-                  answers={answers}
-                  setAnswers={setAnswers}
-                />
-                {errors[question.id] && (
-                  <Alert
-                    variant="outlined"
-                    severity="error"
-                    sx={{ mt: 3, border: "none", p: 0 }}
-                  >
-                    Esta pregunta es requerida
-                  </Alert>
+    <ThemeProvider theme={theme}>
+      <Box>
+        <Header />
+        {restrictions.length < 1 || stepper ? (
+          <Container sx={{ p: 3 }} maxWidth="md">
+            <form onSubmit={submit}>
+              <Stack spacing={2}>
+                <Card sx={{ p: 3 }} variant="outlined">
+                  <Typography variant="h5" mb={2}>
+                    {form.title}
+                  </Typography>
+                  <Typography mb={2}>{form.description}</Typography>
+                  {cardShowed ? (
+                    <Typography color="error" variant="caption">
+                      * Obligatorio
+                    </Typography>
+                  ) : null}
+                </Card>
+                {form.questions.map((question, i) =>
+                  showQuestion(question) === true
+                    ? (cardShowed ? null : setCardShowed(true),
+                      (
+                        <Card key={i} sx={{ p: 3 }} variant="outlined">
+                          <Question
+                            question={question}
+                            answers={answers}
+                            setAnswers={setAnswers}
+                            paletteColor={form.settings.color}
+                          />
+                          {errors[question.id] && (
+                            <Alert
+                              variant="outlined"
+                              severity="error"
+                              sx={{ mt: 3, border: "none", p: 0 }}
+                            >
+                              Esta pregunta es requerida
+                            </Alert>
+                          )}
+                        </Card>
+                      ))
+                    : null
                 )}
-              </Card>
-            ))}
-          </Stack>
-          <Box
-            sx={{
-              mt: 3,
-              display: "flex",
-              flexDirection: { xs: "column-reverse", sm: "row" },
-              justifyContent: { sm: "space-between" },
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ ml: { sm: 1 }, mr: { sm: 2 } }}
-            >
-              Nunca envíes contraseñas a través de UCAB Forms
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexShrink: 0,
-                alignItems: "center",
-                mb: { xs: 2, sm: 0 },
-              }}
-            >
-              <Button
-                sx={{ px: 1, mr: 2 }}
-                onClick={() => initializeAnswers(form.questions)}
-              >
-                Borrar respuestas
-              </Button>
-              <Button
-                type="submit"
-                disabled={submitting}
-                variant="contained"
-                sx={{ px: 5 }}
-              >
-                Enviar
-              </Button>
-            </Box>
-          </Box>
-        </form>
-      </Container>
-    </Box>
+              </Stack>
+              {cardShowed ? (
+                <Box
+                  sx={{
+                    mt: 3,
+                    display: "flex",
+                    flexDirection: { xs: "column-reverse", sm: "row" },
+                    justifyContent: { sm: "space-between" },
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ ml: { sm: 1 }, mr: { sm: 2 } }}
+                  >
+                    Nunca envíes contraseñas a través de UCAB Forms
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexShrink: 0,
+                      alignItems: "center",
+                      mb: { xs: 2, sm: 0 },
+                    }}
+                  >
+                    <Button
+                      sx={{ px: 1, mr: 2 }}
+                      onClick={() => initializeAnswers(form.questions)}
+                    >
+                      Borrar respuestas
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={submitting}
+                      variant="contained"
+                      sx={{ px: 5 }}
+                    >
+                      Enviar
+                    </Button>
+                  </Box>
+                </Box>
+              ) : (
+                <h1>aca va la animacion</h1>
+              )}
+            </form>
+          </Container>
+        ) : (
+          <RestrictionStep
+            restrictions={restrictions}
+            setArray={setArrayRestValidated}
+            array={arrayRestValidated}
+            setShow={setStepper}
+          />
+        )}
+      </Box>
+    </ThemeProvider>
   );
 };
 

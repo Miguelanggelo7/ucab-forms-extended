@@ -6,13 +6,12 @@ import {
   FormGroup,
   MenuItem,
   Radio,
-  Rating,
   RadioGroup,
   Stack,
   TextField,
   Typography,
-  FormControl,
 } from "@mui/material";
+import Rating from "./Rating";
 import { DragHandle as DragHandleIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
 import {
@@ -28,11 +27,15 @@ import {
   TEXT,
   TEXTAREA,
   TIME,
+  VOICE,
+  SLIDERMOJI,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
 import UploadButton from "./UploadButton";
 import { useFont } from "../hooks/useFont";
+import MicIcon from "@mui/icons-material/Mic";
+import Slidermoji from "./Slidermoji";
 
 const QuestionPreview = ({ question }) => {
   const { font } = useFont();
@@ -134,7 +137,7 @@ const QuestionPreview = ({ question }) => {
     case SLIDER:
       return <Slider disabled defaultValue={1} question={question} />;
     case RATING:
-      return <Rating disabled />;
+      return <Rating readOnly question={question} />;
     case DATE:
       return (
         <DatePicker
@@ -175,6 +178,23 @@ const QuestionPreview = ({ question }) => {
       );
     case FILE:
       return <UploadButton disabled />;
+    case VOICE:
+      return (
+        <div style={{ display: "inline-flex" }}>
+          <MicIcon sx={{ color: "#c4c4c4" }} />
+        </div>
+      );
+    case SLIDERMOJI:
+      return (
+        <div>
+          <Slidermoji
+            paletteColor={"#4B7ABC"}
+            disabled
+            defaultValue={1}
+            question={question}
+          />
+        </div>
+      );
     default:
       return null;
   }

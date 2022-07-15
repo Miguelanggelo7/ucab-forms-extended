@@ -10,6 +10,8 @@ export const DATE = "date";
 export const TIME = "time";
 export const DATETIME = "datetime";
 export const FILE = "file";
+export const VOICE = "voice";
+export const SLIDERMOJI = "slidermoji";
 
 export const compatibility = {
   [TEXT]: [TEXT, TEXTAREA, RADIO, SELECT],
@@ -18,12 +20,14 @@ export const compatibility = {
   [CHECKBOX]: [CHECKBOX],
   [SELECT]: [TEXT, TEXTAREA, RADIO, SELECT],
   [SORTABLE]: [SORTABLE],
-  [SLIDER]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING],
+  [SLIDER]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING, SLIDERMOJI],
   [RATING]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING],
   [DATE]: [DATE, TIME, DATETIME],
   [TIME]: [DATE, TIME, DATETIME],
   [DATETIME]: [DATE, TIME, DATETIME],
   [FILE]: [FILE],
+  [VOICE]: [VOICE],
+  [SLIDERMOJI]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING, SLIDERMOJI],
 };
 
 export const ratingLabels = [
@@ -84,6 +88,14 @@ export const questionTypes = [
     value: FILE,
     label: "Carga de archivo",
   },
+  {
+    value: VOICE,
+    label: "Audio",
+  },
+  {
+    value: SLIDERMOJI,
+    label: "Escala lineal con emoji",
+  },
 ];
 
 export const defaultQuestion = {
@@ -91,4 +103,5 @@ export const defaultQuestion = {
   type: TEXT,
   required: false,
   specialType: "",
+  restricted: false,
 };

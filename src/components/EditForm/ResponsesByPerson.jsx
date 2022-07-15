@@ -21,12 +21,15 @@ import {
   SORTABLE,
   RATING,
   TIME,
+  VOICE,
+  SLIDERMOJI,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import Comments from "./Comments";
 import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
+import Slidermoji from "../Slidermoji";
 
 const Response = () => {
   const { responses, questions } = useForm();
@@ -89,12 +92,25 @@ const Response = () => {
         return <Slider disabled question={question} value={value} />;
       }
 
+      if (question.type === SLIDERMOJI) {
+        return <Slidermoji disabled question={question} value={value} />;
+      }
+
       if (question.type === RATING) {
-        return <Rating readOnly value={value} />;
+        return <Rating question={question} readOnly value={value} />;
       }
 
       if (question.type === FILE) {
         return <FilesResponse files={value} />;
+      }
+
+      if (question.type === VOICE) {
+        return (
+          <>
+            <audio controls src={value.url} />
+            <Typography>{value.text}</Typography>
+          </>
+        );
       }
 
       let text = value;
@@ -123,6 +139,12 @@ const Response = () => {
             shape="rounded"
             renderItem={renderItem}
           />
+          <Typography>Respondido por:</Typography>
+          <Typography>
+            {responses[page - 1].user
+              ? responses[page - 1].user.name
+              : "Anónimo"}
+          </Typography>
           <Typography align="right" variant="caption" color="text.secondary">
             Respondido el {format(response.submittedAt, "dd/MM/yyyy, hh:mm a")}
           </Typography>
@@ -156,7 +178,7 @@ const Response = () => {
               </Box>
             </Card>
           )}
-          {questions.map((question) => (
+          {questions.map((question, index) => (
             <Box>
               <Card key={question.id} sx={{ p: 3, mb: 1 }} variant="outlined">
                 <Typography gutterBottom>{question.title}</Typography>

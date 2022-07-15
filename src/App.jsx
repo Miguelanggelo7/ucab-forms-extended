@@ -14,6 +14,7 @@ import EditForm from "./pages/EditForm";
 import AnswerForm from "./pages/AnswerForm";
 import Sent from "./pages/Sent";
 import Fade from "react-reveal/Fade";
+import { RestrictionsProvider } from "./hooks/useRestriction";
 
 const App = () => {
   return (
@@ -69,7 +70,9 @@ const App = () => {
               path="/forms/edit/:id"
               element={
                 <FormProvider>
-                  <EditForm />
+                  <RestrictionsProvider>
+                    <EditForm />
+                  </RestrictionsProvider>
                 </FormProvider>
               }
             />

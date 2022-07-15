@@ -25,6 +25,8 @@ import {
   TEXTAREA,
   TIME,
   ratingLabels,
+  VOICE,
+  SLIDERMOJI,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import FilesResponse from "./FilesResponse";
@@ -162,6 +164,52 @@ const QuestionStat = ({ question, responses }) => {
     const labels = [];
 
     for (let i = question.min; i <= question.max; i++) {
+      labels.push(i);
+    }
+
+    data = {
+      labels,
+      datasets: [
+        {
+          label: "Respuestas",
+          data: labels.map(
+            (n) => responses.filter((r) => r[question.id] === n).length
+          ),
+          backgroundColor: [
+            "rgba(255, 64, 129, 0.2)",
+            "rgba(0, 230, 118, 0.2)",
+            "rgba(255, 241, 118, 0.2)",
+            "rgba(132, 255, 255, 0.2)",
+            "rgba(179, 136, 255, 0.2)",
+            "rgba(255, 145, 128, 0.2)",
+            "rgba(83, 109, 254, 0.2)",
+            "rgba(29, 233, 182, 0.2)",
+            "rgba(186, 104, 200, 0.2)",
+            "rgba(244, 143, 177, 0.2)",
+            "rgba(255, 204, 128, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 64, 129, 1)",
+            "rgba(0, 230, 118, 1)",
+            "rgba(255, 241, 118, 1)",
+            "rgba(132, 255, 255, 1)",
+            "rgba(179, 136, 255, 1)",
+            "rgba(255, 145, 128, 1)",
+            "rgba(83, 109, 254, 1)",
+            "rgba(29, 233, 182, 1)",
+            "rgba(186, 104, 200, 1)",
+            "rgba(244, 143, 177, 1)",
+            "rgba(255, 204, 128, 1)",
+          ],
+        },
+      ],
+    };
+  }
+
+  if (question.type === SLIDERMOJI) {
+    const labels = [];
+
+    for (let i = 0; i <= 100; i++) {
       labels.push(i);
     }
 
@@ -383,6 +431,7 @@ const QuestionStat = ({ question, responses }) => {
       );
     case SLIDER:
     case RATING:
+    case SLIDERMOJI:
       return (
         <>
           <Typography
@@ -428,6 +477,7 @@ const QuestionStat = ({ question, responses }) => {
                 },
               }}
             />
+            {console.log(data)}
           </Container>
         </>
       );
@@ -449,6 +499,24 @@ const QuestionStat = ({ question, responses }) => {
               ))}
             </Stack>
           )}
+        </>
+      );
+    case VOICE:
+      return (
+        <>
+          <Typography
+            color="text.secondary"
+            variant="caption"
+            display="block"
+            mb={1}
+          >
+            {responseCountText}
+          </Typography>
+          {responses.map((r, i) => (
+            <Typography key={i} variant="body2">
+              {r[question.id + "-text"]}
+            </Typography>
+          ))}
         </>
       );
     case SORTABLE:

@@ -29,6 +29,8 @@ import {
   TEXT,
   TEXTAREA,
   TIME,
+  VOICE,
+  SLIDERMOJI,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -36,8 +38,10 @@ import SortableList from "./SortableList";
 import UploadButton from "./UploadButton";
 import Rating from "./Rating";
 import RequiredMark from "./RequiredMark";
+import RecordAudio from "./RecordAudio";
+import Slidermoji from "./Slidermoji";
 
-const Question = ({ answers, question, setAnswers }) => {
+const Question = ({ answers, question, setAnswers, paletteColor }) => {
   const [other, setOther] = useState("");
 
   const handleChange = (e) => {
@@ -262,6 +266,7 @@ const Question = ({ answers, question, setAnswers }) => {
       case RATING:
         return (
           <Rating
+            question={question}
             value={answers[question.id]}
             onChange={(e, value) =>
               setAnswers({ ...answers, [question.id]: value || 0 })
@@ -370,6 +375,33 @@ const Question = ({ answers, question, setAnswers }) => {
               }}
             />
           </Box>
+        );
+      case VOICE:
+        return (
+          <div>
+            <RecordAudio
+              band={answers[question.id]}
+              onChange={(audio) => {
+                setAnswers({ ...answers, [question.id]: audio });
+              }}
+              onChangeText={(text) => {
+                setAnswers({ ...answers, [question.id + "-text"]: text });
+              }}
+            />
+          </div>
+        );
+      case SLIDERMOJI:
+        return (
+          <div>
+            <Slidermoji
+              question={question}
+              paletteColor={paletteColor}
+              value={answers[question.id] || 0}
+              onChange={(_, value) =>
+                setAnswers({ ...answers, [question.id]: value })
+              }
+            />
+          </div>
         );
       default:
         return <Typography>No se puede mostrar la pregunta</Typography>;

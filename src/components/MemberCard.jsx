@@ -18,11 +18,13 @@ const MemberCard = (props) => {
 
   return (
     <div className="member">
-      <div className="contImg">
-        <img src={props.img} className="imageMember" />
+      <div style={{ width: "230px", margin: "auto" }}>
+        <div className="contImg">
+          <img src={props.img} className="imageMember" />
+        </div>
       </div>
-      <p className="name">José Saad</p>
-      <p className="role">Programador</p>
+      <p className="name">{props.name}</p>
+      <p className="role">{props.role}</p>
       <div class="contact">
         <div style={{ height: "150px" }} />
         <IconButton

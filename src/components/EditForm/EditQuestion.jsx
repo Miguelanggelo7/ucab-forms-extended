@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   Box,
   Checkbox,
@@ -9,6 +9,12 @@ import {
   TextField,
   Tooltip,
   Typography,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  Button,
+  Autocomplete,
 } from "@mui/material";
 import {
   ArrowDownward,
@@ -29,6 +35,8 @@ import {
   SLIDER,
   TEXT,
   TEXTAREA,
+  SLIDERMOJI,
+  RATING,
 } from "../../constants/questions";
 import {
   deleteQuestion,
@@ -40,11 +48,18 @@ import { useAlert } from "../../hooks/useAlert";
 import EditOptions from "./EditOptions";
 import { calculateNewIndex } from "../../utils/questions";
 import selectAnimation from "../../img/select.json";
+import { Clear as ClearIcon } from "@mui/icons-material";
+import CheckIcon from "@mui/icons-material/Check";
+import RestrictionDialog from "../RestrictionDialog";
+import { useRestrictions } from "../../hooks/useRestriction";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
     useForm();
   const openAlert = useAlert();
+  const { restrictionsList } = useRestrictions();
+
+  const [openResDialog, setOpenResDialog] = useState(false);
 
   const question = useMemo(() => {
     return questions.find((q) => q.id === current);
@@ -73,6 +88,49 @@ const EditQuestion = ({ setOpenDrawer }) => {
       setQuestions((questions) =>
         questions.map((q) => (q.id === question.id ? newQuestion : q))
       );
+    };
+
+    const handleChangeRestriction = (i) => (_, value) => {
+      const restriction = value.label;
+
+      const restrictions = [...question.restrictions];
+      restrictions[i] = restriction;
+
+      const newQuestion = { ...question, restrictions };
+      console.log(question);
+      console.log(restrictionsList);
+      debouncedSave(newQuestion);
+      setQuestions((questions) =>
+        questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const addRestriction = () => {
+      const newQuestion = {
+        ...question,
+        restrictions: [...question.restrictions, ""],
+      };
+
+      debouncedSave(newQuestion);
+
+      setQuestions((questions) =>
+        questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const deleteRestriction = (i) => () => {
+      const restrictions = [...question.restrictions];
+      if (restrictions.length !== 1) {
+        restrictions.splice(i, 1);
+
+        const newQuestion = { ...question, restrictions };
+
+        debouncedSave(newQuestion);
+
+        setQuestions((questions) =>
+          questions.map((q) => (q.id === question.id ? newQuestion : q))
+        );
+      }
     };
 
     const handleChangeType = (e) => {
@@ -116,6 +174,12 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.maxLabel = null;
       }
 
+      if (type === SLIDERMOJI) {
+        newQuestion.urlEmoji = "https://twemoji.maxcdn.com/2/72x72/1f600.png";
+      } else {
+        newQuestion.urlEmoji = null;
+      }
+
       if (type === SORTABLE) {
         newQuestion.required = true;
       }
@@ -125,6 +189,14 @@ const EditQuestion = ({ setOpenDrawer }) => {
       } else {
         newQuestion.multipleFiles = null;
       }
+
+      if (type === RATING) {
+        newQuestion.typeRating = "star";
+      } else {
+        newQuestion.typeRating = null;
+      }
+
+      console.log(type);
 
       debouncedSave(newQuestion);
 
@@ -137,6 +209,10 @@ const EditQuestion = ({ setOpenDrawer }) => {
       const checked = e.target.checked;
 
       const newQuestion = { ...question, [field]: checked };
+
+      if (field === "restricted" && checked) {
+        newQuestion.restrictions = [""];
+      }
 
       debouncedSave(newQuestion);
 
@@ -219,6 +295,14 @@ const EditQuestion = ({ setOpenDrawer }) => {
       }
 
       return !compatibility[question.type].includes(type);
+    };
+
+    const verificationRestrictionList = (value) => {
+      if (question.restrictions.indexOf(value) > -1) {
+        return false;
+      } else {
+        return true;
+      }
     };
 
     return (
@@ -309,6 +393,64 @@ const EditQuestion = ({ setOpenDrawer }) => {
               label="Obligatoria"
             />
           </Box>
+          <Box>
+            <FormControlLabel
+              control={<Checkbox />}
+              checked={question.restricted}
+              onChange={handleChangeChecked("restricted")}
+              label="Restringida por condición"
+            />
+          </Box>
+          {question.restricted && (
+            <Box>
+              {question.restrictions &&
+                question.restrictions.map((restriction, i) => (
+                  <Box
+                    sx={{
+                      display: "inline-flex",
+                      width: "100%",
+                    }}
+                    key={i}
+                  >
+                    <Autocomplete
+                      fullWidth
+                      disablePortal
+                      onChange={handleChangeRestriction(i)}
+                      id="combo-box-demo"
+                      options={restrictionsList.filter((rest) =>
+                        verificationRestrictionList(rest.label)
+                      )}
+                      isOptionEqualToValue={(option, value) =>
+                        option.label === value
+                      }
+                      value={restriction}
+                      renderInput={(params) => (
+                        <TextField
+                          sx={{ marginBottom: "10pt" }}
+                          variant="standard"
+                          {...params}
+                          label="Restricción"
+                        />
+                      )}
+                    />
+                    <Tooltip
+                      sx={{ height: "30pt", marginTop: "10pt" }}
+                      title="Eliminar"
+                    >
+                      <IconButton>
+                        <ClearIcon onClick={deleteRestriction(i)} />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                ))}
+              <Button fullWidth onClick={addRestriction}>
+                Agregar Restricción
+              </Button>
+              <Button fullWidth onClick={() => setOpenResDialog(true)}>
+                Crear Restricción
+              </Button>
+            </Box>
+          )}
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Tooltip title="Duplicar pregunta" arrow>
               <IconButton onClick={() => duplicateQuestion(question)}>
@@ -322,6 +464,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
             </Tooltip>
           </Box>
         </Box>
+        <RestrictionDialog open={openResDialog} setOpen={setOpenResDialog} />
       </Stack>
     );
   }, [
@@ -334,6 +477,9 @@ const EditQuestion = ({ setOpenDrawer }) => {
     setCurrent,
     setOpenDrawer,
     setQuestions,
+    openResDialog,
+    setOpenResDialog,
+    restrictionsList,
   ]);
 };
 
