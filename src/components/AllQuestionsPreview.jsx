@@ -29,6 +29,7 @@ import {
   TIME,
   VOICE,
   SLIDERMOJI,
+  ARRAY,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -36,6 +37,7 @@ import UploadButton from "./UploadButton";
 import { useFont } from "../hooks/useFont";
 import MicIcon from "@mui/icons-material/Mic";
 import Slidermoji from "./Slidermoji";
+import ArrayTable from "./ArrayTable";
 
 const QuestionPreview = ({ question }) => {
   const { font } = useFont();
@@ -177,6 +179,7 @@ const QuestionPreview = ({ question }) => {
         />
       );
     case FILE:
+      // preguntar al turko donde sale el id de la pregunta
       return <UploadButton disabled />;
     case VOICE:
       return (
@@ -193,6 +196,12 @@ const QuestionPreview = ({ question }) => {
             defaultValue={1}
             question={question}
           />
+        </div>
+      );
+    case ARRAY:
+      return (
+        <div>
+          <ArrayTable question={question} />
         </div>
       );
     default:

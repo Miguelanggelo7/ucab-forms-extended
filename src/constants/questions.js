@@ -12,6 +12,7 @@ export const DATETIME = "datetime";
 export const FILE = "file";
 export const VOICE = "voice";
 export const SLIDERMOJI = "slidermoji";
+export const ARRAY = "array";
 
 export const compatibility = {
   [TEXT]: [TEXT, TEXTAREA, RADIO, SELECT],
@@ -28,6 +29,7 @@ export const compatibility = {
   [FILE]: [FILE],
   [VOICE]: [VOICE],
   [SLIDERMOJI]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING, SLIDERMOJI],
+  [ARRAY]: [ARRAY],
 };
 
 export const ratingLabels = [
@@ -95,6 +97,21 @@ export const questionTypes = [
   {
     value: SLIDERMOJI,
     label: "Escala lineal con emoji",
+  },
+  {
+    value: ARRAY,
+    label: "Matriz",
+  },
+];
+
+export const arrayOptions = [
+  {
+    value: TEXT,
+    label: "Texto",
+  },
+  {
+    value: CHECKBOX,
+    label: "Selección",
   },
 ];
 

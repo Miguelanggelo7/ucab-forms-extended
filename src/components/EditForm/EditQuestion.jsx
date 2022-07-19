@@ -27,6 +27,7 @@ import debounce from "lodash.debounce";
 import {
   compatibility,
   questionTypes,
+  arrayOptions,
   CHECKBOX,
   FILE,
   RADIO,
@@ -37,6 +38,7 @@ import {
   TEXTAREA,
   SLIDERMOJI,
   RATING,
+  ARRAY,
 } from "../../constants/questions";
 import {
   deleteQuestion,
@@ -59,6 +61,8 @@ const EditQuestion = ({ setOpenDrawer }) => {
   const openAlert = useAlert();
   const { restrictionsList } = useRestrictions();
 
+  const [rows, setRows] = useState(1);
+  const [columns, setColumns] = useState(1);
   const [openResDialog, setOpenResDialog] = useState(false);
 
   const question = useMemo(() => {
@@ -82,6 +86,35 @@ const EditQuestion = ({ setOpenDrawer }) => {
       const value = e.target.value;
 
       const newQuestion = { ...question, [field]: value };
+
+      debouncedSave(newQuestion);
+
+      setQuestions((questions) =>
+        questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const handleArraySizeChange = (type) => (e) => {
+      const value = e.target.value;
+      const titles = {
+        rows: [...question.titles.rows],
+        columns: [...question.titles.columns],
+      };
+
+      if (titles[type].length > value) {
+        const newData = titles[type].filter((_, i) => i < value);
+        console.log(newData);
+        titles[type] = [...newData];
+      }
+
+      if (titles[type].length < value) {
+        for (let length = titles[type].length + 1; length <= value; length++)
+          titles[type].push(
+            `${type === "rows" ? "Fila" : "Columna"} ${length}`
+          );
+      }
+
+      const newQuestion = { ...question, titles };
 
       debouncedSave(newQuestion);
 
@@ -194,6 +227,17 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.typeRating = "star";
       } else {
         newQuestion.typeRating = null;
+      }
+
+      if (type === ARRAY) {
+        newQuestion.arrayType = arrayOptions[0].value;
+        newQuestion.titles = {
+          rows: ["Fila 1"],
+          columns: ["Columna 1"],
+        };
+      } else {
+        newQuestion.arrayType = null;
+        newQuestion.titles = null;
       }
 
       console.log(type);
@@ -364,6 +408,40 @@ const EditQuestion = ({ setOpenDrawer }) => {
         </TextField>
         <EditOptions question={question} debouncedSave={debouncedSave} />
         <Box>
+          {question.type === ARRAY && (
+            <Box>
+              <TextField
+                variant="standard"
+                select
+                value={question.arrayType}
+                label="Tipo de matriz"
+                onChange={handleChange("arrayType")}
+                fullWidth
+                sx={{ marginBottom: "20pt" }}
+              >
+                {arrayOptions.map((type) => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <Box sx={{ display: "inline-flex" }}>
+                <TextField
+                  type="number"
+                  label="Filas"
+                  value={question.titles.rows.length || 1}
+                  onChange={handleArraySizeChange("rows")}
+                  InputProps={{ inputProps: { min: 1 } }}
+                />
+                <TextField
+                  type="number"
+                  label="Columnas"
+                  value={question.titles.columns.length || 1}
+                  onChange={handleArraySizeChange("columns")}
+                />
+              </Box>
+            </Box>
+          )}
           {question.type === FILE && (
             <Box>
               <FormControlLabel
