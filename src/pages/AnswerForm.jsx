@@ -31,6 +31,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getFormRestrictions } from "../api/restrictions";
 import RestrictionStep from "../components/RestrictionStep";
 import { useFont } from "../hooks/useFont";
+import Lottie from "lottie-react";
+import errorStep from "../img/errorstep.json";
 
 const AnswerForm = () => {
   const { id: formId } = useParams();
@@ -314,7 +316,7 @@ const AnswerForm = () => {
                   ) : null}
                 </Card>
                 {form.questions.map((question, i) =>
-                  showQuestion(question) === true
+                  showQuestion(question) === true || restrictions.length < 1
                     ? (cardShowed ? null : setCardShowed(true),
                       (
                         <Card key={i} sx={{ p: 3 }} variant="outlined">
@@ -380,7 +382,26 @@ const AnswerForm = () => {
                   </Box>
                 </Box>
               ) : (
-                <h1>aca va la animacion</h1>
+                <div style={{ textAlign: "center" }}>
+                  <Typography variant="h4" sx={{ marginTop: "20pt" }}>
+                    Lo sentimos...
+                  </Typography>
+                  <Lottie
+                    animationData={errorStep}
+                    loop={false}
+                    style={{
+                      width: "100%",
+                      maxWidth: "300pt",
+                      margin: "auto",
+                      marginTop: "-15pt",
+                      marginBottom: "10pt",
+                    }}
+                  />
+                  <Typography variant="body2" sx={{ marginBottom: "10pt" }}>
+                    No cumples con las condiciones necesarias para realizar esta
+                    encuesta.
+                  </Typography>
+                </div>
               )}
             </form>
           </Container>

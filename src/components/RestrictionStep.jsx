@@ -6,6 +6,8 @@ import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import Lottie from "lottie-react";
+import welcomeStep from "../img/welcomestep.json";
 
 export default function RestrictionStep({
   restrictions,
@@ -94,24 +96,9 @@ export default function RestrictionStep({
         width: "90%",
         margin: "auto",
         marginTop: "20pt",
+        textAlign: "center",
       }}
     >
-      <Stepper
-        nonLinear
-        activeStep={activeStep}
-        alternativeLabel
-        sx={{
-          overflowX: restrictions.length > 5 ? "scroll" : "hidden",
-          overflowY: "hidden",
-          paddingBottom: "10pt",
-        }}
-      >
-        {restrictions.map((label, index) => (
-          <Step key={label.id} completed={completed[index]} disabled>
-            <StepButton color="inherit" onClick={handleStep(index)} />
-          </Step>
-        ))}
-      </Stepper>
       <div>
         {allStepsCompleted() ? (
           <>
@@ -129,6 +116,38 @@ export default function RestrictionStep({
             </Box>
           </>
         ) : (
+          <>
+            <Typography variant="h4">¡Espera!</Typography>
+            <Lottie
+              animationData={welcomeStep}
+              loop={false}
+              style={{ width: "100%", maxWidth: "300pt", margin: "auto" }}
+            />
+            <Typography variant="body2" sx={{ marginBottom: "10pt" }}>
+              Para llenar esta encuesta, debes responder una serie de preguntas
+              antes.
+            </Typography>
+          </>
+        )}
+      </div>
+      <Stepper
+        nonLinear
+        activeStep={activeStep}
+        alternativeLabel
+        sx={{
+          overflowX: restrictions.length > 5 ? "scroll" : "hidden",
+          overflowY: "hidden",
+          paddingBottom: "10pt",
+        }}
+      >
+        {restrictions.map((label, index) => (
+          <Step key={label.id} completed={completed[index]} disabled>
+            <StepButton color="inherit" onClick={handleStep(index)} />
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        {allStepsCompleted() ? null : (
           <div style={{ margin: "auto", width: "100%", maxWidth: "400pt" }}>
             <Box
               sx={{

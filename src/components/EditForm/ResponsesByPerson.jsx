@@ -108,6 +108,9 @@ const Response = () => {
         return (
           <>
             <audio controls src={value.url} />
+            <Typography variant="caption" color="text.secondary">
+              Posible traduccion
+            </Typography>
             <Typography>{value.text}</Typography>
           </>
         );
