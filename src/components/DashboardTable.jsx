@@ -119,7 +119,7 @@ const DashboardTable = () => {
     <Table
       columns={columns}
       data={forms}
-      title="Mis encuestas XD"
+      title="Mis encuestas"
       isLoading={loadingUserForms || loadingCollaborationForms || duplicating}
       // options={{
       //   headerStyle: {
