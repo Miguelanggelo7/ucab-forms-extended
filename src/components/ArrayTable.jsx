@@ -1,3 +1,4 @@
+import { TheatersRounded } from "@mui/icons-material";
 import { Box, TextField } from "@mui/material";
 import debounce from "lodash.debounce";
 import React, { useMemo } from "react";
@@ -42,37 +43,88 @@ const ArrayTable = ({ question }) => {
   };
 
   return (
-    <Box sx={{ display: "inline-flex" }}>
-      <Box sx={{ marginRight: "5pt", paddingTop: "20pt" }}>
-        {/* falta estilizar xd */}
+    // <Box>
+    //   {/* falta estilizar xd */}
+    //   {question.titles.rows.map((label, i) => (
+    //     <div style={{ backgroundColor: "red" }}>
+    //       <p
+    //         style={{
+    //           whiteSpace: "nowrap",
+    //           textOverflow: "ellipsis",
+    //           marginRight: "10pt",
+    //         }}
+    //       >
+    //         {label}
+    //       </p>
+    //     </div>
+    //   ))}
+    //   {question.titles.columns.map((label, i) => (
+    //     <div style={{ backgroundColor: "blue" }}>
+    //       <p
+    //         style={{
+    //           whiteSpace: "nowrap",
+    //           textOverflow: "ellipsis",
+    //           marginRight: "10pt",
+    //         }}
+    //       >
+    //         {label}
+    //       </p>
+    //     </div>
+    //   ))}
+    // </Box>
+
+    <div
+      style={{
+        width: "100%",
+        overflow: "auto",
+        maxHeight: "386pt",
+      }}
+    >
+      <table
+        border="1"
+        cellpadding="0"
+        cellspacing="0"
+        bordercolor="#000000"
+        style={{
+          width: "100%",
+          textAlign: "center",
+          borderCollapse: "collapse",
+        }}
+      >
+        <tr>
+          <th style={{ minWidth: "50pt" }}></th>
+          {question.titles.columns.map((label, i) => (
+            <th style={{ minWidth: "100pt", fontWeight: "normal" }}>
+              <p
+                style={{
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  marginRight: "10pt",
+                }}
+              >
+                {label}
+              </p>
+            </th>
+          ))}
+        </tr>
+
         {question.titles.rows.map((label, i) => (
-          <p
-            style={{
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-              marginRight: "10pt",
-            }}
-          >
-            {label}
-          </p>
+          <tr>
+            <td style={{ minWidth: "100pt", fontWeight: "normal" }}>
+              <p
+                style={{
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  marginRight: "10pt",
+                }}
+              >
+                {label}
+              </p>
+            </td>
+          </tr>
         ))}
-      </Box>
-      <Box sx={{ display: "inline-flex" }}>
-        {question.titles.columns.map((label, i) => (
-          <>
-            <p
-              style={{
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-                marginRight: "10pt",
-              }}
-            >
-              {label}
-            </p>
-          </>
-        ))}
-      </Box>
-    </Box>
+      </table>
+    </div>
   );
 };
 

@@ -177,7 +177,14 @@ const Options = ({ question, debouncedSave }) => {
 
     const EmojiButton = (props) => {
       return (
-        <IconButton onClick={() => handleEmoji("urlEmoji", props.emoji)}>
+        <IconButton
+          sx={
+            question.urlEmoji === props.emoji
+              ? { backgroundColor: "#f5f5f5" }
+              : null
+          }
+          onClick={() => handleEmoji("urlEmoji", props.emoji)}
+        >
           <img style={{ width: "40px" }} src={props.emoji} />
         </IconButton>
       );
@@ -409,13 +416,37 @@ const Options = ({ question, debouncedSave }) => {
           <>
             <Box>
               <FormLabel component="legend">Elige un icono</FormLabel>
-              <IconButton id="star" onClick={handleRating}>
+              <IconButton
+                sx={
+                  question.typeRating === "star"
+                    ? { backgroundColor: "#f5f5f5" }
+                    : null
+                }
+                id="star"
+                onClick={handleRating}
+              >
                 <StarBorder />
               </IconButton>
-              <IconButton id="heart" onClick={handleRating}>
+              <IconButton
+                sx={
+                  question.typeRating === "heart"
+                    ? { backgroundColor: "#f5f5f5" }
+                    : null
+                }
+                id="heart"
+                onClick={handleRating}
+              >
                 <FavoriteBorder />
               </IconButton>
-              <IconButton id="face" onClick={handleRating}>
+              <IconButton
+                sx={
+                  question.typeRating === "face"
+                    ? { backgroundColor: "#f5f5f5" }
+                    : null
+                }
+                id="face"
+                onClick={handleRating}
+              >
                 <SentimentSatisfied />
               </IconButton>
             </Box>

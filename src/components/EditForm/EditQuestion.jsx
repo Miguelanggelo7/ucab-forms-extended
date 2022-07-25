@@ -54,6 +54,7 @@ import { Clear as ClearIcon } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
 import RestrictionDialog from "../RestrictionDialog";
 import { useRestrictions } from "../../hooks/useRestriction";
+import { Divider } from "@mui/material";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
@@ -94,25 +95,28 @@ const EditQuestion = ({ setOpenDrawer }) => {
       );
     };
 
-    const handleArraySizeChange = (type) => (e) => {
+    const handleArrayChange = (type, i) => (e) => {
       const value = e.target.value;
+      console.log(i);
       const titles = {
         rows: [...question.titles.rows],
         columns: [...question.titles.columns],
       };
 
-      if (titles[type].length > value) {
-        const newData = titles[type].filter((_, i) => i < value);
-        console.log(newData);
-        titles[type] = [...newData];
-      }
+      if (typeof i === "undefined") {
+        if (titles[type].length > value) {
+          const newData = titles[type].filter((_, i) => i < value);
+          console.log(newData);
+          titles[type] = [...newData];
+        }
 
-      if (titles[type].length < value) {
-        for (let length = titles[type].length + 1; length <= value; length++)
-          titles[type].push(
-            `${type === "rows" ? "Fila" : "Columna"} ${length}`
-          );
-      }
+        if (titles[type].length < value) {
+          for (let length = titles[type].length + 1; length <= value; length++)
+            titles[type].push(
+              `${type === "rows" ? "Fila" : "Columna"} ${length}`
+            );
+        }
+      } else titles[type][i] = value;
 
       const newQuestion = { ...question, titles };
 
@@ -232,8 +236,8 @@ const EditQuestion = ({ setOpenDrawer }) => {
       if (type === ARRAY) {
         newQuestion.arrayType = arrayOptions[0].value;
         newQuestion.titles = {
-          rows: ["Fila 1"],
-          columns: ["Columna 1"],
+          rows: ["Fila 1", "Fila 2", "Fila 3"],
+          columns: ["Columna 1", "Columna 2", "Columna 3"],
         };
       } else {
         newQuestion.arrayType = null;
@@ -429,16 +433,35 @@ const EditQuestion = ({ setOpenDrawer }) => {
                 <TextField
                   type="number"
                   label="Filas"
-                  value={question.titles.rows.length || 1}
-                  onChange={handleArraySizeChange("rows")}
+                  value={question.titles.rows.length || 3}
+                  onChange={handleArrayChange("rows")}
                   InputProps={{ inputProps: { min: 1 } }}
                 />
                 <TextField
                   type="number"
                   label="Columnas"
-                  value={question.titles.columns.length || 1}
-                  onChange={handleArraySizeChange("columns")}
+                  value={question.titles.columns.length || 3}
+                  onChange={handleArrayChange("columns")}
                 />
+              </Box>
+              <Box sx={{ marginTop: "5pt" }}>
+                <Divider textAlign="left">Columnas</Divider>
+                {question.titles.columns.map((title, i) => (
+                  <TextField
+                    fullWidth
+                    value={title}
+                    onChange={handleArrayChange("columns", i)}
+                  />
+                ))}
+
+                <Divider textAlign="left">Filas</Divider>
+                {question.titles.rows.map((title, i) => (
+                  <TextField
+                    fullWidth
+                    value={title}
+                    onChange={handleArrayChange("rows", i)}
+                  />
+                ))}
               </Box>
             </Box>
           )}
