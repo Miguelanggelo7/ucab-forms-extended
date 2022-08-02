@@ -524,6 +524,25 @@ const EditQuestion = ({ setOpenDrawer }) => {
           <Box>
             <FormControlLabel
               control={<Checkbox />}
+              disabled={question.type === SORTABLE}
+              checked={question.descriptionCheck}
+              onChange={handleChangeChecked("descriptionCheck")}
+              label="Agregar descripción"
+            />
+          </Box>
+          {question.descriptionCheck && (
+            <Box>
+              <TextField
+                fullWidth
+                placeholder="Descripción"
+                value={question.description}
+                onChange={handleChange("description")}
+              />
+            </Box>
+          )}
+          <Box>
+            <FormControlLabel
+              control={<Checkbox />}
               checked={question.restricted}
               onChange={handleChangeChecked("restricted")}
               label="Restringida por condición"

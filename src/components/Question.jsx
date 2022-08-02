@@ -31,6 +31,7 @@ import {
   TIME,
   VOICE,
   SLIDERMOJI,
+  ARRAY,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -40,6 +41,7 @@ import Rating from "./Rating";
 import RequiredMark from "./RequiredMark";
 import RecordAudio from "./RecordAudio";
 import Slidermoji from "./Slidermoji";
+import ArrayTable from "./ArrayTable";
 
 const Question = ({ answers, question, setAnswers, paletteColor }) => {
   const [other, setOther] = useState("");
@@ -403,6 +405,12 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
             />
           </div>
         );
+      case ARRAY:
+        return (
+          <div>
+            <ArrayTable question={question} />
+          </div>
+        );
       default:
         return <Typography>No se puede mostrar la pregunta</Typography>;
     }
@@ -413,6 +421,8 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
       <Typography mb={2}>
         {question.title}
         <RequiredMark question={question} />
+        <br />
+        <Typography variant="caption">{question.description}</Typography>
       </Typography>
       {renderQuestion()}
     </Box>

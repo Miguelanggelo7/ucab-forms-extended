@@ -121,4 +121,6 @@ export const defaultQuestion = {
   required: false,
   specialType: "",
   restricted: false,
+  descriptionCheck: false,
+  description: "",
 };
