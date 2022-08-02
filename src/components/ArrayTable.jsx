@@ -1,12 +1,14 @@
 import { TheatersRounded } from "@mui/icons-material";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { Box, TextField } from "@mui/material";
 import debounce from "lodash.debounce";
 import React, { useMemo } from "react";
 import { saveQuestion } from "../api/questions";
 import { CHECKBOX, RADIO, TEXT } from "../constants/questions";
 import { useForm } from "../hooks/useForm";
+import Checkbox from "@mui/material/Checkbox";
 
-const ArrayTable = ({ question }) => {
+const ArrayTable = ({ question, disabled }) => {
   const { form } = useForm();
 
   const debouncedSave = useMemo(
@@ -84,7 +86,7 @@ const ArrayTable = ({ question }) => {
         border="1"
         cellpadding="0"
         cellspacing="0"
-        bordercolor="#000000"
+        bordercolor={disabled ? "#c4c4c4" : "#000000"}
         style={{
           width: "100%",
           textAlign: "center",
@@ -100,6 +102,7 @@ const ArrayTable = ({ question }) => {
                   whiteSpace: "nowrap",
                   textOverflow: "ellipsis",
                   marginRight: "10pt",
+                  color: disabled ? "#c4c4c4" : "#000000",
                 }}
               >
                 {label}
@@ -109,19 +112,46 @@ const ArrayTable = ({ question }) => {
         </tr>
 
         {question.titles.rows.map((label, i) => (
-          <tr>
-            <td style={{ minWidth: "100pt", fontWeight: "normal" }}>
-              <p
-                style={{
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  marginRight: "10pt",
-                }}
-              >
-                {label}
-              </p>
-            </td>
-          </tr>
+          <>
+            <tr>
+              <td style={{ minWidth: "100pt", fontWeight: "normal" }}>
+                <p
+                  style={{
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    marginRight: "10pt",
+                    color: disabled ? "#c4c4c4" : "#000000",
+                  }}
+                >
+                  {label}
+                </p>
+              </td>
+              {question.titles.columns.map((label, j) => (
+                <td style={{ minWidth: "100pt", fontWeight: "normal" }}>
+                  <div
+                    style={{
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
+                      marginRight: "10pt",
+                    }}
+                  >
+                    {question.arrayType === TEXT ? (
+                      <TextField
+                        fullWidth
+                        disabled={disabled}
+                        onChange={() => console.log(i + " /" + j)}
+                        sx={{
+                          margin: "5pt",
+                        }}
+                      />
+                    ) : (
+                      <Checkbox disabled={disabled} />
+                    )}
+                  </div>
+                </td>
+              ))}
+            </tr>
+          </>
         ))}
       </table>
     </div>

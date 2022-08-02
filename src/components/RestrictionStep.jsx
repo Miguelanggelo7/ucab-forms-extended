@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import Lottie from "lottie-react";
 import welcomeStep from "../img/welcomestep.json";
+import done from "../img/done.json";
 
 export default function RestrictionStep({
   restrictions,
@@ -112,7 +113,28 @@ export default function RestrictionStep({
               }}
             >
               <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={() => setShow(true)}>Ir a encuesta</Button>
+              <Typography variant="h4">¡Listo!</Typography>
+              <Lottie
+                animationData={done}
+                loop={false}
+                style={{
+                  width: "100%",
+                  maxWidth: "300pt",
+                  margin: "auto",
+                  marginTop: "-20pt",
+                  marginBottom: "-20pt",
+                }}
+              />
+              <Typography variant="body2" sx={{ marginBottom: "10pt" }}>
+                Ya has finalizado los pasos a seguir para poder responder esta
+                encuesta.
+              </Typography>
+              <Button
+                onClick={() => setShow(true)}
+                sx={{ marginBottom: "10pt" }}
+              >
+                Ir a la encuesta
+              </Button>
             </Box>
           </>
         ) : (

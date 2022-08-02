@@ -201,7 +201,7 @@ const QuestionPreview = ({ question }) => {
     case ARRAY:
       return (
         <div>
-          <ArrayTable question={question} />
+          <ArrayTable disabled question={question} />
         </div>
       );
     default:

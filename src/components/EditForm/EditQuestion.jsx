@@ -55,6 +55,10 @@ import CheckIcon from "@mui/icons-material/Check";
 import RestrictionDialog from "../RestrictionDialog";
 import { useRestrictions } from "../../hooks/useRestriction";
 import { Divider } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
@@ -437,31 +441,54 @@ const EditQuestion = ({ setOpenDrawer }) => {
                   onChange={handleArrayChange("rows")}
                   InputProps={{ inputProps: { min: 1 } }}
                 />
+                <div style={{ marginLeft: "10pt", marginRight: "10pt" }} />
                 <TextField
                   type="number"
                   label="Columnas"
                   value={question.titles.columns.length || 3}
                   onChange={handleArrayChange("columns")}
+                  InputProps={{ inputProps: { min: 1 } }}
                 />
               </Box>
-              <Box sx={{ marginTop: "5pt" }}>
-                <Divider textAlign="left">Columnas</Divider>
-                {question.titles.columns.map((title, i) => (
-                  <TextField
-                    fullWidth
-                    value={title}
-                    onChange={handleArrayChange("columns", i)}
-                  />
-                ))}
-
-                <Divider textAlign="left">Filas</Divider>
-                {question.titles.rows.map((title, i) => (
-                  <TextField
-                    fullWidth
-                    value={title}
-                    onChange={handleArrayChange("rows", i)}
-                  />
-                ))}
+              <Box sx={{ marginTop: "15pt", marginBottom: "15pt" }}>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Filas</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {question.titles.rows.map((title, i) => (
+                      <TextField
+                        fullWidth
+                        value={title}
+                        sx={{ margin: "5pt" }}
+                        onChange={handleArrayChange("rows", i)}
+                      />
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
+                  >
+                    <Typography>Columnas</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {question.titles.columns.map((title, i) => (
+                      <TextField
+                        fullWidth
+                        value={title}
+                        sx={{ margin: "5pt" }}
+                        onChange={handleArrayChange("columns", i)}
+                      />
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
               </Box>
             </Box>
           )}

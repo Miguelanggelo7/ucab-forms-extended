@@ -3,6 +3,7 @@ import Luis from "../img/luissumoza.jpg";
 import Nahum from "../img/nahumgiral.jpg";
 import Miguelanggelo from "../img/miguelanggelo.jpg";
 import Oliver from "../img/olivertorres.jpeg";
+import Diego from "../img/diegogamboa.jpeg";
 import "./Footer.css";
 import MemberCard from "./MemberCard";
 
@@ -61,10 +62,15 @@ const Footer = () => {
             name={"Oliver Torres"}
             role={"Documentador"}
           />
-          <MemberCard img={Saad} />
-          <MemberCard img={Saad} />
-          <MemberCard img={Saad} />
-          <MemberCard img={Saad} />
+          <MemberCard
+            img={Diego}
+            number={"+584167912075"}
+            git={"https://github.com/diegogamboa03"}
+            instagram={"https://instagram.com/diogamboa?igshid=YmMyMTA2M2Y="}
+            linkedin={"www.linkedin.com/in/diego-gamboa-rojas-275199245"}
+            name={"Diego Gamboa"}
+            role={"Tester"}
+          />
         </div>
       </div>
     </footer>
