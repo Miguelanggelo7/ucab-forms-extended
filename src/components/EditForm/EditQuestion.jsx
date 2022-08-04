@@ -262,6 +262,10 @@ const EditQuestion = ({ setOpenDrawer }) => {
 
       const newQuestion = { ...question, [field]: checked };
 
+      if (field === "descriptionCheck" && !checked) {
+        newQuestion.description = "";
+      }
+
       if (field === "restricted" && checked) {
         newQuestion.restrictions = [""];
       }
