@@ -152,8 +152,15 @@ const DialogBody = ({ closeDialog }) => {
                     />
                     {restriction.optionSelected === i ? (
                       <Tooltip title="Esta es la opción correcta">
-                        <IconButton>
-                          <Check color="secondary" />
+                        <IconButton
+                          sx={{
+                            backgroundColor: "#006225",
+                            "&:hover": {
+                              backgroundColor: "#006225",
+                            },
+                          }}
+                        >
+                          <Check sx={{ color: "#fff" }} />
                         </IconButton>
                       </Tooltip>
                     ) : (
