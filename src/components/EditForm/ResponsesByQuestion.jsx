@@ -23,6 +23,7 @@ import {
   RATING,
   TIME,
   VOICE,
+  IMAGE,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import Slider from "../Slider";
@@ -141,7 +142,7 @@ const ResponsesByQuestion = () => {
         return <Rating question={question} readOnly value={value} />;
       }
 
-      if (question.type === FILE) {
+      if (question.type === FILE || question.type === IMAGE) {
         return <FilesResponse files={value} />;
       }
 

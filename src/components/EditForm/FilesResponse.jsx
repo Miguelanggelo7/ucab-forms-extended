@@ -4,6 +4,7 @@ const FilesResponse = ({ files }) => {
   return (
     <Stack sx={{ alignItems: "flex-start" }} spacing={2}>
       {files?.map((file, i) => {
+        console.log(file);
         if (file.type.includes("image")) {
           return (
             <Box

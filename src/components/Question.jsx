@@ -32,6 +32,7 @@ import {
   VOICE,
   SLIDERMOJI,
   ARRAY,
+  IMAGE,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -42,6 +43,7 @@ import RequiredMark from "./RequiredMark";
 import RecordAudio from "./RecordAudio";
 import Slidermoji from "./Slidermoji";
 import ArrayTable from "./ArrayTable";
+import ImageButton from "./ImageButton";
 
 const Question = ({ answers, question, setAnswers, paletteColor }) => {
   const [other, setOther] = useState("");
@@ -366,7 +368,55 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
               inputId={question.id}
               multiple={question.multipleFiles}
               onChange={(files) => {
+                console.log(answers);
                 if (question.multipleFiles) {
+                  return setAnswers({
+                    ...answers,
+                    [question.id]: [...answer, ...files],
+                  });
+                }
+
+                setAnswers({ ...answers, [question.id]: [...files] });
+              }}
+            />
+          </Box>
+        );
+      case IMAGE:
+        return (
+          <Box>
+            <Box sx={{ mb: 2 }}>
+              {answer.map((file, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography noWrap>{file.name}</Typography>
+                  <Tooltip title="Eliminar" arrow>
+                    <IconButton
+                      onClick={() => {
+                        const newAnswers = { ...answers };
+                        newAnswers[question.id] = newAnswers[
+                          question.id
+                        ].filter((f, j) => j !== i);
+                        setAnswers(newAnswers);
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              ))}
+            </Box>
+            <ImageButton
+              inputId={question.id}
+              multiple={question.multipleImages}
+              onChange={(files) => {
+                console.log(answers);
+                if (question.multipleImages) {
                   return setAnswers({
                     ...answers,
                     [question.id]: [...answer, ...files],

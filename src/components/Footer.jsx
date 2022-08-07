@@ -39,7 +39,7 @@ const Footer = () => {
             git={"https://github.com/Luiscarlossomoza"}
             instagram={"https://www.instagram.com/luchosl1/"}
             linkedin={"https://www.linkedin.com/in/luis-carlos-43a3a6177/"}
-            name={"Luis Sumoza"}
+            name={"Luis Somoza"}
             role={"Monitor"}
           />
           <MemberCard

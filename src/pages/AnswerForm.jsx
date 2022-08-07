@@ -22,6 +22,7 @@ import {
   SLIDER,
   SORTABLE,
   VOICE,
+  IMAGE,
 } from "../constants/questions";
 import { useUser } from "../hooks/useUser";
 import Header from "../components/Header";
@@ -58,7 +59,11 @@ const AnswerForm = () => {
     const answers = {};
 
     questions.forEach((question) => {
-      if (question.type === CHECKBOX || question.type === FILE) {
+      if (
+        question.type === CHECKBOX ||
+        question.type === FILE ||
+        question.type === IMAGE
+      ) {
         answers[question.id] = [];
       } else if (question.type === RADIO && question.required) {
         answers[question.id] = question.options[0];
@@ -191,7 +196,9 @@ const AnswerForm = () => {
     form.questions.forEach((question) => {
       if (question.required) {
         if (
-          ((question.type === CHECKBOX || question.type === FILE) &&
+          ((question.type === CHECKBOX ||
+            question.type === FILE ||
+            question.type === IMAGE) &&
             !answers[question.id].length) ||
           (question.type === RATING && !answers[question.id])
         ) {

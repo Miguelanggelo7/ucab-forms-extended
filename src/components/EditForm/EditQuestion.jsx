@@ -39,6 +39,7 @@ import {
   SLIDERMOJI,
   RATING,
   ARRAY,
+  IMAGE,
 } from "../../constants/questions";
 import {
   deleteQuestion,
@@ -233,6 +234,12 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.multipleFiles = false;
       } else {
         newQuestion.multipleFiles = null;
+      }
+
+      if (type === IMAGE) {
+        newQuestion.multipleImages = false;
+      } else {
+        newQuestion.multipleImages = null;
       }
 
       if (type === RATING) {
@@ -533,6 +540,16 @@ const EditQuestion = ({ setOpenDrawer }) => {
                 checked={question.multipleFiles}
                 onChange={handleChangeChecked("multipleFiles")}
                 label="Múltiples archivos"
+              />
+            </Box>
+          )}
+          {question.type === IMAGE && (
+            <Box>
+              <FormControlLabel
+                control={<Checkbox />}
+                checked={question.multipleImages}
+                onChange={handleChangeChecked("multipleImages")}
+                label="Múltiples imágenes"
               />
             </Box>
           )}

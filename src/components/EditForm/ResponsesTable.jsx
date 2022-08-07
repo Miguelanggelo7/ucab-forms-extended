@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import Table from "../Table";
 import { useForm } from "../../hooks/useForm";
 import { stringifyAnswers } from "../../utils/stats";
-import { FILE, VOICE } from "../../constants/questions";
+import { FILE, IMAGE, VOICE } from "../../constants/questions";
 
 const ResponsesTable = () => {
   const { responses, questions } = useForm();
@@ -18,7 +18,7 @@ const ResponsesTable = () => {
         title: question.title,
         field: question.type === VOICE ? `${question.id}.text` : question.id,
         emptyValue: "-",
-        ...(question.type === FILE && {
+        ...((question.type === FILE || question.type === IMAGE) && {
           render: (rowData) => (
             <>
               {rowData[question.id].split(", ").map((url, i) => (
