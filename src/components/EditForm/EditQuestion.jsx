@@ -491,12 +491,14 @@ const EditQuestion = ({ setOpenDrawer }) => {
                   </AccordionSummary>
                   <AccordionDetails>
                     {question.titles.rows.map((title, i) => (
-                      <TextField
-                        fullWidth
-                        value={title}
-                        sx={{ margin: "5pt" }}
-                        onChange={handleArrayChange("rows", i)}
-                      />
+                      <div style={{ marginTop: "10pt", marginBottom: "10pt" }}>
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          value={title}
+                          onChange={handleArrayChange("rows", i)}
+                        />
+                      </div>
                     ))}
                   </AccordionDetails>
                 </Accordion>
@@ -510,12 +512,14 @@ const EditQuestion = ({ setOpenDrawer }) => {
                   </AccordionSummary>
                   <AccordionDetails>
                     {question.titles.columns.map((title, i) => (
-                      <TextField
-                        fullWidth
-                        value={title}
-                        sx={{ margin: "5pt" }}
-                        onChange={handleArrayChange("columns", i)}
-                      />
+                      <div style={{ marginTop: "10pt", marginBottom: "10pt" }}>
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          value={title}
+                          onChange={handleArrayChange("columns", i)}
+                        />
+                      </div>
                     ))}
                   </AccordionDetails>
                 </Accordion>
