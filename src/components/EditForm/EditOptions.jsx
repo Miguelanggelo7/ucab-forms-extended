@@ -356,35 +356,39 @@ const Options = ({ question, debouncedSave }) => {
       case SLIDER:
         return (
           <>
-            <Box>
-              <TextField
-                select
-                variant="standard"
-                label="Desde"
-                value={question.min}
-                onChange={handleChange("min")}
-                sx={{ width: "45%", marginRight: "10%" }}
-              >
-                {sliderMinValues.map((n) => (
-                  <MenuItem key={n} value={n}>
-                    {n}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                select
-                variant="standard"
-                label="Hasta"
-                value={question.max}
-                onChange={handleChange("max")}
-                sx={{ width: "45%" }}
-              >
-                {sliderMaxValues.map((n) => (
-                  <MenuItem key={n} value={n}>
-                    {n}
-                  </MenuItem>
-                ))}
-              </TextField>
+            <Box sx={{ display: "inline-flex" }}>
+              <div style={{ width: "45%", marginRight: "10%" }}>
+                <TextField
+                  select
+                  fullWidth
+                  variant="standard"
+                  label="Desde"
+                  value={question.min}
+                  onChange={handleChange("min")}
+                >
+                  {sliderMinValues.map((n) => (
+                    <MenuItem key={n} value={n}>
+                      {n}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <div style={{ width: "45%" }}>
+                <TextField
+                  select
+                  fullWidth
+                  variant="standard"
+                  label="Hasta"
+                  value={question.max}
+                  onChange={handleChange("max")}
+                >
+                  {sliderMaxValues.map((n) => (
+                    <MenuItem key={n} value={n}>
+                      {n}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
             </Box>
             <TextField
               variant="standard"

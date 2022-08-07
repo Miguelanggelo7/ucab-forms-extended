@@ -86,14 +86,14 @@ const ArrayTable = ({ question, disabled }) => {
                     }}
                   >
                     {question.arrayType === TEXT ? (
-                      <TextField
-                        fullWidth
-                        disabled={disabled}
-                        onChange={() => console.log(i + " /" + j)}
-                        sx={{
-                          margin: "5pt",
-                        }}
-                      />
+                      <div style={{ margin: "5pt", width: "100%" }}>
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          disabled={disabled}
+                          onChange={() => console.log(i + " /" + j)}
+                        />
+                      </div>
                     ) : (
                       <Checkbox disabled={disabled} />
                     )}

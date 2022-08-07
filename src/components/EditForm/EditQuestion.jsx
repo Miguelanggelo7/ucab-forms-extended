@@ -66,6 +66,10 @@ const EditQuestion = ({ setOpenDrawer }) => {
   const openAlert = useAlert();
   const { restrictionsList } = useRestrictions();
 
+  const arrayValues = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+  ];
+
   const [rows, setRows] = useState(1);
   const [columns, setColumns] = useState(1);
   const [openResDialog, setOpenResDialog] = useState(false);
@@ -429,7 +433,6 @@ const EditQuestion = ({ setOpenDrawer }) => {
                 label="Tipo de matriz"
                 onChange={handleChange("arrayType")}
                 fullWidth
-                sx={{ marginBottom: "20pt" }}
               >
                 {arrayOptions.map((type) => (
                   <MenuItem key={type.value} value={type.value}>
@@ -437,22 +440,45 @@ const EditQuestion = ({ setOpenDrawer }) => {
                   </MenuItem>
                 ))}
               </TextField>
-              <Box sx={{ display: "inline-flex" }}>
-                <TextField
-                  type="number"
-                  label="Filas"
-                  value={question.titles.rows.length || 3}
-                  onChange={handleArrayChange("rows")}
-                  InputProps={{ inputProps: { min: 1 } }}
-                />
-                <div style={{ marginLeft: "10pt", marginRight: "10pt" }} />
-                <TextField
-                  type="number"
-                  label="Columnas"
-                  value={question.titles.columns.length || 3}
-                  onChange={handleArrayChange("columns")}
-                  InputProps={{ inputProps: { min: 1 } }}
-                />
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  width: "100%",
+                  marginTop: "15pt",
+                }}
+              >
+                <div style={{ width: "45%", marginRight: "10%" }}>
+                  <TextField
+                    select
+                    fullWidth
+                    variant="standard"
+                    label="Filas"
+                    value={question.titles.rows.length || 3}
+                    onChange={handleArrayChange("rows")}
+                  >
+                    {arrayValues.map((n) => (
+                      <MenuItem key={n} value={n}>
+                        {n}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+                <div style={{ width: "45%" }}>
+                  <TextField
+                    select
+                    fullWidth
+                    variant="standard"
+                    label="Columnas"
+                    value={question.titles.columns.length || 3}
+                    onChange={handleArrayChange("columns")}
+                  >
+                    {arrayValues.map((n) => (
+                      <MenuItem key={n} value={n}>
+                        {n}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
               </Box>
               <Box sx={{ marginTop: "15pt", marginBottom: "15pt" }}>
                 <Accordion>
@@ -538,6 +564,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
             <Box>
               <TextField
                 fullWidth
+                variant="standard"
                 placeholder="Descripción"
                 value={question.description}
                 onChange={handleChange("description")}
