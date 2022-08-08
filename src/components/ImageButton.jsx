@@ -2,7 +2,15 @@ import { Button } from "@mui/material";
 import { Image } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 
-const ImageButton = ({ inputId, onChange, multiple, disabled }) => {
+const ImageButton = ({
+  inputId,
+  onChange,
+  multiple,
+  disabled,
+  fullWidth,
+  text,
+  title,
+}) => {
   const id = "upload-button" + inputId;
   const { enqueueSnackbar } = useSnackbar();
 
@@ -31,8 +39,9 @@ const ImageButton = ({ inputId, onChange, multiple, disabled }) => {
       />
       <Button
         disabled={disabled}
-        variant="contained"
+        variant={text ? "text" : "contained"}
         startIcon={<Image />}
+        fullWidth={fullWidth}
         component="span"
       >
         Cargar imagen{multiple ? "es" : ""}

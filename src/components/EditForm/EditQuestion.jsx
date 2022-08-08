@@ -60,6 +60,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ImageButton from "../ImageButton";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
@@ -96,6 +97,16 @@ const EditQuestion = ({ setOpenDrawer }) => {
       const value = e.target.value;
 
       const newQuestion = { ...question, [field]: value };
+
+      debouncedSave(newQuestion);
+
+      setQuestions((questions) =>
+        questions.map((q) => (q.id === question.id ? newQuestion : q))
+      );
+    };
+
+    const handleChangeImage = (image) => {
+      const newQuestion = { ...question, ["image"]: image };
 
       debouncedSave(newQuestion);
 
@@ -533,6 +544,33 @@ const EditQuestion = ({ setOpenDrawer }) => {
               </Box>
             </Box>
           )}
+          <Box>
+            <ImageButton
+              fullWidth
+              text
+              inputId={question.id + "-edit"}
+              onChange={(image) => handleChangeImage(image)}
+            />
+            {question.image && (
+              <>
+                {console.log(question.image)}
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography noWrap>{question.image[0].name}</Typography>
+                  <Tooltip title="Eliminar" arrow>
+                    <IconButton onClick={() => handleChangeImage(null)}>
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </>
+            )}
+          </Box>
           {question.type === FILE && (
             <Box>
               <FormControlLabel
