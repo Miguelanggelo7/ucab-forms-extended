@@ -14,6 +14,7 @@ const UploadButton = ({ inputId, onChange, multiple, disabled }) => {
         disabled={disabled}
         onChange={(e) => {
           if (e.target.files.length) {
+            console.log(e.target.files);
             onChange(e.target.files);
           }
         }}

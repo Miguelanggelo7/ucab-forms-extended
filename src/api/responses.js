@@ -23,6 +23,7 @@ export const submitResponse = async (form, response, user) => {
     await Promise.all(
       form.questions.map(async (question) => {
         if (question.type === FILE || question.type === IMAGE) {
+          console.log(response.answers[question.id]);
           response.answers[question.id] = await uploadFiles(
             response.answers[question.id]
           );

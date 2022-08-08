@@ -61,6 +61,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ImageButton from "../ImageButton";
+import { deleteFile, uploadFiles } from "../../api/storage";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
@@ -105,14 +106,37 @@ const EditQuestion = ({ setOpenDrawer }) => {
       );
     };
 
-    const handleChangeImage = (image) => {
-      const newQuestion = { ...question, ["image"]: image };
+    const handleChangeImage = async (files, i) => {
+      if (!files) {
+        try {
+          await deleteFile(
+            `${question.image[i].date}${question.image[i].name}`
+          );
 
-      debouncedSave(newQuestion);
+          const newQuestion = { ...question };
 
-      setQuestions((questions) =>
-        questions.map((q) => (q.id === question.id ? newQuestion : q))
-      );
+          newQuestion.image = newQuestion.image.filter(
+            (_, index) => index !== i
+          );
+
+          debouncedSave(newQuestion);
+          setQuestions((questions) =>
+            questions.map((q) => (q.id === question.id ? newQuestion : q))
+          );
+          return;
+        } catch (err) {}
+      }
+
+      try {
+        const filesSaved = await uploadFiles([...files]);
+        const newQuestion = { ...question };
+        newQuestion.image.push(...filesSaved);
+        debouncedSave(newQuestion);
+
+        setQuestions((questions) =>
+          questions.map((q) => (q.id === question.id ? newQuestion : q))
+        );
+      } catch (err) {}
     };
 
     const handleArrayChange = (type, i) => (e) => {
@@ -548,28 +572,30 @@ const EditQuestion = ({ setOpenDrawer }) => {
             <ImageButton
               fullWidth
               text
+              multiple
               inputId={question.id + "-edit"}
               onChange={(image) => handleChangeImage(image)}
             />
-            {question.image && (
-              <>
-                {console.log(question.image)}
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1,
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography noWrap>{question.image[0].name}</Typography>
-                  <Tooltip title="Eliminar" arrow>
-                    <IconButton onClick={() => handleChangeImage(null)}>
-                      <ClearIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              </>
-            )}
+            {question.image &&
+              question.image.map((image, i) => (
+                <>
+                  <Box
+                    key={image.date + image.name}
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography noWrap>{image.name}</Typography>
+                    <Tooltip title="Eliminar" arrow>
+                      <IconButton onClick={() => handleChangeImage(null, i)}>
+                        <ClearIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </>
+              ))}
           </Box>
           {question.type === FILE && (
             <Box>
