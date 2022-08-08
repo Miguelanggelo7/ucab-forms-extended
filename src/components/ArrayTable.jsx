@@ -28,28 +28,30 @@ const ArrayTable = ({ question, disabled }) => {
         <tr>
           <th style={{ minWidth: "50pt", backgroundColor: "#f5f5f5" }}></th>
           {question.titles.columns.map((label, i) => (
-            <th
-              style={{
-                minWidth: "100pt",
-                fontWeight: "normal",
-                backgroundColor: "#f5f5f5",
-              }}
-            >
-              <p
+            <Tooltip title={label}>
+              <th
                 style={{
                   minWidth: "100pt",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  maxWidth: "150pt",
-                  marginRight: "5pt",
-                  marginLeft: "5pt",
-                  color: disabled ? "#c4c4c4" : "#000000",
+                  fontWeight: "normal",
+                  backgroundColor: "#f5f5f5",
                 }}
               >
-                {label}
-              </p>
-            </th>
+                <p
+                  style={{
+                    minWidth: "100pt",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    maxWidth: "150pt",
+                    marginRight: "5pt",
+                    marginLeft: "5pt",
+                    color: disabled ? "#c4c4c4" : "#000000",
+                  }}
+                >
+                  {label}
+                </p>
+              </th>
+            </Tooltip>
           ))}
         </tr>
 

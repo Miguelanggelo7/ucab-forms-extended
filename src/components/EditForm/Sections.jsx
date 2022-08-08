@@ -172,15 +172,18 @@ const Sections = () => {
     }
   };
 
-  useEffect(() => {
-    tree &&
-      tree.subTrees.forEach((subTree, i) => {
-        setFiles((files) => [...files, i + 2 + ""]);
-      });
-  }, [tree]);
+  let counterTree = 0;
+
+  const assignExp = () => {
+    let cont = [];
+    for (let i = 0; i <= counterTree; i++) {
+      cont.push(i + "");
+    }
+    return cont;
+  };
 
   const handleExpandClick = () => {
-    setExpanded((oldExpanded) => (oldExpanded.length === 0 ? files : []));
+    setExpanded((oldExpanded) => (oldExpanded.length === 0 ? assignExp() : []));
   };
 
   const handleToggle = (event, nodeIds) => {
@@ -189,7 +192,7 @@ const Sections = () => {
 
   const buildTree = (tree) => (
     <StyledTreeItem
-      nodeId={tree.id + ""}
+      nodeId={++counterTree + ""}
       key={tree.id}
       labelIcon={FolderIcon}
       labelText={tree.title}
@@ -200,21 +203,23 @@ const Sections = () => {
     >
       {tree.children.map((doc) => (
         // Se construyen las encuestas hijas si es que tiene
-        <StyledTreeItem
-          key={doc.id}
-          nodeId={doc.id + ""}
-          labelIcon={ArticleIcon}
-          labelText={doc.title}
-          iconColor={"#4B7ABC"}
-          labelInfo={"0pt"}
-          labelColor={doc.id === formId ? "#444a44" : "#000"}
-          onClick={(_) => {
-            if (formId !== doc.id) {
-              resetQuestions();
-              navigate("/forms/edit/" + doc.id);
-            }
-          }}
-        />
+        <>
+          <StyledTreeItem
+            key={doc.id}
+            nodeId={++counterTree + ""}
+            labelIcon={ArticleIcon}
+            labelText={doc.title}
+            iconColor={"#4B7ABC"}
+            labelInfo={"0pt"}
+            labelColor={doc.id === formId ? "#444a44" : "#000"}
+            onClick={(_) => {
+              if (formId !== doc.id) {
+                resetQuestions();
+                navigate("/forms/edit/" + doc.id);
+              }
+            }}
+          />
+        </>
       ))}
       {tree.subTrees.map((subTree, i) => {
         // Ahora se construyen los subarboles si es que tiene
