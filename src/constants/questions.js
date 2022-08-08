@@ -129,4 +129,5 @@ export const defaultQuestion = {
   restricted: false,
   descriptionCheck: false,
   description: "",
+  image: "",
 };

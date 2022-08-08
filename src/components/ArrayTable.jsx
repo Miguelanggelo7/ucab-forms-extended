@@ -1,6 +1,6 @@
 import { TheatersRounded } from "@mui/icons-material";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { TextField } from "@mui/material";
+import { TextField, Tooltip } from "@mui/material";
 import React from "react";
 import { saveQuestion } from "../api/questions";
 import { CHECKBOX, RADIO, TEXT } from "../constants/questions";
@@ -23,7 +23,6 @@ const ArrayTable = ({ question, disabled }) => {
         style={{
           width: "100%",
           textAlign: "center",
-          borderCollapse: "collapse",
         }}
       >
         <tr>
@@ -38,9 +37,13 @@ const ArrayTable = ({ question, disabled }) => {
             >
               <p
                 style={{
-                  whiteSpace: "nowrap",
+                  minWidth: "100pt",
                   textOverflow: "ellipsis",
-                  marginRight: "10pt",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  maxWidth: "150pt",
+                  marginRight: "5pt",
+                  marginLeft: "5pt",
                   color: disabled ? "#c4c4c4" : "#000000",
                 }}
               >
@@ -53,24 +56,29 @@ const ArrayTable = ({ question, disabled }) => {
         {question.titles.rows.map((label, i) => (
           <>
             <tr>
-              <td
-                style={{
-                  minWidth: "100pt",
-                  fontWeight: "normal",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
-                <p
+              <Tooltip title={label}>
+                <td
                   style={{
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    marginRight: "10pt",
-                    color: disabled ? "#c4c4c4" : "#000000",
+                    fontWeight: "normal",
+                    backgroundColor: "#f5f5f5",
                   }}
                 >
-                  {label}
-                </p>
-              </td>
+                  <p
+                    style={{
+                      minWidth: "100pt",
+                      maxWidth: "150pt",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      marginRight: "5pt",
+                      marginLeft: "5pt",
+                      color: disabled ? "#c4c4c4" : "#000000",
+                    }}
+                  >
+                    {label}
+                  </p>
+                </td>
+              </Tooltip>
               {question.titles.columns.map((label, j) => (
                 <td
                   style={{
