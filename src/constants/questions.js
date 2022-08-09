@@ -13,6 +13,7 @@ export const FILE = "file";
 export const VOICE = "voice";
 export const SLIDERMOJI = "slidermoji";
 export const ARRAY = "array";
+export const IMAGE = "image";
 
 export const compatibility = {
   [TEXT]: [TEXT, TEXTAREA, RADIO, SELECT],
@@ -28,8 +29,9 @@ export const compatibility = {
   [DATETIME]: [DATE, TIME, DATETIME],
   [FILE]: [FILE],
   [VOICE]: [VOICE],
-  [SLIDERMOJI]: [TEXT, TEXTAREA, RADIO, SELECT, SLIDER, RATING, SLIDERMOJI],
+  [SLIDERMOJI]: [SLIDER, SLIDERMOJI],
   [ARRAY]: [ARRAY],
+  [IMAGE]: [FILE, IMAGE],
 };
 
 export const ratingLabels = [
@@ -102,6 +104,10 @@ export const questionTypes = [
     value: ARRAY,
     label: "Matriz",
   },
+  {
+    value: IMAGE,
+    label: "Imagen",
+  },
 ];
 
 export const arrayOptions = [
@@ -123,4 +129,5 @@ export const defaultQuestion = {
   restricted: false,
   descriptionCheck: false,
   description: "",
+  image: [],
 };

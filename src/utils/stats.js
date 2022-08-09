@@ -6,6 +6,7 @@ import {
   FILE,
   SORTABLE,
   TIME,
+  IMAGE,
 } from "../constants/questions";
 
 export const getResponseCountText = (count) => {
@@ -44,6 +45,7 @@ export const stringifyAnswers = (answers, questions) => {
         newAnswers[questionId] = format(answer.toDate(), "HH:mm");
         break;
       case FILE:
+      case IMAGE:
         newAnswers[questionId] = answer.map((f) => f.url).join(", ");
         break;
       case CHECKBOX:

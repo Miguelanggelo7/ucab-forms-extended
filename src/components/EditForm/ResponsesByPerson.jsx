@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
   Stack,
+  Grid,
 } from "@mui/material";
 import { format } from "date-fns";
 import {
@@ -23,6 +24,7 @@ import {
   TIME,
   VOICE,
   SLIDERMOJI,
+  IMAGE,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import Comments from "./Comments";
@@ -30,6 +32,17 @@ import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
 import Slidermoji from "../Slidermoji";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Pagination as PagSwiper, Navigation } from "swiper";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/bundle";
+import "./Slider.css";
+
+SwiperCore.use([PagSwiper]);
+SwiperCore.use([Navigation]);
 
 const Response = () => {
   const { responses, questions } = useForm();
@@ -100,7 +113,7 @@ const Response = () => {
         return <Rating question={question} readOnly value={value} />;
       }
 
-      if (question.type === FILE) {
+      if (question.type === FILE || question.type === IMAGE) {
         return <FilesResponse files={value} />;
       }
 
@@ -184,7 +197,40 @@ const Response = () => {
           {questions.map((question, index) => (
             <Box>
               <Card key={question.id} sx={{ p: 3, mb: 1 }} variant="outlined">
-                <Typography gutterBottom>{question.title}</Typography>
+                <Typography gutterBottom>
+                  {question.title}
+                  <br />
+                  <Typography variant="caption">
+                    {question.description}
+                  </Typography>
+                </Typography>
+                <Swiper
+                  slidesPerView={1}
+                  pagination={{ clickable: "true" }}
+                  className="mySwiper"
+                  onSlideChange={() => console.log("slide change")}
+                  onSwiper={(swiper) => console.log(swiper)}
+                  style={{ marginBottom: "20pt" }}
+                >
+                  {question.image?.map((file, i) => (
+                    <SwiperSlide>
+                      <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <img
+                          alt="imagen"
+                          key={i}
+                          src={file.url}
+                          style={{ maxHeight: "300pt", objectFit: "contain" }}
+                        />
+                      </Grid>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
                 {response.answers[question.id] === "" ||
                 response.answers[question.id] === null ||
                 response.answers[question.id] === undefined ||

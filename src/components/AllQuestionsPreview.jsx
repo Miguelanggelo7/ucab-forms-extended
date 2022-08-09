@@ -30,6 +30,7 @@ import {
   VOICE,
   SLIDERMOJI,
   ARRAY,
+  IMAGE,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -38,6 +39,7 @@ import { useFont } from "../hooks/useFont";
 import MicIcon from "@mui/icons-material/Mic";
 import Slidermoji from "./Slidermoji";
 import ArrayTable from "./ArrayTable";
+import ImageButton from "./ImageButton";
 
 const QuestionPreview = ({ question }) => {
   const { font } = useFont();
@@ -180,7 +182,7 @@ const QuestionPreview = ({ question }) => {
       );
     case FILE:
       // preguntar al turko donde sale el id de la pregunta
-      return <UploadButton disabled />;
+      return <UploadButton disabled multiple={question.multipleFiles} />;
     case VOICE:
       return (
         <div style={{ display: "inline-flex" }}>
@@ -204,6 +206,8 @@ const QuestionPreview = ({ question }) => {
           <ArrayTable disabled question={question} />
         </div>
       );
+    case IMAGE:
+      return <ImageButton disabled multiple={question.multipleImages} />;
     default:
       return null;
   }

@@ -27,6 +27,7 @@ import {
   ratingLabels,
   VOICE,
   SLIDERMOJI,
+  IMAGE,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import FilesResponse from "./FilesResponse";
@@ -482,6 +483,7 @@ const QuestionStat = ({ question, responses }) => {
         </>
       );
     case FILE:
+    case IMAGE:
       return (
         <>
           <Typography

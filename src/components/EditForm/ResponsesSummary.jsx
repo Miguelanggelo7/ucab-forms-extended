@@ -1,5 +1,5 @@
 import { useMemo, useRef, useCallback } from "react";
-import { Box, Card, Typography, Stack, Button } from "@mui/material";
+import { Box, Card, Typography, Stack, Button, Grid } from "@mui/material";
 import { useForm } from "../../hooks/useForm";
 import QuestionStat from "./QuestionStat";
 import { useCapture } from "react-capture";
@@ -29,7 +29,13 @@ const ResponsesSummary = () => {
         <Stack ref={element} spacing={2}>
           {questions.map((question) => (
             <Card key={question.id} sx={{ p: 3 }} variant="outlined">
-              <Typography>{question.title}</Typography>
+              <Typography>
+                {question.title}
+                <br />
+                <Typography variant="caption">
+                  {question.description}
+                </Typography>
+              </Typography>
               <QuestionStat question={question} responses={answers} />
             </Card>
           ))}

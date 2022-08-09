@@ -1,4 +1,12 @@
-import { Box, Container, Drawer, Toolbar, useMediaQuery } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import {
+  Box,
+  Container,
+  Drawer,
+  IconButton,
+  Toolbar,
+  useMediaQuery,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import EditQuestion from "./EditQuestion";
 
@@ -27,7 +35,13 @@ const DrawerLayout = ({ open, setOpen, children }) => {
         }}
       >
         <Toolbar />
+
         <Box sx={{ overflow: "auto", p: 2 }}>
+          {upMd ? null : (
+            <IconButton onClick={() => setOpen(false)}>
+              <ArrowBack />
+            </IconButton>
+          )}
           <EditQuestion setOpenDrawer={setOpen} />
         </Box>
       </Drawer>

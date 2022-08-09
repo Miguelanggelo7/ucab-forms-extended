@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
   Stack,
+  Grid,
 } from "@mui/material";
 import { format } from "date-fns";
 import { useForm } from "../../hooks/useForm";
@@ -23,12 +24,24 @@ import {
   RATING,
   TIME,
   VOICE,
+  IMAGE,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
 import RecordAudio from "../RecordAudio";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Pagination as PagSwiper, Navigation } from "swiper";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/bundle";
+import "./Slider.css";
+
+SwiperCore.use([PagSwiper]);
+SwiperCore.use([Navigation]);
 
 const ResponsesByQuestion = () => {
   const { responses, questions } = useForm();
@@ -141,7 +154,7 @@ const ResponsesByQuestion = () => {
         return <Rating question={question} readOnly value={value} />;
       }
 
-      if (question.type === FILE) {
+      if (question.type === FILE || question.type === IMAGE) {
         return <FilesResponse files={value} />;
       }
 
@@ -164,7 +177,38 @@ const ResponsesByQuestion = () => {
             renderItem={renderItem}
           />
           <Card sx={{ p: 3 }} variant="outlined">
-            <Typography fontSize="h6.fontSize">{question.title}</Typography>
+            <Typography fontSize="h6">
+              {question.title}
+              <br />
+              <Typography variant="caption">{question.description}</Typography>
+            </Typography>
+            <Swiper
+              slidesPerView={1}
+              pagination={{ clickable: "true" }}
+              className="mySwiper"
+              onSlideChange={() => console.log("slide change")}
+              onSwiper={(swiper) => console.log(swiper)}
+              style={{ marginBottom: "20pt" }}
+            >
+              {question.image?.map((file, i) => (
+                <SwiperSlide>
+                  <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <img
+                      alt="imagen"
+                      key={i}
+                      src={file.url}
+                      style={{ maxHeight: "300pt", objectFit: "contain" }}
+                    />
+                  </Grid>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </Card>
           {answersWithStats.map((response, i) => (
             <Card key={i} sx={{ p: 3 }} variant="outlined">

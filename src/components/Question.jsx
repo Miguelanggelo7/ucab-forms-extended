@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Grid,
 } from "@mui/material";
 import { Clear as ClearIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
@@ -32,6 +33,7 @@ import {
   VOICE,
   SLIDERMOJI,
   ARRAY,
+  IMAGE,
 } from "../constants/questions";
 import Select from "./Select";
 import Slider from "./Slider";
@@ -42,6 +44,18 @@ import RequiredMark from "./RequiredMark";
 import RecordAudio from "./RecordAudio";
 import Slidermoji from "./Slidermoji";
 import ArrayTable from "./ArrayTable";
+import ImageButton from "./ImageButton";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Pagination, Navigation } from "swiper";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/bundle";
+import "./EditForm/Slider.css";
+
+SwiperCore.use([Pagination]);
+SwiperCore.use([Navigation]);
 
 const Question = ({ answers, question, setAnswers, paletteColor }) => {
   const [other, setOther] = useState("");
@@ -366,7 +380,55 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
               inputId={question.id}
               multiple={question.multipleFiles}
               onChange={(files) => {
+                console.log(answers);
                 if (question.multipleFiles) {
+                  return setAnswers({
+                    ...answers,
+                    [question.id]: [...answer, ...files],
+                  });
+                }
+
+                setAnswers({ ...answers, [question.id]: [...files] });
+              }}
+            />
+          </Box>
+        );
+      case IMAGE:
+        return (
+          <Box>
+            <Box sx={{ mb: 2 }}>
+              {answer.map((file, i) => (
+                <Box
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography noWrap>{file.name}</Typography>
+                  <Tooltip title="Eliminar" arrow>
+                    <IconButton
+                      onClick={() => {
+                        const newAnswers = { ...answers };
+                        newAnswers[question.id] = newAnswers[
+                          question.id
+                        ].filter((f, j) => j !== i);
+                        setAnswers(newAnswers);
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              ))}
+            </Box>
+            <ImageButton
+              inputId={question.id}
+              multiple={question.multipleImages}
+              onChange={(files) => {
+                console.log(answers);
+                if (question.multipleImages) {
                   return setAnswers({
                     ...answers,
                     [question.id]: [...answer, ...files],
@@ -424,6 +486,35 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
         <br />
         <Typography variant="caption">{question.description}</Typography>
       </Typography>
+      <Swiper
+        slidesPerView={1}
+        pagination={{ clickable: "true" }}
+        className="mySwiper"
+        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => console.log(swiper)}
+        style={{ marginBottom: "20pt" }}
+      >
+        {question.image?.map((file, i) => (
+          <SwiperSlide>
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <a href={file.url} target="_blank">
+                <img
+                  alt="imagen"
+                  key={i}
+                  src={file.url}
+                  style={{ maxHeight: "300pt", objectFit: "contain" }}
+                />
+              </a>
+            </Grid>
+          </SwiperSlide>
+        ))}
+      </Swiper>
       {renderQuestion()}
     </Box>
   );

@@ -39,6 +39,7 @@ import {
   SLIDERMOJI,
   RATING,
   ARRAY,
+  IMAGE,
 } from "../../constants/questions";
 import {
   deleteQuestion,
@@ -59,6 +60,8 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ImageButton from "../ImageButton";
+import { deleteFile, uploadFiles } from "../../api/storage";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
@@ -101,6 +104,39 @@ const EditQuestion = ({ setOpenDrawer }) => {
       setQuestions((questions) =>
         questions.map((q) => (q.id === question.id ? newQuestion : q))
       );
+    };
+
+    const handleChangeImage = async (files, i) => {
+      if (!files) {
+        try {
+          await deleteFile(
+            `${question.image[i].date}${question.image[i].name}`
+          );
+
+          const newQuestion = { ...question };
+
+          newQuestion.image = newQuestion.image.filter(
+            (_, index) => index !== i
+          );
+
+          debouncedSave(newQuestion);
+          setQuestions((questions) =>
+            questions.map((q) => (q.id === question.id ? newQuestion : q))
+          );
+          return;
+        } catch (err) {}
+      }
+
+      try {
+        const filesSaved = await uploadFiles([...files]);
+        const newQuestion = { ...question };
+        newQuestion.image.push(...filesSaved);
+        debouncedSave(newQuestion);
+
+        setQuestions((questions) =>
+          questions.map((q) => (q.id === question.id ? newQuestion : q))
+        );
+      } catch (err) {}
     };
 
     const handleArrayChange = (type, i) => (e) => {
@@ -235,6 +271,12 @@ const EditQuestion = ({ setOpenDrawer }) => {
         newQuestion.multipleFiles = null;
       }
 
+      if (type === IMAGE) {
+        newQuestion.multipleImages = false;
+      } else {
+        newQuestion.multipleImages = null;
+      }
+
       if (type === RATING) {
         newQuestion.typeRating = "star";
       } else {
@@ -357,6 +399,18 @@ const EditQuestion = ({ setOpenDrawer }) => {
       return !compatibility[question.type].includes(type);
     };
 
+    const disableEditArrayTable = () => {
+      let shouldCheckDisable = false;
+
+      responses.forEach((r) => {
+        const answer = r.answers[question.id];
+        if (answer || answer === 0) {
+          shouldCheckDisable = true;
+        }
+      });
+      return shouldCheckDisable;
+    };
+
     const verificationRestrictionList = (value) => {
       if (question.restrictions.indexOf(value) > -1) {
         return false;
@@ -433,6 +487,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
                 label="Tipo de matriz"
                 onChange={handleChange("arrayType")}
                 fullWidth
+                disabled={disableEditArrayTable()}
               >
                 {arrayOptions.map((type) => (
                   <MenuItem key={type.value} value={type.value}>
@@ -455,6 +510,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
                     label="Filas"
                     value={question.titles.rows.length || 3}
                     onChange={handleArrayChange("rows")}
+                    disabled={disableEditArrayTable()}
                   >
                     {arrayValues.map((n) => (
                       <MenuItem key={n} value={n}>
@@ -471,6 +527,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
                     label="Columnas"
                     value={question.titles.columns.length || 3}
                     onChange={handleArrayChange("columns")}
+                    disabled={disableEditArrayTable()}
                   >
                     {arrayValues.map((n) => (
                       <MenuItem key={n} value={n}>
@@ -491,12 +548,14 @@ const EditQuestion = ({ setOpenDrawer }) => {
                   </AccordionSummary>
                   <AccordionDetails>
                     {question.titles.rows.map((title, i) => (
-                      <TextField
-                        fullWidth
-                        value={title}
-                        sx={{ margin: "5pt" }}
-                        onChange={handleArrayChange("rows", i)}
-                      />
+                      <div style={{ marginTop: "10pt", marginBottom: "10pt" }}>
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          value={title}
+                          onChange={handleArrayChange("rows", i)}
+                        />
+                      </div>
                     ))}
                   </AccordionDetails>
                 </Accordion>
@@ -510,18 +569,49 @@ const EditQuestion = ({ setOpenDrawer }) => {
                   </AccordionSummary>
                   <AccordionDetails>
                     {question.titles.columns.map((title, i) => (
-                      <TextField
-                        fullWidth
-                        value={title}
-                        sx={{ margin: "5pt" }}
-                        onChange={handleArrayChange("columns", i)}
-                      />
+                      <div style={{ marginTop: "10pt", marginBottom: "10pt" }}>
+                        <TextField
+                          fullWidth
+                          variant="standard"
+                          value={title}
+                          onChange={handleArrayChange("columns", i)}
+                        />
+                      </div>
                     ))}
                   </AccordionDetails>
                 </Accordion>
               </Box>
             </Box>
           )}
+          <Box>
+            <ImageButton
+              fullWidth
+              text
+              multiple
+              inputId={question.id + "-edit"}
+              onChange={(image) => handleChangeImage(image)}
+            />
+            {question.image &&
+              question.image.map((image, i) => (
+                <>
+                  <Box
+                    key={image.date + image.name}
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography noWrap>{image.name}</Typography>
+                    <Tooltip title="Eliminar" arrow>
+                      <IconButton onClick={() => handleChangeImage(null, i)}>
+                        <ClearIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                </>
+              ))}
+          </Box>
           {question.type === FILE && (
             <Box>
               <FormControlLabel
@@ -529,6 +619,16 @@ const EditQuestion = ({ setOpenDrawer }) => {
                 checked={question.multipleFiles}
                 onChange={handleChangeChecked("multipleFiles")}
                 label="Múltiples archivos"
+              />
+            </Box>
+          )}
+          {question.type === IMAGE && (
+            <Box>
+              <FormControlLabel
+                control={<Checkbox />}
+                checked={question.multipleImages}
+                onChange={handleChangeChecked("multipleImages")}
+                label="Múltiples imágenes"
               />
             </Box>
           )}
