@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Grid,
 } from "@mui/material";
 import { Clear as ClearIcon } from "@mui/icons-material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/lab";
@@ -44,6 +45,17 @@ import RecordAudio from "./RecordAudio";
 import Slidermoji from "./Slidermoji";
 import ArrayTable from "./ArrayTable";
 import ImageButton from "./ImageButton";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Pagination, Navigation } from "swiper";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/bundle";
+import "./EditForm/Slider.css";
+
+SwiperCore.use([Pagination]);
+SwiperCore.use([Navigation]);
 
 const Question = ({ answers, question, setAnswers, paletteColor }) => {
   const [other, setOther] = useState("");
@@ -474,6 +486,35 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
         <br />
         <Typography variant="caption">{question.description}</Typography>
       </Typography>
+      <Swiper
+        slidesPerView={1}
+        pagination={{ clickable: "true" }}
+        className="mySwiper"
+        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => console.log(swiper)}
+        style={{ marginBottom: "20pt" }}
+      >
+        {question.image?.map((file, i) => (
+          <SwiperSlide>
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <a href={file.url} target="_blank">
+                <img
+                  alt="imagen"
+                  key={i}
+                  src={file.url}
+                  style={{ maxHeight: "300pt", objectFit: "contain" }}
+                />
+              </a>
+            </Grid>
+          </SwiperSlide>
+        ))}
+      </Swiper>
       {renderQuestion()}
     </Box>
   );
