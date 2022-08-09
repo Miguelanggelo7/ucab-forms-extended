@@ -28,9 +28,11 @@ import {
   VOICE,
   SLIDERMOJI,
   IMAGE,
+  ARRAY,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import FilesResponse from "./FilesResponse";
+import ArrayTable from "../ArrayTable";
 
 ChartJS.register(
   ArcElement,
@@ -564,6 +566,29 @@ const QuestionStat = ({ question, responses }) => {
               ))}
             </table>
           </Container>
+        </>
+      );
+    case ARRAY:
+      return (
+        <>
+          <Typography
+            color="text.secondary"
+            variant="caption"
+            display="block"
+            mb={1}
+          >
+            {responseCountText}
+          </Typography>
+          {responses.map((r, i) => (
+            <div key={i} style={{ paddingBottom: "30px" }}>
+              <ArrayTable
+                question={question}
+                disabled
+                answers={r[question.id]}
+                isAnswer
+              />
+            </div>
+          ))}
         </>
       );
     default:

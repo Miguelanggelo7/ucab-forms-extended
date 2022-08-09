@@ -24,12 +24,14 @@ import {
   TIME,
   VOICE,
   IMAGE,
+  ARRAY,
 } from "../../constants/questions";
 import { getResponseCountText } from "../../utils/stats";
 import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
 import RecordAudio from "../RecordAudio";
+import ArrayTable from "../ArrayTable";
 
 const ResponsesByQuestion = () => {
   const { responses, questions } = useForm();
@@ -148,6 +150,12 @@ const ResponsesByQuestion = () => {
 
       if (question.type === VOICE) {
         return <audio controls src={value.url} />;
+      }
+
+      if (question.type === ARRAY) {
+        return (
+          <ArrayTable disabled isAnswer question={question} answers={value} />
+        );
       }
 
       return <Typography>{value}</Typography>;

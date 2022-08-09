@@ -6,7 +6,15 @@ import { saveQuestion } from "../api/questions";
 import { CHECKBOX, RADIO, TEXT } from "../constants/questions";
 import Checkbox from "@mui/material/Checkbox";
 
-const ArrayTable = ({ question, disabled }) => {
+const ArrayTable = ({ question, disabled, answers, setAnswers, isAnswer }) => {
+  const handleValueChange = (i, j, value) => {
+    const newAnswers = { ...answers };
+
+    newAnswers[question.id][`${i}:${j}`] = value;
+
+    setAnswers(newAnswers);
+  };
+
   return (
     <div
       style={{
@@ -17,8 +25,8 @@ const ArrayTable = ({ question, disabled }) => {
     >
       <table
         border="1"
-        cellpadding="0"
-        cellspacing="0"
+        cellPadding="0"
+        cellSpacing="0"
         bordercolor={disabled ? "#c4c4c4" : "#000000"}
         style={{
           width: "100%",
@@ -57,7 +65,7 @@ const ArrayTable = ({ question, disabled }) => {
 
         {question.titles.rows.map((label, i) => (
           <>
-            <tr>
+            <tr key={`row ${i}`}>
               <Tooltip title={label}>
                 <td
                   style={{
@@ -87,6 +95,7 @@ const ArrayTable = ({ question, disabled }) => {
                     minWidth: "100pt",
                     fontWeight: "normal",
                   }}
+                  key={`column ${i}:${j}`}
                 >
                   <div
                     style={{
@@ -97,12 +106,33 @@ const ArrayTable = ({ question, disabled }) => {
                   >
                     {question.arrayType === TEXT ? (
                       <div style={{ margin: "5pt", width: "100%" }}>
-                        <TextField
-                          fullWidth
-                          variant="standard"
-                          disabled={disabled}
-                          onChange={() => console.log(i + " /" + j)}
-                        />
+                        {isAnswer ? (
+                          <>
+                            {disabled ? (
+                              <TextField
+                                fullWidth
+                                value={answers[`${i}:${j}`]}
+                                variant="standard"
+                                disabled
+                              />
+                            ) : (
+                              <TextField
+                                fullWidth
+                                value={answers[question.id][`${i}:${j}`]}
+                                variant="standard"
+                                onChange={(e) =>
+                                  handleValueChange(i, j, e.target.value)
+                                }
+                              />
+                            )}
+                          </>
+                        ) : (
+                          <TextField
+                            fullWidth
+                            variant="standard"
+                            disabled={disabled}
+                          />
+                        )}
                       </div>
                     ) : (
                       <Checkbox disabled={disabled} />

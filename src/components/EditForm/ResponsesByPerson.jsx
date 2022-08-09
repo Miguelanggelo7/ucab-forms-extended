@@ -24,6 +24,7 @@ import {
   VOICE,
   SLIDERMOJI,
   IMAGE,
+  ARRAY,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import Comments from "./Comments";
@@ -31,6 +32,7 @@ import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
 import Slidermoji from "../Slidermoji";
+import ArrayTable from "../ArrayTable";
 
 const Response = () => {
   const { responses, questions } = useForm();
@@ -117,6 +119,12 @@ const Response = () => {
         );
       }
 
+      if (question.type === ARRAY) {
+        return (
+          <ArrayTable disabled isAnswer question={question} answers={value} />
+        );
+      }
+
       let text = value;
 
       if (question.type === DATE) {
@@ -184,7 +192,11 @@ const Response = () => {
           )}
           {questions.map((question, index) => (
             <Box>
-              <Card key={question.id} sx={{ p: 3, mb: 1 }} variant="outlined">
+              <Card
+                key={question.id + " " + index}
+                sx={{ p: 3, mb: 1 }}
+                variant="outlined"
+              >
                 <Typography gutterBottom>{question.title}</Typography>
                 {response.answers[question.id] === "" ||
                 response.answers[question.id] === null ||
