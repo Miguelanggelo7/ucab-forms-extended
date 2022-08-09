@@ -30,19 +30,19 @@ const EmojiRating = styled(MuiRating)(({ theme }) => ({
 
 const customIcons = {
   1: {
-    icon: <SentimentVeryDissatisfied color="error" />,
+    icon: <SentimentVeryDissatisfied sx={{ color: "#C22027" }} />,
   },
   2: {
-    icon: <SentimentDissatisfied color="error" />,
+    icon: <SentimentDissatisfied sx={{ color: "#C22027" }} />,
   },
   3: {
-    icon: <SentimentSatisfied color="warning" />,
+    icon: <SentimentSatisfied sx={{ color: "#ffd200" }} />,
   },
   4: {
-    icon: <SentimentSatisfiedAlt color="secondary" />,
+    icon: <SentimentSatisfiedAlt sx={{ color: "#006225" }} />,
   },
   5: {
-    icon: <SentimentVerySatisfied color="secondary" />,
+    icon: <SentimentVerySatisfied sx={{ color: "#006225" }} />,
   },
 };
 
