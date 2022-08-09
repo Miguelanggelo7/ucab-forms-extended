@@ -15,6 +15,7 @@ import {
   Radio,
   Button,
   Autocomplete,
+  useMediaQuery,
 } from "@mui/material";
 import {
   ArrowDownward,
@@ -62,12 +63,16 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ImageButton from "../ImageButton";
 import { deleteFile, uploadFiles } from "../../api/storage";
+import { useTheme } from "@mui/material/styles";
 
 const EditQuestion = ({ setOpenDrawer }) => {
   const { form, questions, setQuestions, current, setCurrent, responses } =
     useForm();
   const openAlert = useAlert();
   const { restrictionsList } = useRestrictions();
+
+  const theme = useTheme();
+  const upXs = useMediaQuery(theme.breakpoints.up("xs"));
 
   const arrayValues = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -339,7 +344,11 @@ const EditQuestion = ({ setOpenDrawer }) => {
 
     if (!question) {
       return (
-        <Box>
+        <Box
+          sx={{
+            marginTop: upXs ? "0" : "50pt",
+          }}
+        >
           <Box sx={{ width: "65%", mx: "auto" }}>
             <Lottie animationData={selectAnimation} loop />
           </Box>
@@ -426,6 +435,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
       <Stack spacing={3}>
         <Box
           sx={{
+            marginTop: upXs ? "0" : "50pt",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -761,6 +771,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
     openResDialog,
     setOpenResDialog,
     restrictionsList,
+    upXs,
   ]);
 };
 

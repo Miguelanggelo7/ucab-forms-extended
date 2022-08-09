@@ -9,6 +9,15 @@ const ThemeProvider = ({ children }) => {
   const theme = useMemo(
     () =>
       createTheme({
+        breakpoints: {
+          values: {
+            xs: 351,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+          },
+        },
         typography: {
           fontFamily: font.family,
         },
