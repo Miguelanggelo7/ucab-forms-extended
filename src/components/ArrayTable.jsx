@@ -12,7 +12,7 @@ const ArrayTable = ({ question, disabled }) => {
       style={{
         width: "100%",
         overflow: "auto",
-        maxHeight: "386pt",
+        maxHeight: "270pt",
       }}
     >
       <table

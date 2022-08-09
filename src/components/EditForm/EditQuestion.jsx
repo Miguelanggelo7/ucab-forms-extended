@@ -399,6 +399,18 @@ const EditQuestion = ({ setOpenDrawer }) => {
       return !compatibility[question.type].includes(type);
     };
 
+    const disableEditArrayTable = () => {
+      let shouldCheckDisable = false;
+
+      responses.forEach((r) => {
+        const answer = r.answers[question.id];
+        if (answer || answer === 0) {
+          shouldCheckDisable = true;
+        }
+      });
+      return shouldCheckDisable;
+    };
+
     const verificationRestrictionList = (value) => {
       if (question.restrictions.indexOf(value) > -1) {
         return false;
@@ -475,6 +487,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
                 label="Tipo de matriz"
                 onChange={handleChange("arrayType")}
                 fullWidth
+                disabled={disableEditArrayTable()}
               >
                 {arrayOptions.map((type) => (
                   <MenuItem key={type.value} value={type.value}>
@@ -497,6 +510,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
                     label="Filas"
                     value={question.titles.rows.length || 3}
                     onChange={handleArrayChange("rows")}
+                    disabled={disableEditArrayTable()}
                   >
                     {arrayValues.map((n) => (
                       <MenuItem key={n} value={n}>
@@ -513,6 +527,7 @@ const EditQuestion = ({ setOpenDrawer }) => {
                     label="Columnas"
                     value={question.titles.columns.length || 3}
                     onChange={handleArrayChange("columns")}
+                    disabled={disableEditArrayTable()}
                   >
                     {arrayValues.map((n) => (
                       <MenuItem key={n} value={n}>
