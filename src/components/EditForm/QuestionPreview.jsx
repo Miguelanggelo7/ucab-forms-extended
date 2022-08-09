@@ -57,8 +57,8 @@ const EditQuestion = ({ question, setOpenDrawer }) => {
             slidesPerView={1}
             pagination={{ clickable: "true" }}
             className="mySwiper"
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
+            // onSlideChange={() => console.log("slide change")}
+            // onSwiper={(swiper) => console.log(swiper)}
             style={{ marginBottom: "10pt" }}
           >
             {question.image?.map((file, i) => (

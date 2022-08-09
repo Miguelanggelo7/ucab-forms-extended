@@ -23,52 +23,24 @@ const ArrayTable = ({ question, disabled, answers, setAnswers, isAnswer }) => {
         maxHeight: "270pt",
       }}
     >
-      <table
-        border="1"
-        cellPadding="0"
-        cellSpacing="0"
-        bordercolor={disabled ? "#c4c4c4" : "#000000"}
-        style={{
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
-        <tr>
-          <th style={{ minWidth: "50pt", backgroundColor: "#f5f5f5" }}></th>
-          {question.titles.columns.map((label, i) => (
-            <Tooltip title={label}>
-              <th
-                style={{
-                  minWidth: "100pt",
-                  fontWeight: "normal",
-                  backgroundColor: "#f5f5f5",
-                }}
-              >
-                <p
+      {answers ? (
+        <table
+          border="1"
+          cellPadding="0"
+          cellSpacing="0"
+          bordercolor={disabled ? "#c4c4c4" : "#000000"}
+          style={{
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          <tr>
+            <th style={{ minWidth: "50pt", backgroundColor: "#f5f5f5" }}></th>
+            {question.titles.columns.map((label, i) => (
+              <Tooltip title={label}>
+                <th
                   style={{
                     minWidth: "100pt",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    maxWidth: "150pt",
-                    marginRight: "5pt",
-                    marginLeft: "5pt",
-                    color: disabled ? "#c4c4c4" : "#000000",
-                  }}
-                >
-                  {label}
-                </p>
-              </th>
-            </Tooltip>
-          ))}
-        </tr>
-
-        {question.titles.rows.map((label, i) => (
-          <>
-            <tr key={`row ${i}`}>
-              <Tooltip title={label}>
-                <td
-                  style={{
                     fontWeight: "normal",
                     backgroundColor: "#f5f5f5",
                   }}
@@ -76,10 +48,10 @@ const ArrayTable = ({ question, disabled, answers, setAnswers, isAnswer }) => {
                   <p
                     style={{
                       minWidth: "100pt",
-                      maxWidth: "150pt",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
+                      maxWidth: "150pt",
                       marginRight: "5pt",
                       marginLeft: "5pt",
                       color: disabled ? "#c4c4c4" : "#000000",
@@ -87,63 +59,110 @@ const ArrayTable = ({ question, disabled, answers, setAnswers, isAnswer }) => {
                   >
                     {label}
                   </p>
-                </td>
+                </th>
               </Tooltip>
-              {question.titles.columns.map((label, j) => (
-                <td
-                  style={{
-                    minWidth: "100pt",
-                    fontWeight: "normal",
-                  }}
-                  key={`column ${i}:${j}`}
-                >
-                  <div
+            ))}
+          </tr>
+
+          {question.titles.rows.map((label, i) => (
+            <>
+              <tr key={`row ${i}`}>
+                <Tooltip title={label}>
+                  <td
                     style={{
-                      whiteSpace: "nowrap",
-                      textOverflow: "ellipsis",
-                      marginRight: "10pt",
+                      fontWeight: "normal",
+                      backgroundColor: "#f5f5f5",
                     }}
                   >
-                    {question.arrayType === TEXT ? (
-                      <div style={{ margin: "5pt", width: "100%" }}>
-                        {isAnswer ? (
-                          <>
-                            {disabled ? (
-                              <TextField
-                                fullWidth
-                                value={answers[`${i}:${j}`]}
-                                variant="standard"
-                                disabled
-                              />
-                            ) : (
-                              <TextField
-                                fullWidth
-                                value={answers[question.id][`${i}:${j}`]}
-                                variant="standard"
-                                onChange={(e) =>
-                                  handleValueChange(i, j, e.target.value)
-                                }
-                              />
-                            )}
-                          </>
-                        ) : (
-                          <TextField
-                            fullWidth
-                            variant="standard"
-                            disabled={disabled}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <Checkbox disabled={disabled} />
-                    )}
-                  </div>
-                </td>
-              ))}
-            </tr>
-          </>
-        ))}
-      </table>
+                    <p
+                      style={{
+                        minWidth: "100pt",
+                        maxWidth: "150pt",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        marginRight: "5pt",
+                        marginLeft: "5pt",
+                        color: disabled ? "#c4c4c4" : "#000000",
+                      }}
+                    >
+                      {label}
+                    </p>
+                  </td>
+                </Tooltip>
+                {question.titles.columns.map((label, j) => (
+                  <td
+                    style={{
+                      minWidth: "100pt",
+                      fontWeight: "normal",
+                    }}
+                    key={`column ${i}:${j}`}
+                  >
+                    <div
+                      style={{
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        marginRight: "10pt",
+                      }}
+                    >
+                      {question.arrayType === TEXT ? (
+                        <div style={{ margin: "5pt", width: "100%" }}>
+                          {isAnswer ? (
+                            <>
+                              {disabled ? (
+                                <TextField
+                                  fullWidth
+                                  value={answers[`${i}:${j}`]}
+                                  variant="standard"
+                                  disabled
+                                />
+                              ) : (
+                                <TextField
+                                  fullWidth
+                                  value={answers[question.id][`${i}:${j}`]}
+                                  variant="standard"
+                                  onChange={(e) =>
+                                    handleValueChange(i, j, e.target.value)
+                                  }
+                                />
+                              )}
+                            </>
+                          ) : (
+                            <TextField
+                              fullWidth
+                              variant="standard"
+                              disabled={disabled}
+                            />
+                          )}
+                        </div>
+                      ) : isAnswer && answers ? (
+                        <>
+                          {disabled ? (
+                            <Checkbox disabled checked={answers[`${i}:${j}`]} />
+                          ) : (
+                            <Checkbox
+                              checked={answers[question.id][`${i}:${j}`]}
+                              onChange={(e) =>
+                                handleValueChange(i, j, e.target.checked)
+                              }
+                            />
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <Checkbox disabled />
+                        </>
+                      )}
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            </>
+          ))}
+        </table>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

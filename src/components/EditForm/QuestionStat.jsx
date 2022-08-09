@@ -581,6 +581,7 @@ const QuestionStat = ({ question, responses }) => {
           </Typography>
           {responses.map((r, i) => (
             <div key={i} style={{ paddingBottom: "30px" }}>
+              {console.log(r)}
               <ArrayTable
                 question={question}
                 disabled
