@@ -23,6 +23,8 @@ import {
   SORTABLE,
   VOICE,
   IMAGE,
+  ARRAY,
+  TEXT,
 } from "../constants/questions";
 import { useUser } from "../hooks/useUser";
 import Header from "../components/Header";
@@ -76,6 +78,14 @@ const AnswerForm = () => {
       } else if (question.type === VOICE) {
         answers[question.id] = [];
         answers[question.id + "-text"] = "";
+      } else if (question.type === ARRAY) {
+        answers[question.id] = {};
+        question.titles.rows.forEach((_, i) => {
+          question.titles.columns.forEach((_, j) => {
+            answers[question.id][`${i}:${j}`] =
+              question.arrayType === TEXT ? "" : false;
+          });
+        });
       } else {
         answers[question.id] = "";
       }

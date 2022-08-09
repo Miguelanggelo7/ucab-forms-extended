@@ -25,6 +25,7 @@ import {
   VOICE,
   SLIDERMOJI,
   IMAGE,
+  ARRAY,
 } from "../../constants/questions";
 import { useForm } from "../../hooks/useForm";
 import Comments from "./Comments";
@@ -32,6 +33,7 @@ import Slider from "../Slider";
 import Rating from "../Rating";
 import FilesResponse from "./FilesResponse";
 import Slidermoji from "../Slidermoji";
+import ArrayTable from "../ArrayTable";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination as PagSwiper, Navigation } from "swiper";
 
@@ -126,6 +128,12 @@ const Response = () => {
             </Typography>
             <Typography>{value.text}</Typography>
           </>
+        );
+      }
+
+      if (question.type === ARRAY) {
+        return (
+          <ArrayTable disabled isAnswer question={question} answers={value} />
         );
       }
 

@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import Table from "../Table";
 import { useForm } from "../../hooks/useForm";
 import { stringifyAnswers } from "../../utils/stats";
-import { FILE, IMAGE, VOICE } from "../../constants/questions";
+import { ARRAY, FILE, IMAGE, VOICE } from "../../constants/questions";
 
 const ResponsesTable = () => {
   const { responses, questions } = useForm();
@@ -14,29 +14,37 @@ const ResponsesTable = () => {
     return [
       { title: "Fecha de respuesta", field: "submittedAt" },
       { title: "Usuario", field: "username" },
-      ...questions.map((question) => ({
-        title: question.title,
-        field: question.type === VOICE ? `${question.id}.text` : question.id,
-        emptyValue: "-",
-        ...((question.type === FILE || question.type === IMAGE) && {
-          render: (rowData) => (
-            <>
-              {rowData[question.id].split(", ").map((url, i) => (
-                <Link
-                  key={i}
-                  href={url}
-                  noWrap
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{ display: "block", maxWidth: "15ch" }}
-                >
-                  {url}
-                </Link>
-              ))}
-            </>
-          ),
-        }),
-      })),
+      ...questions
+        .map((question) => {
+          if (question.type !== ARRAY) {
+            return {
+              title: question.title,
+              field:
+                question.type === VOICE ? `${question.id}.text` : question.id,
+              emptyValue: "-",
+              ...((question.type === FILE || question.type === IMAGE) && {
+                render: (rowData) => (
+                  <>
+                    {rowData[question.id].split(", ").map((url, i) => (
+                      <Link
+                        key={i}
+                        href={url}
+                        noWrap
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ display: "block", maxWidth: "15ch" }}
+                      >
+                        {url}
+                      </Link>
+                    ))}
+                  </>
+                ),
+              }),
+            };
+          }
+          return null;
+        })
+        .filter((p) => p),
     ];
   }, [questions]);
 

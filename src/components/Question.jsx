@@ -468,9 +468,15 @@ const Question = ({ answers, question, setAnswers, paletteColor }) => {
           </div>
         );
       case ARRAY:
+        console.log(answers);
         return (
           <div>
-            <ArrayTable question={question} />
+            <ArrayTable
+              question={question}
+              setAnswers={setAnswers}
+              answers={answers}
+              isAnswer={true}
+            />
           </div>
         );
       default:
