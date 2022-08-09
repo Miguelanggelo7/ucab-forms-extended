@@ -36,12 +36,14 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useFont } from "../hooks/useFont";
+import WifiIcon from "@mui/icons-material/Wifi";
+import WifiOffIcon from "@mui/icons-material/WifiOff";
 
 const Header = ({ leftIcons, rightIcons, moreMenu }) => {
   const user = useUser();
   const theme = useTheme();
   const { font, setFont } = useFont();
-  // let [isOnline, connection] = useNetwork();
+  let [isOnline] = useNetwork();
 
   const popupStateUser = usePopupState({
     variant: "popover",
@@ -63,7 +65,7 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {leftIcons}
             {/* Las siguientes lineas de codigo permiten mostrar el estado de conexion del usuario */}
-            {/* <Tooltip
+            <Tooltip
               title={
                 isOnline
                   ? "Está conectado a internet"
@@ -72,11 +74,11 @@ const Header = ({ leftIcons, rightIcons, moreMenu }) => {
               sx={{ marginRight: "10pt" }}
             >
               {isOnline ? (
-                <SignalWifiStatusbar4BarIcon color="secondary" />
+                <WifiIcon color="secondary" />
               ) : (
-                <SignalWifiOffIcon color="error" />
+                <WifiOffIcon color="error" />
               )}
-            </Tooltip> */}
+            </Tooltip>
             <HeaderLogo
               sx={{
                 position: { sm: "absolute" },

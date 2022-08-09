@@ -324,9 +324,12 @@ const EditQuestion = ({ setOpenDrawer }) => {
     };
 
     const removeQuestion = (questionId) => {
+      const textMessage = disableEditArrayTable()
+        ? "Al eliminar esta pregunta eliminarás todas sus respuestas ¿estás seguro de eliminarla?"
+        : "¿Estás seguro de eliminar esta pregunta?";
       openAlert({
         title: "Eliminar pregunta",
-        message: "¿Estás seguro de eliminar esta pregunta?",
+        message: textMessage,
         action: () => {
           deleteQuestion(form.id, questionId);
           setOpenDrawer(false);
