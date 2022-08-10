@@ -203,7 +203,7 @@ const QuestionPreview = ({ question }) => {
     case ARRAY:
       return (
         <div>
-          <ArrayTable disabled question={question} />
+          <ArrayTable disabled question={question} answers={1} />
         </div>
       );
     case IMAGE:
