@@ -280,9 +280,8 @@ const Sections = () => {
               encuesta!
             </strong>
             <br />
-            Habilitarlas te permitirá dividir tu encuesta en carpetas y
-            subcarpetas, asi como permitirte crear mas encuestas dentro para
-            poder mantener un mejor control.
+            Habilitarlas te permite controlar mejor tus encuestas con el uso de
+            carpetas.
           </Typography>
           <Box sx={{ width: "180pt", margin: "auto", marginTop: "10pt" }}>
             <Button
