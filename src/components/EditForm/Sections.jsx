@@ -276,7 +276,7 @@ const Sections = () => {
           </Box>
           <Typography textAlign={"center"}>
             <strong>
-              ¡Al parecer aún no haz habilitado las secciones para esta
+              ¡Al parecer aún no has habilitado las secciones para esta
               encuesta!
             </strong>
             <br />
