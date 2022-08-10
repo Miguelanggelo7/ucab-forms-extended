@@ -15,28 +15,28 @@ import AnswerForm from "./pages/AnswerForm";
 import Sent from "./pages/Sent";
 import Fade from "react-reveal/Fade";
 import { RestrictionsProvider } from "./hooks/useRestriction";
-import { useNetwork } from "./hooks/useNetwork";
-import { useEffect, useState } from "react";
-import { useSnackbar } from "notistack";
+// import { useNetwork } from "./hooks/useNetwork";
+// import { useEffect, useState } from "react";
+// import { useSnackbar } from "notistack";
 
 const App = () => {
-  let [isOnline] = useNetwork();
-  const [boolNot, setBoolNot] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  // let [isOnline] = useNetwork();
+  // const [boolNot, setBoolNot] = useState(false);
+  // const { enqueueSnackbar } = useSnackbar();
 
-  useEffect(() => {
-    if (!isOnline) {
-      setBoolNot(true);
-      return enqueueSnackbar("Has perdido la conexión a internet", {
-        variant: "error",
-      });
-    } else if (boolNot) {
-      setBoolNot(false);
-      return enqueueSnackbar("Estás conectado a internet", {
-        variant: "success",
-      });
-    }
-  }, [isOnline]);
+  // useEffect(() => {
+  //   if (!isOnline) {
+  //     setBoolNot(true);
+  //     return enqueueSnackbar("Has perdido la conexión a internet", {
+  //       variant: "error",
+  //     });
+  //   } else if (boolNot) {
+  //     setBoolNot(false);
+  //     return enqueueSnackbar("Estás conectado a internet", {
+  //       variant: "success",
+  //     });
+  //   }
+  // }, [isOnline]);
 
   return (
     <UserProvider>
