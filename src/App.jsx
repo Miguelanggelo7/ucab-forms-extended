@@ -18,6 +18,7 @@ import { RestrictionsProvider } from "./hooks/useRestriction";
 import { useNetwork } from "./hooks/useNetwork";
 import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
+import AnswerFormSections from "./pages/AnswerFormSections";
 
 const App = () => {
   let [isOnline] = useNetwork();
@@ -98,6 +99,7 @@ const App = () => {
               }
             />
           </Route>
+          <Route path="/forms/answer" element={<AnswerFormSections />} />
           <Route path="/forms/answer/:id" element={<AnswerForm />} />
           <Route path="/forms/answer/:id/sent" element={<Sent />} />
           <Route

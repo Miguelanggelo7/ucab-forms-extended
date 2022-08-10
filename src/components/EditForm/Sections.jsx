@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
-import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { enableSections } from "../../api/trees";
 import { useSnackbar } from "notistack";
 import { TreeView, TreeItem } from "@mui/lab";
@@ -107,13 +115,12 @@ StyledTreeItem.propTypes = {
   labelText: PropTypes.string.isRequired,
 };
 
-const Sections = () => {
+const Sections = ({ isCheckbox, checked, setChecked }) => {
   const { id: formId } = useParams();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { tree, form, resetQuestions } = useForm();
   const [expanded, setExpanded] = useState([]);
-  const [files, setFiles] = useState(["1"]);
   const [editDialog, setEditDialog] = useState(false);
   const [current, setCurrent] = useState(null);
   const [addTree, setAddTree] = useState(false);
@@ -190,6 +197,18 @@ const Sections = () => {
     setExpanded(nodeIds);
   };
 
+  const handleCheckedChange = (id) => (e) => {
+    const newChecked = [...checked];
+    if (e.target.checked) {
+      if (!checked.includes(id)) newChecked.push(id);
+
+      setChecked(newChecked);
+      return;
+    }
+
+    setChecked(newChecked.filter((c) => c !== id));
+  };
+
   const buildTree = (tree) => (
     <StyledTreeItem
       nodeId={++counterTree + ""}
@@ -197,28 +216,50 @@ const Sections = () => {
       labelIcon={FolderIcon}
       labelText={tree.title}
       iconColor={"#ffd200"}
-      options={optionFile(tree)}
+      options={isCheckbox ? false : optionFile(tree)}
       labelInfo={"85pt"}
       labelColor={"#000"}
     >
       {tree.children.map((doc) => (
         // Se construyen las encuestas hijas si es que tiene
         <>
-          <StyledTreeItem
-            key={doc.id}
-            nodeId={++counterTree + ""}
-            labelIcon={ArticleIcon}
-            labelText={doc.title}
-            iconColor={"#4B7ABC"}
-            labelInfo={"0pt"}
-            labelColor={doc.id === formId ? "#444a44" : "#000"}
-            onClick={(_) => {
-              if (formId !== doc.id) {
-                resetQuestions();
-                navigate("/forms/edit/" + doc.id);
+          {console.log(checked)}
+          {isCheckbox ? (
+            <StyledTreeItem
+              key={doc.id}
+              nodeId={++counterTree + ""}
+              label={
+                <FormControlLabel
+                  label={doc.title}
+                  control={
+                    <Checkbox
+                      checked={checked.includes(doc.id)}
+                      title={"Seleccionar"}
+                      disabled={doc.id === formId}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={handleCheckedChange(doc.id)}
+                    />
+                  }
+                />
               }
-            }}
-          />
+            />
+          ) : (
+            <StyledTreeItem
+              key={doc.id}
+              nodeId={++counterTree + ""}
+              labelIcon={ArticleIcon}
+              labelText={doc.title}
+              iconColor={"#4B7ABC"}
+              labelInfo={"0pt"}
+              labelColor={doc.id === formId ? "#444a44" : "#000"}
+              onClick={(_) => {
+                if (formId !== doc.id) {
+                  resetQuestions();
+                  navigate("/forms/edit/" + doc.id);
+                }
+              }}
+            />
+          )}
         </>
       ))}
       {tree.subTrees.map((subTree, i) => {

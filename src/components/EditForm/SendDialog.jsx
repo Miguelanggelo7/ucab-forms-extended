@@ -1,4 +1,4 @@
-import { useMemo, useRef, useCallback } from "react";
+import { useMemo, useRef, useCallback, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -12,12 +12,26 @@ import { useForm } from "../../hooks/useForm";
 import { APP_URL } from "../../constants/urls";
 import QRCode from "react-qr-code";
 import { useCapture } from "react-capture";
+import Sections from "./Sections";
+import { useState } from "react";
 
 const SendDialog = ({ open, setOpen }) => {
   const { form } = useForm();
   const { enqueueSnackbar } = useSnackbar();
   const { snap } = useCapture();
   const element = useRef(null);
+  const [checked, setChecked] = useState([form.id]);
+  const [formUrl, setFormUrl] = useState(`${APP_URL}/forms/answer/${form.id}`);
+
+  useEffect(() => {
+    if (checked.length > 1) {
+      const newUrl = `${APP_URL}/forms/answer?forms=${checked.join(",")}`;
+      console.log(newUrl);
+      setFormUrl(newUrl);
+    } else {
+      setFormUrl(`${APP_URL}/forms/answer/${form.id}`);
+    }
+  }, [checked]);
 
   const downloadQR = useCallback(() => {
     snap(element, { file: `${form.title}-QR.png` });
@@ -28,7 +42,7 @@ const SendDialog = ({ open, setOpen }) => {
       setOpen(false);
     };
 
-    const formUrl = `${APP_URL}/forms/answer/${form.id}`;
+    // const formUrl = `${APP_URL}/forms/answer/${form.id}`;
 
     const handleCopy = async () => {
       try {
@@ -59,12 +73,15 @@ const SendDialog = ({ open, setOpen }) => {
           <TextField
             variant="standard"
             fullWidth
-            defaultValue={formUrl}
+            value={formUrl}
             onFocus={(e) => e.target.select()}
             InputProps={{
               readOnly: true,
             }}
           />
+        </DialogContent>
+        <DialogContent>
+          <Sections isCheckbox checked={checked} setChecked={setChecked} />
         </DialogContent>
         <DialogActions sx={{ marginTop: "-15pt" }}>
           <Button onClick={downloadQR}>Descargar QR</Button>
@@ -74,7 +91,7 @@ const SendDialog = ({ open, setOpen }) => {
         </DialogActions>
       </Dialog>
     );
-  }, [enqueueSnackbar, form.id, open, setOpen]);
+  }, [enqueueSnackbar, form.id, open, setOpen, checked, formUrl]);
 };
 
 export default SendDialog;
