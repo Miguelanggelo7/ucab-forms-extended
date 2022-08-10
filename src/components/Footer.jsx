@@ -67,7 +67,9 @@ const Footer = () => {
             number={"+584167912075"}
             git={"https://github.com/diegogamboa03"}
             instagram={"https://instagram.com/diogamboa?igshid=YmMyMTA2M2Y="}
-            linkedin={"www.linkedin.com/in/diego-gamboa-rojas-275199245"}
+            linkedin={
+              "https://www.linkedin.com/in/diego-gamboa-rojas-275199245"
+            }
             name={"Diego Gamboa"}
             role={"Tester"}
           />
